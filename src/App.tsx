@@ -1,5 +1,9 @@
 function App() {
-  return <></>;
+  return (
+    <>
+      <h1>LUNA HUAPI</h1>
+    </>
+  );
 }
 
 export default App;
