@@ -73,18 +73,6 @@
 
 /* Clases personalizadas */
 @layer components {
-  .btn {
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
-    transition: background 0.2s ease-in-out;
-  }
-
-  .btn:hover {
-    background-color: hsl(var(--primary) / 0.8);
-  }
-
   /* Aplicar nuevos colores */
   .bg-image {
     background: var(--color-bg-image);
@@ -198,24 +186,23 @@
   }
 }
 
-/* Estilos específicos para DraggableCards */
-.scrollbar-draggable {
-  scrollbar-color: hsla(0, 0%, 48%) hsl(220, 13%, 91%); /* Color del thumb y del track */
-}
-
 .scrollbar-draggable::-webkit-scrollbar {
-  height: 2px; /* Altura de la barra de desplazamiento */
+  height: 1px; /* Grosor mínimo si es horizontal */
+  width: 1px; /* Grosor mínimo si es vertical */
 }
 
 .scrollbar-draggable::-webkit-scrollbar-track {
-  background: hsl(
-    220,
-    13%,
-    91%
-  ); /* Color del fondo de la barra de desplazamiento */
+  background: hsl(220, 13%, 91%);
 }
 
 .scrollbar-draggable::-webkit-scrollbar-thumb {
-  background: var(--text-primary); /* Color de la parte que se arrastra */
-  border-radius: 15px; /* Bordes redondeados */
+  background: var(--text-primary);
+  border-radius: 15px;
+  transition: background 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0.5; /* Hace que el thumb sea más sutil */
+}
+
+.scrollbar-draggable::-webkit-scrollbar-thumb:hover {
+  opacity: 1; /* Se hace más visible al hacer hover */
+  background: hsla(0, 0%, 30%, 0.9); /* Un color más oscuro al interactuar */
 }

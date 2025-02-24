@@ -43,7 +43,7 @@ export default function Departments() {
   };
 
   return (
-    <section className="bg-background">
+    <section className="bg-background overflow-hidden">
       <div className="container mx-auto">
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="departments" direction="horizontal">
@@ -51,7 +51,7 @@ export default function Departments() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex gap-5 overflow-x-auto h-auto w-full scrollbar-draggable"
+                className="flex gap-5 overflow-x-auto h-auto w-full scrollbar-draggable cursor-grab"
               >
                 {departments.map((department, index) => (
                   <Draggable
@@ -77,15 +77,15 @@ export default function Departments() {
                               className="object-cover w-full rounded-lg"
                             />
                           </div>
-                          <div className="bottom-2 left-2 right-2 flex justify-between items-center rounded-md">
-                            <span className="text-sm font-semibold text-gray-800">
+                          <div className="flex justify-between items-center rounded-md mt-4">
+                            <span className="text-sm font-semibold text-primary uppercase">
                               {department.title}
                             </span>
                             <button
-                              className="text-sm font-semibold text-gray-800 z-50"
+                              className="text-sm font-semibold text-primary z-50 uppercase underline underline-offset-6"
                               onClick={() => setSelectedDepartment(department)}
                             >
-                              Ver más
+                              Ver más →
                             </button>
                           </div>
                         </CardContent>

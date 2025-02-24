@@ -7,14 +7,19 @@ import {
 } from "lucide-react";
 import DraggableCards from "./DraggableCards";
 import FaqAccordion from "./FaqAccordion";
+import { Button } from "./ui/button";
+import Testimonials from "./Testimonials";
 const LandingPage = () => {
   return (
     <div className="bg-background min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen w-screen bg-card-foreground color-dark bg-opacity-75 bg-blend-overlay bg-[url('/test3.png')] bg-cover bg-center text-secondary-custom grid grid-cols-2">
-        <nav className="absolute top-0 left-0 right-0 p-6 flex md:flex-row justify-between items-center w-full">
+      <section className="relative h-screen w-full bg-card-foreground color-dark bg-blend-overlay bg-[url('/test3.png')] bg-cover bg-center text-secondary-custom grid grid-cols-2">
+        <nav className="absolute top-0 p-6 flex md:flex-row justify-between items-center w-full">
           <div id="right-side" className="flex items-start justify-start">
-            <div id="logo-container" className="w-[87.71px] h-[87.71px] mr-20">
+            <div
+              id="logo-container"
+              className="w-[87.71px] h-[87.71px] mr-5 ml-5"
+            >
               <img
                 src="/logo.svg"
                 alt="LUNA HUAPI"
@@ -33,8 +38,8 @@ const LandingPage = () => {
               </p>
             </div>
           </div>
-          <div className="lg:grid-cols-2 items-center gap-12 hidden lg:grid overflow-none">
-            <div className="flex space-x-12 items-center justify-self-end">
+          <div className="lg:grid-cols-2 items-center hidden lg:grid overflow-none">
+            <div className="flex space-x-8 items-center justify-self-end">
               {["Nosotras", "Los departamentos", "Reviews", "Contacto"].map(
                 (item) => (
                   <a
@@ -50,21 +55,21 @@ const LandingPage = () => {
                         ? "#contacto"
                         : "#"
                     }
-                    className="text-light hover:text-primary transition-colors relative group min-w-fit"
+                    className="text-light transition-colors relative group min-w-fit"
                   >
                     {item}
                   </a>
                 )
               )}
             </div>
-            <div className="flex items-center justify-self-end">
+            <div className="flex items-center justify-self-end pr-2">
               <div className="w-px h-[30px] bg-[#D1D1D1]"></div>
               <div className="text-[#D1D1D1] px-6 py-4 rounded-full flex items-center">
                 EN <ArrowUpRight className="ml-2" size={20} />
               </div>
-              <button
+              <Button
                 id="btn-contactanos"
-                className="min-w-fit inline-flex items-center border border-[#D1D1D1] text-[#D1D1D1] px-6 py-4 rounded-full mr-4"
+                className="inline-flex items-center border border-[#D1D1D1] text-[#D1D1D1] px-6 py-4 rounded-full mr-4 bg-transparent"
                 onClick={() => {
                   window.location.href = "https://wa.me/5492944444444";
                 }}
@@ -73,13 +78,13 @@ const LandingPage = () => {
                 <span className="ml-2" role="img" aria-label="WhatsApp">
                   <PhoneCall className="w-4 h-4" />
                 </span>
-              </button>
-              <button
+              </Button>
+              <Button
                 id="btn-reserva"
-                className="btn border border-[#D1D1D1] text-[#D1D1D1] px-6 py-4 rounded-full"
+                className="btn border border-[#D1D1D1] text-[#D1D1D1] px-6 py-4 rounded-full bg-transparent"
               >
                 Reserva
-              </button>
+              </Button>
             </div>
           </div>
           <div className="flex items-center justify-self-end lg:hidden ">
@@ -87,18 +92,18 @@ const LandingPage = () => {
           </div>
         </nav>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-          <h2 className="text-3xl text-light mb-16">
+          <h2 className="text-3xl text-light mb-16 text-balance">
             Descubre la comodidad y el encanto de nuestros departamentos en
             alquiler en San Carlos de Bariloche, una de las ciudades mas bellas
             de la Patagonia argentina.
           </h2>
-          <div className="flex justify-center space-x-5">
-            <button className="bg-[#F1F1F1] text-[#3F3F3F] px-8 py-4 rounded-full">
+          <div className="flex flex-col justify-center items-center gap-3 lg:flex-row">
+            <Button className="bg-[#F1F1F1] text-[#3F3F3F] px-8 py-4 rounded-full max-w-fit">
               Reserva tu habitacion
-            </button>
-            <button className="border border-[#D1D1D1] text-[#D1D1D1] px-8 py-4 rounded-full">
+            </Button>
+            <Button className="border border-[#D1D1D1] text-[#D1D1D1] px-8 py-4 rounded-full max-w-fit bg-transparent">
               Seguinos en instagram
-            </button>
+            </Button>
           </div>
         </div>
       </section>
@@ -106,15 +111,14 @@ const LandingPage = () => {
       {/* Content Section 1 */}
       <section className="py-24">
         <div className="container mx-auto">
-          <div className="h-px bg-[#565656] opacity-20 flex-grow"></div>
+          <div className="h-px bg-[#565656] opacity-20 flex-grow mb-10"></div>
           <div className="flex justify-between items-center mb-12">
             <span className="text-dark uppercase text-xl">
               01 / Quienes somos
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-24">
-            <div></div>
-            <div className="relative">
+          <div className="flex w-full lg:justify-end justify-start">
+            <div className="relative w-3/5">
               <p className="text-2xl text-muted mb-8">
                 Descubre la comodidad y el encanto de nuestros departamentos en
                 alquiler en San Carlos de Bariloche, una de las ciudades mas
@@ -144,63 +148,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-[url('/placeholder.svg?height=1125&width=1920')] bg-cover bg-center py-24 hidden">
-        <div className="container mx-auto text-center">
-          <h2 className="text-8xl font-light uppercase mb-12">
-            Call to Action
-          </h2>
-          <button className="bg-background text-text-primary px-8 py-4 rounded-full">
-            Primary CTA
-          </button>
-          <a
-            href="#"
-            className="text-text-primary uppercase text-xl border-b border-text-primary pb-1"
-          >
-            Learn More
-          </a>
-        </div>
-      </section>
-
-      <section className="container mx-auto min-h-[600px] bg-primary-custom w-full">
-        <div className="h-px bg-[#565656] opacity-20 flex-grow my-8"></div>
-        <div className="mb-16 flex items-center gap-2 text-sm text-muted-foreground">
-          <span className="text-text-primary uppercase text-xl">
-            03 / Nuestros huespedes
-          </span>
-        </div>
-
-        <div className="grid gap-[15vw] md:grid-cols-[100px_1fr]">
-          <div className="flex gap-4 flex-row">
-            <button
-              className="h-10 w-10 rounded-full text-dark cursor-pointer"
-              aria-label="Previous testimonial"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </button>
-            <button
-              className="h-10 w-10 rounded-full text-dark cursor-pointer"
-              aria-label="Next testimonial"
-            >
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-
-          <div className="space-y-8">
-            <h2 className="text-2xl font-light leading-relaxed text-gray-600 md:text-3xl lg:text-2xl">
-              "Un hotel iconico para los argentinos, su ubicacion, su entorno,
-              sus vistas son incomparables. Su arquitectura e historia van de la
-              mano de su excelente servicio. Tanto los menus de sus
-              restaurantes, como sus desayunos son increibles."
-            </h2>
-            <div className="h-px bg-[#565656] opacity-20 flex-grow"></div>
-            <div className="text-sm uppercase tracking-wider text-muted-foreground">
-              <p>Lucrecia Solomon</p>
-              <p>Buenos Aires, Arg</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Testimonials />
 
       {/* FAQ Section */}
       <section className="container mx-auto py-24">
@@ -211,13 +159,9 @@ const LandingPage = () => {
               04 / Preguntas frecuentes
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-24">
-            <div></div>
-            <div>
-              <div className="flex justify-between items-center">
-                <FaqAccordion />
-              </div>
-              {/* Repeat for other questions */}
+          <div className="flex w-full justify-end">
+            <div className="w-3/5">
+              <FaqAccordion />
             </div>
           </div>
         </div>
