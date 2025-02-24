@@ -1,6 +1,4 @@
 import {
-  ArrowLeft,
-  ArrowRight,
   ArrowUp,
   ArrowUpRight,
   PhoneCall,
@@ -143,7 +141,6 @@ const LandingPage = () => {
               <span className="text-black uppercase">Drag</span>
             </div>
           </div>
-
           <DraggableCards />
         </div>
       </section>
@@ -160,7 +157,7 @@ const LandingPage = () => {
             </span>
           </div>
           <div className="flex w-full justify-end">
-            <div className="w-3/5">
+            <div className="w-full lg:w-3/5">
               <FaqAccordion />
             </div>
           </div>
@@ -177,13 +174,18 @@ const LandingPage = () => {
               <ArrowUp className="text-primary" size={24} />
             </button>
           </div>
-          <div className="grid grid-cols-3 justify-between my-15 text-dark">
-            <span className="uppercase text-md">
-              Los jilgueros 2374, Bariloche <br /> CP 1723, Argentina <br />
+          <div className="grid md:grid-cols-3 md:grid-rows-2 justify-between my-15 text-dark items-start">
+            <div className="uppercase text-md flex items-baseline">
+              <img src="/circle.svg" alt="Circle" />
+              Los jilgueros 2374, Bariloche <br /> <br />CP 1723, Argentina <br />
               54 (9) 1157963615
-            </span>
-            <span className="uppercase text-md">seguinos en instagram → </span>
-            <span className="uppercase text-md">info@lunahuapi.com</span>
+            </div>
+            <div className="uppercase text-md flex items-center">
+            <img src="/circle.svg" alt="Circle" className="self-center"/>
+            seguinos en instagram → </div>
+            <div className="uppercase text-md flex items-center">
+            <img src="/circle.svg" alt="Circle" className="self-center"/>
+            info@lunahuapi.com </div>
           </div>
           <div className="flex items-center w-full justify-end">
             <span className="text-dark text-xl">&copy; 2025 LUNA HUAPI</span>

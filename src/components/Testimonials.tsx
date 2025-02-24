@@ -44,9 +44,9 @@ export default function Testimonials() {
       </div>
 
       {/* Testimonio dinámico */}
-      <div className="grid lg:grid-cols-2 lg:grid-rows-3 w-full">
+      <div className="flex flex-row w-full">
         {/* Botones de navegación */}
-        <div className="flex gap-4 flex-row">
+        <div className="flex gap-4 flex-row w-2/5">
           <button
             className="h-10 w-10 rounded-full text-dark cursor-pointer"
             aria-label="Previous testimonial"
@@ -62,7 +62,7 @@ export default function Testimonials() {
             <ArrowRight className="h-4 w-4" />
           </button>
         </div>
-        <div className="space-y-8 transition-opacity duration-500 ease-in-out">
+        <div className="space-y-8 transition-opacity duration-500 ease-in-out w-3/5">
           <h2 className="text-2xl font-light leading-relaxed text-gray-600 md:text-3xl lg:text-2xl">
             {testimonials[currentIndex].text}
           </h2>

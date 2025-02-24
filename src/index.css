@@ -1,8 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: 'LightFont';
+  src: url('/fonts/Light.woff2') format('woff2'), 
+       url('/fonts/Light.woff') format('woff'),   
+       url('/fonts/Light.ttf') format('truetype'), 
+       url('/fonts/Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
 
 :root {
   --border: hsl(220, 13%, 91%);
@@ -59,7 +71,15 @@
   body {
     background-color: var(--color-bg);
     color: var(--text-primary);
-    font-family: "Inter", sans-serif;
+    font-family: 'LightFont', sans-serif;
+  }
+
+  .font-light {
+    font-family: 'LightFont', sans-serif;
+  }
+
+  .font-inter {
+    font-family: 'Inter', sans-serif;
   }
 
   .text-primary {
