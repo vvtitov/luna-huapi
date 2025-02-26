@@ -3,7 +3,6 @@
 
 @plugin "tailwindcss-animate";
 
-@custom-variant dark (&:is(.dark *));
 
 @font-face {
   font-family: 'LightFont';
@@ -14,7 +13,6 @@
   font-weight: 300;
   font-style: normal;
 }
-
 
 :root {
   --border: hsl(220, 13%, 91%);
@@ -37,7 +35,7 @@
   --popover: hsl(220, 13%, 91%);
   --popover-foreground: hsl(220, 13%, 30%);
   --card: hsl(220, 13%, 91%);
-  --card-foreground: hsl(0, 0%, 25%);
+  --card-foreground: hsl(0, 0%, 10%);
   --text-primary: hsla(0, 0%, 48%);
   --text-secondary: hsl(0, 0%, 68%);
   --radius: 8px;
@@ -64,6 +62,9 @@
   --color-light: hsl(0, 0%, 86%);
   --color-dark: hsl(0, 0%, 25%);
   --color-white: hsl(0, 0%, 100%);
+
+  --pointer-drag: cursor url('/pointer-drag.svg') 50 50, auto;
+  --pointer-primary: cursor url('/pointer-primary.svg') 50 50, auto;
 }
 
 /* Estilos base */
@@ -72,6 +73,16 @@
     background-color: var(--color-bg);
     color: var(--text-primary);
     font-family: 'LightFont', sans-serif;
+  }
+
+  .pointer-primary,
+  .pointer-primary * {
+    cursor: url('/pointer-primary.svg') 50 50, auto !important;
+  }
+
+  .pointer-drag,
+  .pointer-drag * {
+    cursor: url('/pointer-drag.svg') 50 50, auto !important;
   }
 
   .font-light {
@@ -99,8 +110,9 @@
   }
 
   .text-main {
-    color: var(--color-text);
+    color: var(--text-primary);
   }
+
 
   .text-muted {
     color: var(--color-muted);
@@ -207,7 +219,7 @@
 }
 
 .scrollbar-draggable::-webkit-scrollbar {
-  height: 1px; /* Grosor mínimo si es horizontal */
+  height: 2px; /* Grosor mínimo si es horizontal */
   width: 1px; /* Grosor mínimo si es vertical */
 }
 
@@ -225,4 +237,8 @@
 .scrollbar-draggable::-webkit-scrollbar-thumb:hover {
   opacity: 1; /* Se hace más visible al hacer hover */
   background: hsla(0, 0%, 30%, 0.9); /* Un color más oscuro al interactuar */
+}
+
+.scrollbar-draggable::-webkit-scrollbar-thumb:active {
+  background: hsla(0, 0%, 40%, 0.9); /* Color más oscuro al hacer click */
 }

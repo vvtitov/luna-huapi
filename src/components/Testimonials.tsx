@@ -35,35 +35,21 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="container mx-auto min-h-[600px] bg-primary-custom w-full">
-      <div className="h-px bg-[#565656] opacity-20 flex-grow my-8"></div>
-      <div className="mb-16 flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="text-text-primary uppercase text-xl">
-          03 / Nuestros huéspedes
-        </span>
-      </div>
-
-      {/* Testimonio dinámico */}
-      <div className="flex flex-row w-full">
-        {/* Botones de navegación */}
-        <div className="flex gap-4 flex-row w-2/5">
-          <button
-            className="h-10 w-10 rounded-full text-dark cursor-pointer"
-            aria-label="Previous testimonial"
-            onClick={handlePrev}
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <button
-            className="h-10 w-10 rounded-full text-dark cursor-pointer"
-            aria-label="Next testimonial"
-            onClick={handleNext}
-          >
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-        <div className="space-y-8 transition-opacity duration-500 ease-in-out w-3/5">
-          <h2 className="text-2xl font-light leading-relaxed text-gray-600 md:text-3xl lg:text-2xl">
+    <section
+      className="mx-auto min-h-[600px] bg-primary-custom w-full px-10 pointer-primary [&_*]:pointer-primary"
+      id="reviews"
+    >
+      <div className="h-px bg-[#565656] opacity-20 flex-grow my-8 pointer-primary [&_*]:pointer-primary"></div>
+      <div className="flex justify-between w-full font-inter">
+        <p className="text-light text-xl">
+          03
+          <span className="text-light px-4">/</span>
+          <span className="text-primary uppercase text-xl">
+            Nuestros huéspedes
+          </span>
+        </p>
+        <div className="space-y-8 transition-opacity duration-500 ease-in-out w-full lg:w-4/7 h-full">
+          <h2 className="text-2xl font-light leading-relaxed text-gray-600 md:text-2xl lg:text-3xl mt-10">
             {testimonials[currentIndex].text}
           </h2>
           <div className="h-px bg-[#565656] opacity-20 flex-grow"></div>
@@ -72,6 +58,23 @@ export default function Testimonials() {
             <p>{testimonials[currentIndex].location}</p>
           </div>
         </div>
+      </div>
+
+      <div className="flex flex-row gap-4 h-[100px] items-start translate-y-[-150px]">
+        <button
+          className="h-10 w-10 rounded-full border border-primary px-3 text-primary"
+          aria-label="Previous testimonial"
+          onClick={handlePrev}
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </button>
+        <button
+          className="h-10 w-10 rounded-full border border-primary px-3 text-primary"
+          aria-label="Next testimonial"
+          onClick={handleNext}
+        >
+          <ArrowRight className="h-4 w-4" />
+        </button>
       </div>
     </section>
   );
