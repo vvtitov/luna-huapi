@@ -16,8 +16,8 @@ const ParallaxSection = ({ firstText, secondText }: ParallaxSectionProps) => {
     offset: ["start end", "end start"]
   });
 
-  const leftX = useTransform(scrollYProgress, [0, 0.9], ["-150%", "200%"]);
-  const rightX = useTransform(scrollYProgress, [0, 0.9], ["150%", "-200%"]);
+  const leftX = useTransform(scrollYProgress, [0, 0.7], ["-150%", "200%"]);
+  const rightX = useTransform(scrollYProgress, [0, 0.7], ["150%", "-200%"]);
   const overlayOpacity = useTransform(scrollYProgress, [0.3, 0.5], [1, 0]);
 
   return (
