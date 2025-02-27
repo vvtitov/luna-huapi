@@ -36,44 +36,44 @@ export default function Testimonials() {
 
   return (
     <section
-      className="mx-auto min-h-[600px] bg-primary-custom w-full px-10 pointer-primary [&_*]:pointer-primary"
+      className="mx-auto min-h-[600px] bg-primary-custom w-full px-10 pointer-primary [&_*]:pointer-primary relative min-w-[400px]"
       id="reviews"
     >
       <div className="h-px bg-[#565656] opacity-20 flex-grow my-8 pointer-primary [&_*]:pointer-primary"></div>
-      <div className="flex justify-between w-full font-inter">
+      <div className="block lg:flex justify-between w-full font-inter">
         <p className="text-light text-xl">
           03
           <span className="text-light px-4">/</span>
           <span className="text-primary uppercase text-xl">
-            Nuestros huéspedes
+            Nuestros huéspedes
           </span>
         </p>
         <div className="space-y-8 transition-opacity duration-500 ease-in-out w-full lg:w-4/7 h-full">
-          <h2 className="text-2xl font-light leading-relaxed text-gray-600 md:text-2xl lg:text-3xl mt-10">
+          <h2 className="text-3xl font-light text-primary md:text-2xl lg:text-3xl mt-10 text-balance">
             {testimonials[currentIndex].text}
           </h2>
-          <div className="h-px bg-[#565656] opacity-20 flex-grow"></div>
-          <div className="text-sm uppercase tracking-wider text-muted-foreground">
+          <div className="h-px bg-[#565656] opacity-20 hidden lg:flex flex-grow"></div>
+          <div className="text-sm uppercase tracking-wider text-muted-foreground mb-20">
             <p>{testimonials[currentIndex].author}</p>
             <p>{testimonials[currentIndex].location}</p>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-row gap-4 h-[100px] items-start translate-y-[-150px]">
+      <div className="absolute bottom-0 md:bottom-50 left-10 lg:bottom-80 lg:left-10 items-center flex flex-row gap-4">
         <button
-          className="h-10 w-10 rounded-full border border-primary px-3 text-primary"
+          className="h-16 w-16 lg:h-12 lg:w-12 rounded-full border border-primary/70 items-center flex justify-center text-primary lg:text-xl text-2xl font-bold hover:bg-primary/10"
           aria-label="Previous testimonial"
           onClick={handlePrev}
         >
-          <ArrowLeft className="h-4 w-4" />
+          ←
         </button>
         <button
-          className="h-10 w-10 rounded-full border border-primary px-3 text-primary"
+          className="h-16 w-16 lg:h-12 lg:w-12 rounded-full border border-primary/70 items-center flex justify-center text-primary lg:text-xl text-2xl font-bold hover:bg-primary/10"
           aria-label="Next testimonial"
           onClick={handleNext}
         >
-          <ArrowRight className="h-4 w-4" />
+          →
         </button>
       </div>
     </section>

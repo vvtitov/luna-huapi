@@ -16,8 +16,8 @@ const ParallaxSection = ({ firstText, secondText }: ParallaxSectionProps) => {
     offset: ["start end", "end start"]
   });
 
-  const leftX = useTransform(scrollYProgress, [0, 0.9], ["-200%", "200%"]);
-  const rightX = useTransform(scrollYProgress, [0, 0.9], ["200%", "-200%"]);
+  const leftX = useTransform(scrollYProgress, [0, 0.9], ["-150%", "200%"]);
+  const rightX = useTransform(scrollYProgress, [0, 0.9], ["150%", "-200%"]);
   const overlayOpacity = useTransform(scrollYProgress, [0.3, 0.5], [1, 0]);
 
   return (
@@ -47,7 +47,7 @@ const ParallaxSection = ({ firstText, secondText }: ParallaxSectionProps) => {
           style={{ x: leftX }}
           className="whitespace-nowrap z-10"
         >
-          <span className="text-[60px] lg:text-[100px] text-dark leading-none tracking-wider uppercase">
+          <span className="text-[60px] lg:text-7xl text-dark leading-none tracking-wider uppercase">
             {firstText}
           </span>
         </motion.div>
@@ -57,7 +57,7 @@ const ParallaxSection = ({ firstText, secondText }: ParallaxSectionProps) => {
           style={{ x: rightX }}
           className="whitespace-nowrap z-10"
         >
-          <span className="text-[60px] lg:text-[100px] text-dark leading-none tracking-wider uppercase">
+          <span className="text-[60px] lg:text-7xl text-dark leading-none tracking-wider uppercase">
             {secondText}
           </span>
         </motion.div>

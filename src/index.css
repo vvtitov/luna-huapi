@@ -219,26 +219,19 @@
 }
 
 .scrollbar-draggable::-webkit-scrollbar {
-  height: 2px; /* Grosor mínimo si es horizontal */
-  width: 1px; /* Grosor mínimo si es vertical */
+  display: none;
 }
 
-.scrollbar-draggable::-webkit-scrollbar-track {
-  background: hsl(220, 13%, 91%);
-}
+@media (min-width: 768px) {
+  .scrollbar-draggable::-webkit-scrollbar {
+    display: block;
+    height: 2px; /* Grosor mínimo si es horizontal */
+  }
+  .scrollbar-draggable::-webkit-scrollbar-thumb {
+    background: var(--text-secondary);
+  }
 
-.scrollbar-draggable::-webkit-scrollbar-thumb {
-  background: var(--text-primary);
-  border-radius: 15px;
-  transition: background 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  opacity: 0.5; /* Hace que el thumb sea más sutil */
-}
-
-.scrollbar-draggable::-webkit-scrollbar-thumb:hover {
-  opacity: 1; /* Se hace más visible al hacer hover */
-  background: hsla(0, 0%, 30%, 0.9); /* Un color más oscuro al interactuar */
-}
-
-.scrollbar-draggable::-webkit-scrollbar-thumb:active {
-  background: hsla(0, 0%, 40%, 0.9); /* Color más oscuro al hacer click */
+  .scrollbar-draggable::-webkit-scrollbar-track {
+    background: var(--color-light);
+  }
 }

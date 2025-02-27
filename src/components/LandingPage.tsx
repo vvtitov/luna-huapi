@@ -6,6 +6,9 @@ import FaqAccordion from "./FaqAccordion";
 import { Button } from "./ui/button";
 import Testimonials from "./Testimonials";
 import ParallaxSection from "./ParallaxText";
+import { ParallaxCircleDivider } from "./ParallaxImage";
+
+
 const LandingPage = () => {
   return (
     <div className="bg-background min-h-screen ">
@@ -88,8 +91,8 @@ const LandingPage = () => {
             <img src="/burger-menu.svg" alt="Menu" className="w-8 h-8 pt-4" />
           </div>
         </nav>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-3/5 lg:w-2/5">
-          <h2 className="text-2xl lg:text-3xl text-light mb-16 animate-in fade-in duration-[2000ms]">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-3/5 lg:w-3/6 pt-20">
+          <h2 className="text-3xl lg:text-4xl text-light mb-16 animate-in fade-in duration-[2000ms]">
             Descubre la comodidad y el encanto de nuestros departamentos en
             alquiler en San Carlos de Bariloche, una de las ciudades mas bellas
             de la Patagonia argentina.
@@ -110,22 +113,22 @@ const LandingPage = () => {
         secondText="tu refugio en la naturaleza en la patagonia " 
       /> 
 
-      {/* Content Section 1 */}
-      <section className="py-24 pointer-primary" id="nosotras">
-        <div className="mx-auto px-10">
+      {/* NOSOTRAS */}
+      <section className="py-24 pointer-primary mb-8" id="nosotras">
+        <div className="mx-auto px-6 lg:px-10">
           <div className="h-px bg-[#565656] opacity-20 flex-grow mb-10"></div>
           <div className="block lg:flex justify-between mb-12">
             <div className="min-w-fit font-inter">
             <p className="text-light text-xl">
               01 
               <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase text-xl">Quienes somos</span>
+              <span className="text-primary uppercase lg:text-xl text-xl">Quienes somos</span>
             </p>
             </div>
             
           <div className="flex w-full lg:justify-end">
-            <div className="relative lg:w-3/5">
-              <p className="text-3xl text-primary mt-5">
+            <div className="relative lg:w-4/6">
+              <p className="text-4xl lg:text-4xl text-primary mt-10 lg:mt-5 text-pretty">
                 Descubre la comodidad y el encanto de nuestros departamentos en
                 alquiler en San Carlos de Bariloche, una de las ciudades mas
                 bellas de la Patagonia argentina.
@@ -135,27 +138,34 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-      {/* Content Section 2 */}
-      <section className="mx-auto py-24 px-10 pointer-drag [&_*]:pointer-drag" id="los-departamentos">
+
+      {/* LOS DEPARTAMENTOS */}
+      <section className="mx-auto py-24 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag" id="los-departamentos">
         <div className="mx-auto">
-          <div className="flex justify-between items-center mb-12 font-inter">
-            <p className="text-light text-xl">
+          <div className="flex justify-between items-center mb-5 font-inter">
+            <p className="text-light text-2xl">
               02 
               <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase text-xl">Nuestros departamentos</span>
+              <span className="text-primary uppercase lg:text-xl text-xl">Nuestros departamentos</span>
             </p>
           </div>
           <DraggableCards />
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
       <div className="pointer-primary [&_*]:pointer-primary">
         <Testimonials />
       </div>
 
-      {/* FAQ Section */}
-      <section className="mx-auto py-24 px-10 pointer-primary" id="preguntas-frecuentes">
-        <div className="h-px bg-[#565656] opacity-20 flex-grow my-8"></div>
+      {/* PARALLAX */}
+      <div className="relative w-full pointer-primary [&_*]:pointer-primary">
+        <ParallaxCircleDivider imageUrl="/paralaxbg.png" title="Tu lugar de descanso" buttonText="Seguinos en instagram" onButtonClick={() => {}}/>
+      </div>
+
+      {/* FAQ */}
+      <section className="mx-auto pb-24 px-10 pointer-primary" id="preguntas-frecuentes">
+        <div className="h-px bg-[#565656] opacity-20 flex-grow my-12"></div>
         <div className="mx-auto">
           <div className="flex justify-between items-center mb-12 font-inter">
             <p className="text-light text-xl">
@@ -172,28 +182,29 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-primary-custom py-12 px-10 pointer-primary [&_*]:pointer-primary" id="contacto">
+      {/* FOOTER */}
+      <footer className="bg-primary-custom py-12 px-10 pointer-primary [&_*]:pointer-primary font-inter" id="contacto">
         <div className="mx-auto">
           <div className="h-px bg-[#565656] opacity-20 my-8"></div>
           <div className="flex justify-between items-center mb-[15vh]">
-            <h1 className="text-dark text-5xl font-light">CONTACTO</h1>
+            <h1 className="text-7xl font-light">CONTACTO</h1>
             <button className="border border-primary rounded-full p-4">
               <ArrowUp className="text-primary" size={24} />
             </button>
           </div>
-          <div className="grid md:grid-cols-3 md:grid-rows-2 justify-between my-15 text-dark items-start gap-10">
-            <div className="uppercase text-md flex items-baseline">
-              <img src="/circle.svg" alt="Circle" className="self-start pt-1 mr-2"/>
+          <div className="grid md:grid-cols-3 md:grid-rows-2 justify-between my-15 text-dark items-start gap-10 text-primary">
+            <div className="uppercase text-xl flex items-baseline">
+              <img src="/circle.svg" alt="Circle" className="self-start pt-1 mr-3"/>
               Los jilgueros 2374, Bariloche <br /> <br />CP 1723, Argentina <br />
               54 (9) 1157963615
             </div>
             <div className="uppercase text-md flex items-center">
-            <img src="/circle.svg" alt="Circle" className="self-center mr-2 min-w-fit shrink-0"/>
-            <a href="https://www.instagram.com/lunahuapi/" target="_blank" rel="noopener noreferrer">seguinos en instagram</a> → </div>
+            <img src="/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
+            <a href="https://www.instagram.com/lunahuapi/" target="_blank" rel="noopener noreferrer hover:underline" 
+                className="underline underline-offset-8 text-xl">seguinos en instagram →</a></div>
             <div className="uppercase text-md flex items-center">
-            <img src="/circle.svg" alt="Circle" className="self-center mr-2 min-w-fit shrink-0"/>
-            <a href="mailto:info@lunahuapi.com">info@lunahuapi.com</a> </div>
+            <img src="/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
+            <a href="mailto:info@lunahuapi.com" className="text-xl">info@lunahuapi.com</a> </div>
           </div>
           <div className="flex items-center w-full justify-end">
             <span className="text-dark text-xl">dev by 3M &copy; 2025 LUNA HUAPI</span>

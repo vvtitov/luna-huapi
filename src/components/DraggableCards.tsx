@@ -89,36 +89,35 @@ export default function Departments() {
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseLeave}
           onMouseMove={handleMouseMove}
-          className="flex overflow-x-auto h-auto w-full scrollbar-draggable"
+          className="flex overflow-x-auto scrollbar-draggable gap-5"
           style={{ 
             scrollBehavior: dragStateRef.current.isDragging ? 'auto' : 'smooth',
             scrollSnapType: dragStateRef.current.isDragging ? 'none' : 'x mandatory',
-            transition: dragStateRef.current.isDragging ? 'none' : 'all 0.3s ease-out'
           }}
         >
           {departments.map((department, index) => (
             <Card
               key={department.id}
               className={`
-                w-[576px] flex-shrink-0 transition-all hover:pointer-drag
+                w-[300px] lg:w-[576px] h-fit flex-shrink-0 transition-all
               `}
               style={{ 
                 scrollSnapAlign: 'start',
                 transform: dragStateRef.current.isDragging 
-                  ? `perspective(1000px) 
+                  ? `perspective(1000px)
                      translateZ(${Math.abs(index - activeIndex) * -10}px)`
                   : 'none',
-                transition: dragStateRef.current.isDragging ? 'transform 0.1s' : 'all 0.3s ease-out'
+                
               }}
             >
-              <CardContent className="mb-10 relative overflow-hidden">
+              <CardContent className="lg:mb-20 relative overflow-hidden">
                 <div className="relative overflow-hidden">
                   <img
                     src={department.image}
                     alt={department.title}
                     className={`
-                      object-cover w-full transition-transform duration-300
-                      ${dragStateRef.current.isDragging ? 'scale-[1.03]' : 'scale-100'}
+                      object-cover w-full h-[300px] lg:h-[648px] transition-transform duration-300 mb-4
+                      ${dragStateRef.current.isDragging ? 'scale-[1.00]' : 'scale-100'}
                     `}
                     draggable={false}
                   />
@@ -129,14 +128,14 @@ export default function Departments() {
                     `}
                   />
                 </div>
-                <div className="flex justify-between items-center rounded-md mt-4 font-inter">
-                  <span className="text-sm font-semibold text-primary uppercase">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center rounded-md mt-4 font-inter pb-2">
+                  <span className="text-xl lg:text-2xl text-primary uppercase font-extralight mb-3 lg:mb-0">
                     {department.title}
                   </span>
                   <Button
                     variant="link"
-                    className="text-sm font-semibold text-primary z-50 uppercase underline underline-offset-6 pb-3
-                             transition-all duration-300 hover:tracking-wider"
+                    className="text-xl lg:text-2xl text-primary/60 z-50 uppercase underline underline-offset-10 underline-
+                    hover:cursor-pointer font-extralight"
                     onClick={() => setSelectedDepartment(department)}
                   >
                     Ver más →
