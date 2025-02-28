@@ -30,7 +30,7 @@ const useDepartments = create<{
     id: (i + 1).toString(),
     title: `Departamento ${i + 1}`,
     image: "/test3.png",
-    description: `Descripción del departamento ${i + 1}.`,
+    description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. `,
   })),
   setDepartments: (departments) => set({ departments }),
 }));
@@ -129,12 +129,12 @@ export default function Departments() {
                   />
                 </div>
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center rounded-md mt-4 font-inter pb-2">
-                  <span className="text-xl lg:text-2xl text-primary uppercase font-extralight mb-3 lg:mb-0">
+                  <span className="text-xl lg:text-xl text-primary uppercase font-extralight mb-3 lg:mb-0">
                     {department.title}
                   </span>
                   <Button
                     variant="link"
-                    className="text-xl lg:text-2xl text-primary/60 z-50 uppercase underline underline-offset-10 underline-
+                    className="text-xl lg:text-xl text-primary/60 z-50 uppercase underline underline-offset-10 underline-
                     hover:cursor-pointer font-extralight"
                     onClick={() => setSelectedDepartment(department)}
                   >

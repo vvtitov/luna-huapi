@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   ArrowUp,
 } from "lucide-react";
@@ -7,9 +8,16 @@ import { Button } from "./ui/button";
 import Testimonials from "./Testimonials";
 import ParallaxSection from "./ParallaxText";
 import { ParallaxCircleDivider } from "./ParallaxImage";
+import BurguerMenu from "./BurguerMenu";
 
 
 const LandingPage = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <div className="bg-background min-h-screen ">
       {/* Hero Section */}
@@ -56,6 +64,17 @@ const LandingPage = () => {
                         : "#"
                     }
                     className="text-light transition-colors relative group min-w-fit"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      const target = document.querySelector(
+                        event.currentTarget.getAttribute("href") as string
+                      );
+                      if (target) {
+                        target.scrollIntoView({
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
                   >
                     {item}
                   </a>
@@ -87,8 +106,8 @@ const LandingPage = () => {
               </Button>
             </div>
           </div>
-          <div className="flex items-center justify-self-end lg:hidden pt-[72px] pr-10 cursor-pointer">
-            <img src="/burger-menu.svg" alt="Menu" className="w-8 h-8 pt-4" />
+          <div className="flex items-center justify-self-end lg:hidden pt-[72px] pr-10 cursor-pointer" onClick={toggleMenu}>
+            <BurguerMenu isOpen={isMenuOpen} toggleMenu={toggleMenu}/>
           </div>
         </nav>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-3/5 lg:w-3/6 pt-20">
@@ -119,10 +138,10 @@ const LandingPage = () => {
           <div className="h-px bg-[#565656] opacity-20 flex-grow mb-10"></div>
           <div className="block lg:flex justify-between mb-12">
             <div className="min-w-fit font-inter">
-            <p className="text-light text-xl">
+            <p className="text-light text-lg">
               01 
               <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase lg:text-xl text-xl">Quienes somos</span>
+              <span className="text-primary uppercase lg:text-xl text-lg">Quienes somos</span>
             </p>
             </div>
             
@@ -143,10 +162,10 @@ const LandingPage = () => {
       <section className="mx-auto py-24 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag" id="los-departamentos">
         <div className="mx-auto">
           <div className="flex justify-between items-center mb-5 font-inter">
-            <p className="text-light text-2xl">
+            <p className="text-light text-lg">
               02 
               <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase lg:text-xl text-xl">Nuestros departamentos</span>
+              <span className="text-primary uppercase lg:text-xl text-lg">Nuestros departamentos</span>
             </p>
           </div>
           <DraggableCards />
@@ -168,14 +187,14 @@ const LandingPage = () => {
         <div className="h-px bg-[#565656] opacity-20 flex-grow my-12"></div>
         <div className="mx-auto">
           <div className="flex justify-between items-center mb-12 font-inter">
-            <p className="text-light text-xl">
+            <p className="text-light text-lg">
               04 
               <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase text-xl">Preguntas frecuentes</span>
+              <span className="text-primary uppercase text-lg">Preguntas frecuentes</span>
             </p>
           </div>
           <div className="flex w-full justify-end">
-            <div className="w-full lg:w-7/12">
+            <div className="w-full lg:w-4/7">
               <FaqAccordion />
             </div>
           </div>
@@ -187,27 +206,33 @@ const LandingPage = () => {
         <div className="mx-auto">
           <div className="h-px bg-[#565656] opacity-20 my-8"></div>
           <div className="flex justify-between items-center mb-[15vh]">
-            <h1 className="text-7xl font-light">CONTACTO</h1>
-            <button className="border border-primary rounded-full p-4">
+            <h1 className="text-5xl lg:text-7xl font-light">CONTACTO</h1>
+            <button className="relative lg:top-3 top-130 left-2 animate-bounce transition-all duration-2000 border border-primary rounded-full p-4" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <ArrowUp className="text-primary" size={24} />
             </button>
           </div>
           <div className="grid md:grid-cols-3 md:grid-rows-2 justify-between my-15 text-dark items-start gap-10 text-primary">
-            <div className="uppercase text-xl flex items-baseline">
+            <div className="uppercase text-lg lg:text-xl flex items-baseline">
               <img src="/circle.svg" alt="Circle" className="self-start pt-1 mr-3"/>
               Los jilgueros 2374, Bariloche <br /> <br />CP 1723, Argentina <br />
               54 (9) 1157963615
             </div>
-            <div className="uppercase text-md flex items-center">
+            <div className="uppercase text-lg lg:text-xl flex items-center">
             <img src="/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
             <a href="https://www.instagram.com/lunahuapi/" target="_blank" rel="noopener noreferrer hover:underline" 
-                className="underline underline-offset-8 text-xl">seguinos en instagram →</a></div>
-            <div className="uppercase text-md flex items-center">
+                className="underline underline-offset-8 text-lg">seguinos en instagram →</a></div>
+            <div className="uppercase text-md lg:text-xl flex items-center">
             <img src="/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
-            <a href="mailto:info@lunahuapi.com" className="text-xl">info@lunahuapi.com</a> </div>
+            <a href="mailto:info@lunahuapi.com" className="text-lg">info@lunahuapi.com</a> </div>
           </div>
-          <div className="flex items-center w-full justify-end">
-            <span className="text-dark text-xl">dev by 3M &copy; 2025 LUNA HUAPI</span>
+          <div className="flex items-center w-full justify-center pt-20">
+            <p className="text-dark font-extralight text-xs">
+             dev by {""}
+              <a href="https://www.3mangos.site/" target="_blank" rel="noopener noreferrer hover:underline" className="underline underline-offset-4 text-sm">THREE MANGOS</a> <br/>
+             <span className="text-dark font-extralight text-sm">
+              &copy; 2025 LUNA HUAPI
+             </span>
+            </p>
           </div>
         </div>
       </footer>

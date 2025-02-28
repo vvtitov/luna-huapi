@@ -41,10 +41,10 @@ export default function Testimonials() {
     >
       <div className="h-px bg-[#565656] opacity-20 flex-grow my-8 pointer-primary [&_*]:pointer-primary"></div>
       <div className="block lg:flex justify-between w-full font-inter">
-        <p className="text-light text-xl">
+        <p className="text-light text-lg">
           03
           <span className="text-light px-4">/</span>
-          <span className="text-primary uppercase text-xl">
+          <span className="text-primary uppercase text-lg">
             Nuestros huéspedes
           </span>
         </p>

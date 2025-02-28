@@ -222,7 +222,13 @@
   display: none;
 }
 
-@media (min-width: 768px) {
+.scrollbar-hidden::-webkit-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  display: none;
+}
+
+@media (min-width: 1024px) {
   .scrollbar-draggable::-webkit-scrollbar {
     display: block;
     height: 2px; /* Grosor mínimo si es horizontal */
