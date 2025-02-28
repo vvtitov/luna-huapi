@@ -51,7 +51,7 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
         style={{ zIndex: 998 }}
       >
         <div
-          className="w-full h-full bg-gradient-to-b from-background to-[#E3BDB1]"
+          className="w-full h-full bg-gradient-to-b from-background via-background to-[#E3BDB1]"
           style={isOpen ? { overflow: "hidden" } : {}}
         >
          <div
@@ -69,12 +69,12 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
             
           <div className="w-fit h-fit mt-20">
             <img
-              src="/logo.svg"
+              src="/logo-dark.svg"
               alt="Logo"
-              className="w-[200px] h-[200px] object-cover"
+              className="w-[100px] h-[100px] object-cover"
             />
           </div>
-          <ul className="text-primary text-right text-4xl mt-10">
+          <ul className="text-primary text-center text-2xl mt-20">
             <li className="mb-6">
               <button
                 onClick={() => handleClick("nosotras")}
@@ -112,7 +112,7 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
               </button>
             </li>
           </ul>
-          <div className="text-primary px-6 py-4 rounded-full flex items-center text-2xl mt-10">
+          <div className="text-primary px-6 py-4 rounded-full flex items-center text-xl mt-5">
             ES <ArrowUpRight />
           </div>
         </nav>
