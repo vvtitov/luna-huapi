@@ -10,7 +10,7 @@ interface ParallaxCircleDividerProps {
   onButtonClick?: () => void
 }
 
-export function ParallaxCircleDivider({ imageUrl, title, buttonText, onButtonClick }: ParallaxCircleDividerProps) {
+export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: ParallaxCircleDividerProps) {
   const [progress, setProgress] = useState(0)
   const dividerRef = useRef<HTMLDivElement>(null)
 
@@ -66,7 +66,7 @@ export function ParallaxCircleDivider({ imageUrl, title, buttonText, onButtonCli
           }}
         >
           <img
-            src={imageUrl || "/paralaxbg.png"}
+            src={"/images/parallaxbg.png"}
             alt="Parallax Background"
             className="object-cover w-full h-full"
           />

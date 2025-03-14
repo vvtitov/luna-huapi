@@ -77,12 +77,12 @@
 
   .pointer-primary,
   .pointer-primary * {
-    cursor: url('/pointer-primary.svg') 50 50, auto !important;
+    cursor: url('@/assets/pointer-primary.svg') 50 50, auto !important;
   }
 
   .pointer-drag,
   .pointer-drag * {
-    cursor: url('/pointer-drag.svg') 50 50, auto !important;
+    cursor: url('@/assets/pointer-drag.svg') 50 50, auto !important;
   }
 
   .font-light {

@@ -20,8 +20,8 @@ const LandingPage = () => {
 
   return (
     <div className="bg-background min-h-screen ">
-      {/* Hero Section */}
-      <section className="relative h-screen w-full bg-card-foreground bg-blend-overlay bg-[url('/test3.png')] bg-cover bg-center">
+
+      <section className="relative h-screen w-full bg-card-foreground bg-blend-overlay bg-[url('/images/main-bg.png')] bg-cover bg-center">
         <nav id="navbar" className="absolute top-0 flex justify-between w-full items-center align-middle">
           <div id="right-side" className="relative flex pl-10">
             <div
@@ -29,7 +29,7 @@ const LandingPage = () => {
               className="self-center pt-[72px] "
             >
               <img
-                src="/logo.svg"
+                src="/src/assets/logo.svg"
                 alt="LUNA HUAPI"
                 width={87.71}
                 height={87.71}
@@ -37,7 +37,7 @@ const LandingPage = () => {
               />
               <p className="text-text-primary uppercase text-xl lg:hidden pt-5">
                 <img
-                  src="/logotipo.svg"
+                  src="/src/assets/logotipo.svg"
                   alt="LUNA HUAPI"
                   width={87.71}
                   height={87.71}
@@ -84,7 +84,7 @@ const LandingPage = () => {
             <div className="flex items-center justify-self-end pr-10">
               <div className="w-px h-[30px] bg-[#D1D1D1]"></div>
               <div className="text-[#D1D1D1] px-6 py-4 rounded-full flex items-center">
-                ES <img src="/arrow-down.svg" alt="Arrow Down" className="w-5 h-5 ml-1"/>
+                ES <img src="/src/assets/arrow-down.svg" alt="Arrow Down" className="w-5 h-5 ml-1"/>
               </div>
               <Button
                 id="btn-contactanos"
@@ -95,7 +95,7 @@ const LandingPage = () => {
               >
                 Contactanos{" "}
                 <span className="ml-1" role="img" aria-label="WhatsApp">
-                  <img src="/whatsapp.svg" alt="WhatsApp" className="w-5 h-5"/>
+                  <img src="/src/assets/whatsapp.svg" alt="WhatsApp" className="w-5 h-5"/>
                 </span>
               </Button>
               <Button
@@ -110,8 +110,8 @@ const LandingPage = () => {
             <BurguerMenu isOpen={isMenuOpen} toggleMenu={toggleMenu}/>
           </div>
         </nav>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-3/5 lg:w-3/6 pt-20">
-          <h2 className="text-3xl lg:text-4xl text-light mb-16 animate-in fade-in duration-[2000ms]">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-3/5 lg:w-3/6 pt-20">
+          <h2 className="text-2xl lg:text-4xl text-light mb-16 animate-in fade-in duration-[2000ms]">
             Descubre la comodidad y el encanto de nuestros departamentos en
             alquiler en San Carlos de Bariloche, una de las ciudades mas bellas
             de la Patagonia argentina.
@@ -213,16 +213,16 @@ const LandingPage = () => {
           </div>
           <div className="grid md:grid-cols-3 md:grid-rows-2 justify-between my-15 text-dark items-start gap-10 text-primary">
             <div className="uppercase text-lg lg:text-xl flex items-baseline">
-              <img src="/circle.svg" alt="Circle" className="self-start pt-1 mr-3"/>
+              <img src="/src/assets/circle.svg" alt="Circle" className="self-start pt-1.5 mr-3"/>
               Los jilgueros 2374, Bariloche <br /> <br />CP 1723, Argentina <br />
               54 (9) 1157963615
             </div>
             <div className="uppercase text-lg lg:text-xl flex items-center">
-            <img src="/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
+            <img src="/src/assets/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
             <a href="https://www.instagram.com/lunahuapi/" target="_blank" rel="noopener noreferrer hover:underline" 
                 className="underline underline-offset-8 text-lg">seguinos en instagram →</a></div>
             <div className="uppercase text-md lg:text-xl flex items-center">
-            <img src="/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
+            <img src="/src/assets/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
             <a href="mailto:info@lunahuapi.com" className="text-lg">info@lunahuapi.com</a> </div>
           </div>
           <div className="flex items-center w-full justify-center pt-20">

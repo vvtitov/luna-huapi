@@ -5,13 +5,7 @@ import * as React from "react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
 import { Separator } from "./ui/separator"
-
-interface Department {
-  id: string;
-  title: string;
-  image: string;
-  description: string;
-}
+import { Department } from "./ApartmentsConfig"
 
 interface ApartmentDetailProps {
   department: Department | null;
@@ -21,24 +15,21 @@ interface ApartmentDetailProps {
 export default function ApartmentDetail({ department, onClose }: ApartmentDetailProps) {
   if (!department) return null;
 
-  const thumbnails = [
-    department.image,
-    "/test3.png",
-    "/test.png",
-    "/test3.png",
-    "/test.png",
-    "/test.png",
-    "/test.png",
-  ]
+  // Combine apartment and building images
+  const allImages = [
+    department.mainImage,
+    ...department.images.apartment,
+    ...department.images.building
+  ];
 
-  const [selectedImage, setSelectedImage] = React.useState(department.image)
+  const [selectedImage, setSelectedImage] = React.useState(department.mainImage);
 
   return (
     <div className="fixed top-0 right-0 bottom-0 left-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden">
       <div className="flex flex-col md:flex-row h-full w-full">
         {/* Thumbnails */}
         <div className="block md:flex flex-col gap-2 p-4 border-r space-x-3 mx-auto">
-          {thumbnails.map((thumb, idx) => (
+          {allImages.map((thumb, idx) => (
             <button
               key={idx}
               onClick={() => setSelectedImage(thumb)}
@@ -56,7 +47,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
         {/* Main Image */}
         <div className="relative h-[20rem] md:h-full w-full md:w-1/2">
           <img 
-            src={selectedImage || department.image} 
+            src={selectedImage || department.mainImage} 
             alt={department.title} 
             className="object-cover w-full h-full"
           />
@@ -89,15 +80,15 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             <div className="grid-row sm:grid-cols-3 lg:flex lg:flex-row mx-auto justify-center gap-4 mb-8 font-inter w-full text-center shrink-1 space-y-3 lg:space-y-0">
               <Card className="px-3 py-6 min-w-fit border rounded-md border-primary lg:w-1/3">
                 <h3 className="font-medium text-lg">CAPACIDAD</h3>
-                <p className="text-4xl text-muted-foreground">4</p>
+                <p className="text-4xl text-muted-foreground">{department.capacity}</p>
               </Card>
               <Card className="px-3 py-6 min-w-fit border rounded-md border-primary lg:w-1/3">
                 <h3 className="font-medium text-lg">HABITACIONES</h3>
-                <p className="text-4xl text-muted-foreground">2 </p>
+                <p className="text-4xl text-muted-foreground">{department.bedrooms}</p>
               </Card>
               <Card className="px-3 py-6 min-w-fit border rounded-md border-primary lg:w-1/3">
                 <h3 className="font-medium text-lg">BAÑOS</h3>
-                <p className="text-4xl text-muted-foreground">1</p>
+                <p className="text-4xl text-muted-foreground">{department.bathrooms}</p>
               </Card>
             </div>
 
