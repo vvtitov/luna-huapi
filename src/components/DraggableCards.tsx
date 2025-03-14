@@ -1,5 +1,4 @@
 import React, { useState, useRef, useCallback } from "react";
-import { create } from "zustand";
 import {
   Dialog,
   DialogContent,
@@ -7,13 +6,7 @@ import {
 import { Card, CardContent } from "../components/ui/card";
 import ApartmentDetail from "./ApartmentDetails";
 import { Button } from "./ui/button";
-
-interface Department {
-  id: string;
-  title: string;
-  image: string;
-  description: string;
-}
+import { useDepartments, Department } from "./ApartmentsConfig";
 
 interface DragState {
   isDragging: boolean;
@@ -21,19 +14,6 @@ interface DragState {
   scrollLeft: number;
   lastX: number;
 }
-
-const useDepartments = create<{
-  departments: Department[];
-  setDepartments: (departments: Department[]) => void;
-}>((set) => ({
-  departments: Array.from({ length: 4 }, (_, i) => ({
-    id: (i + 1).toString(),
-    title: `Departamento ${i + 1}`,
-    image: "/test3.png",
-    description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. `,
-  })),
-  setDepartments: (departments) => set({ departments }),
-}));
 
 export default function Departments() {
   const { departments } = useDepartments();
@@ -113,7 +93,7 @@ export default function Departments() {
               <CardContent className="lg:mb-20 relative overflow-hidden">
                 <div className="relative overflow-hidden">
                   <img
-                    src={department.image}
+                    src={department.mainImage}
                     alt={department.title}
                     className={`
                       object-cover w-full h-[300px] lg:h-[648px] transition-transform duration-300 mb-4
