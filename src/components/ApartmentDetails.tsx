@@ -68,7 +68,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
     // Only initialize if we don't have loading states already
     if (Object.keys(loadingThumbnails).length === 0) {
       const initialLoadingState: Record<number, boolean> = {};
-      allImages.forEach((img, idx) => {x
+      allImages.forEach((img, idx) => {
         // Check if we've already loaded this image
         initialLoadingState[idx] = !loadedImages[img];
       });
