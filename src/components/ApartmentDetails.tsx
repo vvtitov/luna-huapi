@@ -15,14 +15,86 @@ interface ApartmentDetailProps {
 export default function ApartmentDetail({ department, onClose }: ApartmentDetailProps) {
   if (!department) return null;
 
-  // Combine apartment and building images
-  const allImages = React.useMemo(() => [
-    department.mainImage,
-    ...department.images.apartment,
-    ...department.images.building
-  ], [department]);
+  // Combine apartment and building images, excluding the main image from thumbnails
+  const allImages = React.useMemo(() => {
+    // Create array without duplicates and excluding the main image from thumbnails
+    const uniqueImages = [
+      ...new Set([
+        ...department.images.apartment,
+        ...department.images.building
+      ])
+    ].filter(img => img !== department.mainImage);
+    
+    // Return array with main image first, followed by unique other images
+    return [department.mainImage, ...uniqueImages];
+  }, [department]);
 
   const [selectedImage, setSelectedImage] = React.useState(department.mainImage);
+  const [isMainImageLoading, setIsMainImageLoading] = React.useState(true);
+  const [loadingThumbnails, setLoadingThumbnails] = React.useState<Record<number, boolean>>({});
+  const [loadedImages, setLoadedImages] = React.useState<Record<string, boolean>>({});
+
+  const handleMainImageLoad = () => {
+    setIsMainImageLoading(false);
+    setLoadedImages(prev => ({
+      ...prev,
+      [selectedImage]: true
+    }));
+  };
+
+  const handleThumbnailLoad = (idx: number, src: string) => {
+    setLoadingThumbnails(prev => ({
+      ...prev,
+      [idx]: false
+    }));
+    setLoadedImages(prev => ({
+      ...prev,
+      [src]: true
+    }));
+  };
+
+  React.useEffect(() => {
+    // Reset loading state when selected image changes
+    // Only if we haven't already loaded this image
+    if (!loadedImages[selectedImage]) {
+      setIsMainImageLoading(true);
+    } else {
+      setIsMainImageLoading(false);
+    }
+  }, [selectedImage, loadedImages]);
+
+  // Initialize thumbnail loading states
+  React.useEffect(() => {
+    const initialLoadingState: Record<number, boolean> = {};
+    allImages.forEach((img, idx) => {
+      // Check if we've already loaded this image
+      initialLoadingState[idx] = !loadedImages[img];
+    });
+    setLoadingThumbnails(initialLoadingState);
+  }, [allImages, loadedImages]);
+
+  // Preload the next few images
+  React.useEffect(() => {
+    // Find the current index
+    const currentIndex = allImages.findIndex(img => img === selectedImage);
+    
+    // Preload the next 3 images
+    for (let i = 1; i <= 3; i++) {
+      const nextIndex = (currentIndex + i) % allImages.length;
+      const nextImage = allImages[nextIndex];
+      
+      if (!loadedImages[nextImage]) {
+        const img = new Image();
+        img.src = nextImage;
+        img.onload = () => {
+          setLoadedImages(prev => ({
+            ...prev,
+            [nextImage]: true
+          }));
+        };
+      }
+    }
+  }, [selectedImage, allImages, loadedImages]);
 
   return (
     <div className="fixed top-0 right-0 bottom-0 left-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden">
@@ -33,7 +105,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             <button
               key={idx}
               onClick={() => setSelectedImage(thumb)}
-              className="relative w-20 h-20 overflow-hidden rounded-md hover:opacity-80 transition-opacity "
+              className="relative w-20 h-20 overflow-hidden rounded-md hover:opacity-80 transition-opacity cursor-pointer"
             >
               <img
                 src={thumb || "/placeholder.svg"}
@@ -42,7 +114,20 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
                 loading="lazy"
                 width={80}
                 height={80}
+                onLoad={() => handleThumbnailLoad(idx, thumb)}
+                style={{ 
+                  opacity: loadingThumbnails[idx] ? 0.5 : 1,
+                  transition: 'opacity 0.3s ease-in-out'
+                }}
               />
+              {loadingThumbnails[idx] && (
+                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-background/30 backdrop-blur-sm transition-opacity duration-300">
+                  <svg className="animate-spin h-6 w-6 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                </div>
+              )}
             </button>
           ))}
         </div>
@@ -56,7 +141,20 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             width={800}
             height={600}
             loading="eager"
+            onLoad={handleMainImageLoad}
+            style={{ 
+              opacity: isMainImageLoading ? 0.5 : 1,
+              transition: 'opacity 0.3s ease-in-out'
+            }}
           />
+          {isMainImageLoading && (
+            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-background/30 backdrop-blur-sm transition-opacity duration-300">
+              <svg className="animate-spin h-12 w-12 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          )}
         </div>
 
         {/* Info Panel */}
@@ -64,7 +162,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
           <div className="fixed top-20 right-6 md:top-8 md:right-18 lg:flex lg:justify-end rounded-full bg-background/80 backdrop-blur-sm">
             <button 
               onClick={onClose}
-              className="rounded-full p-4 border border-muted font-extralight hover:scale-105 transition-transform"
+              className="rounded-full p-4 border border-muted font-extralight hover:scale-105 transition-transform cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
