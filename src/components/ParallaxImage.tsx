@@ -51,7 +51,7 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
   return (
     <div
       ref={dividerRef}
-      className="relative min-w-full w-full h-full mt-30 lg:mt-0"
+      className="relative min-w-full w-full h-full pt-10 lg:mt-0"
       style={{ height: `${Math.max(finalHeight, window.innerHeight)}px` }}
     >
       <div className="sticky top-0 flex justify-center min-w-full">

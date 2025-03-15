@@ -63,8 +63,8 @@
   --color-dark: hsl(0, 0%, 25%);
   --color-white: hsl(0, 0%, 100%);
 
-  --pointer-drag: cursor url('/pointer-drag.svg') 50 50, auto;
-  --pointer-primary: cursor url('/pointer-primary.svg') 50 50, auto;
+  --pointer-drag: cursor url('/assets/pointer-drag.svg') 50 50, auto;
+  --pointer-primary: cursor url('/assets/pointer-primary.svg') 50 50, auto;
 }
 
 /* Estilos base */
@@ -77,12 +77,24 @@
 
   .pointer-primary,
   .pointer-primary * {
-    cursor: url('@/assets/pointer-primary.svg') 50 50, auto !important;
+    cursor: url('/assets/pointer-primary.svg') 50 50, auto !important;
+  }
+
+  .pointer-primary a:hover,
+  .pointer-primary button:hover,
+  .pointer-primary [role="button"]:hover {
+    cursor: url('/assets/pointer-primary-white.svg') 50 50, auto !important;
   }
 
   .pointer-drag,
   .pointer-drag * {
-    cursor: url('@/assets/pointer-drag.svg') 50 50, auto !important;
+    cursor: url('/assets/pointer-drag.svg') 50 50, auto !important;
+  }
+
+  .pointer-drag a:hover,
+  .pointer-drag button:hover,
+  .pointer-drag [role="button"]:hover {
+    cursor: url('/assets/pointer-primary.svg') 50 50, auto !important;
   }
 
   .font-light {

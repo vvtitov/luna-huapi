@@ -69,7 +69,7 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
             
           <div className="w-fit h-fit mt-20">
             <img
-              src="/logo-dark.svg"
+              src="/assets/logo-dark.svg"
               alt="Logo"
               className="w-[100px] h-[100px] object-cover"
             />

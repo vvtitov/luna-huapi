@@ -36,11 +36,11 @@ export default function Testimonials() {
 
   return (
     <section
-      className="mx-auto min-h-[600px] bg-primary-custom w-full px-10 pointer-primary [&_*]:pointer-primary relative min-w-[400px]"
+      className="mx-auto min-h-[600px] bg-primary-custom w-full px-10 pointer-primary [&_*]:pointer-primary relative min-w-[400px] pb-20"
       id="reviews"
     >
-      <div className="h-px bg-[#565656] opacity-20 flex-grow my-8 pointer-primary [&_*]:pointer-primary"></div>
-      <div className="block lg:flex justify-between w-full font-inter">
+      <div className="h-px bg-[#565656] opacity-20 flex-grow"></div>
+      <div className="block lg:flex justify-between w-full font-inter mt-10">
         <p className="text-light text-lg">
           03
           <span className="text-light px-4">/</span>
