@@ -16,11 +16,11 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
   if (!department) return null;
 
   // Combine apartment and building images
-  const allImages = [
+  const allImages = React.useMemo(() => [
     department.mainImage,
     ...department.images.apartment,
     ...department.images.building
-  ];
+  ], [department]);
 
   const [selectedImage, setSelectedImage] = React.useState(department.mainImage);
 
@@ -39,6 +39,9 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
                 src={thumb || "/placeholder.svg"}
                 alt={`Thumbnail ${idx + 1}`}
                 className="object-cover w-full h-full"
+                loading="lazy"
+                width={80}
+                height={80}
               />
             </button>
           ))}
@@ -50,6 +53,9 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             src={selectedImage || department.mainImage} 
             alt={department.title} 
             className="object-cover w-full h-full"
+            width={800}
+            height={600}
+            loading="eager"
           />
         </div>
 

@@ -129,8 +129,8 @@ const LandingPage = () => {
       </section>
 
       <ParallaxSection 
-        firstText="tu refugio en la naturaleza en la patagonia " 
-        secondText="tu refugio en la naturaleza en la patagonia " 
+        firstText="tu refugio en la naturaleza en la patagonia" 
+        secondText="tu refugio en la naturaleza en la patagonia" 
       /> 
 
       {/* NOSOTRAS */}
