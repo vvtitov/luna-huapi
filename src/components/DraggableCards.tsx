@@ -18,6 +18,7 @@ interface DragState {
 export default function Departments() {
   const { departments } = useDepartments();
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const dragStateRef = useRef<DragState>({
@@ -60,8 +61,23 @@ export default function Departments() {
     setActiveIndex(newIndex);
   }, []);
 
+  // Optimize dialog opening
+  const handleOpenDialog = useCallback((department: Department) => {
+    setSelectedDepartment(department);
+    setIsDialogOpen(true);
+  }, []);
+
+  // Optimize dialog closing
+  const handleCloseDialog = useCallback(() => {
+    setIsDialogOpen(false);
+    // Clear selected department after animation completes
+    setTimeout(() => {
+      setSelectedDepartment(null);
+    }, 300);
+  }, []);
+
   return (
-    <section className="bg-background overflow-hidden w-full pointer-drag select-none">
+    <section className="bg-[#EFECE4] overflow-hidden w-full select-none">
       <div className="mx-auto">
         <div
           ref={sliderRef}
@@ -96,10 +112,13 @@ export default function Departments() {
                     src={department.mainImage}
                     alt={department.title}
                     className={`
-                      object-cover w-full h-[300px] lg:h-[648px] transition-transform duration-300 mb-4
+                      object-cover w-full h-[300px] lg:h-[448px] transition-transform duration-300 mb-4
                       ${dragStateRef.current.isDragging ? 'scale-[1.00]' : 'scale-100'}
                     `}
                     draggable={false}
+                    loading="lazy"
+                    width={576}
+                    height={448}
                   />
                   <div 
                     className={`
@@ -114,9 +133,8 @@ export default function Departments() {
                   </span>
                   <Button
                     variant="link"
-                    className="text-xl lg:text-xl text-primary/60 z-50 uppercase underline underline-offset-10 underline-
-                    hover:cursor-pointer font-extralight"
-                    onClick={() => setSelectedDepartment(department)}
+                    className="text-xl lg:text-xl text-primary/60 z-50 uppercase underline underline-offset-10 pointer-primary font-extralight"
+                    onClick={() => handleOpenDialog(department)}
                   >
                     Ver más →
                   </Button>
@@ -127,12 +145,14 @@ export default function Departments() {
         </div>
       </div>
 
-      <Dialog open={!!selectedDepartment} onOpenChange={() => setSelectedDepartment(null)}>
+      <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
         <DialogContent>
-          <ApartmentDetail 
-            department={selectedDepartment} 
-            onClose={() => setSelectedDepartment(null)}
-          />
+          {selectedDepartment && (
+            <ApartmentDetail 
+              department={selectedDepartment} 
+              onClose={handleCloseDialog}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </section>

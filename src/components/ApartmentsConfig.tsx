@@ -24,7 +24,7 @@ export const useDepartments = create<{
     {
       id: "1",
       title: "Departamento 1",
-      mainImage: "/images/dp-1/PRIORITY_RENTALS-1.webp",
+      mainImage: "/images/dp-1/PRIORITY_RENTALS-3.webp",
       description: "Acogedor departamento con vista panorámica al Lago Nahuel Huapi. Cuenta con una amplia sala de estar, cocina equipada y balcón privado. Ideal para parejas o pequeñas familias que buscan disfrutar de la tranquilidad y belleza natural de Bariloche.",
       capacity: 4,
       bedrooms: 2,
