@@ -19,6 +19,7 @@ export default function Departments() {
   const { departments } = useDepartments();
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loadingDepartment, setLoadingDepartment] = useState<string | null>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const dragStateRef = useRef<DragState>({
@@ -63,8 +64,48 @@ export default function Departments() {
 
   // Optimize dialog opening
   const handleOpenDialog = useCallback((department: Department) => {
-    setSelectedDepartment(department);
-    setIsDialogOpen(true);
+    // Set loading state for this department
+    setLoadingDepartment(department.id);
+    
+    // Preload department images before opening dialog
+    const preloadImages = async () => {
+      // Start loading the main image first
+      const mainImg = new Image();
+      mainImg.src = department.mainImage;
+      
+      // Then preload a few apartment images
+      const imagesToPreload = [
+        ...department.images.apartment.slice(0, 3)
+      ];
+      
+      // Create an array of promises for image loading
+      const preloadPromises = imagesToPreload.map(src => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(true);
+          img.onerror = () => resolve(false);
+          img.src = src;
+        });
+      });
+      
+      // Wait for main image to load
+      await new Promise(resolve => {
+        mainImg.onload = resolve;
+        mainImg.onerror = resolve;
+      });
+      
+      // Set selected department and open dialog
+      setSelectedDepartment(department);
+      setIsDialogOpen(true);
+      setLoadingDepartment(null);
+      
+      // Continue preloading other images in the background
+      Promise.all(preloadPromises).catch(() => {
+        // Silently handle any errors
+      });
+    };
+    
+    preloadImages();
   }, []);
 
   // Optimize dialog closing
@@ -135,8 +176,19 @@ export default function Departments() {
                     variant="link"
                     className="text-xl lg:text-xl text-primary/60 z-50 uppercase underline underline-offset-10 pointer-primary font-extralight"
                     onClick={() => handleOpenDialog(department)}
+                    disabled={loadingDepartment === department.id}
                   >
-                    Ver más →
+                    {loadingDepartment === department.id ? (
+                      <span className="flex items-center">
+                        <svg className="animate-spin h-4 w-4 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Cargando...
+                      </span>
+                    ) : (
+                      "Ver más →"
+                    )}
                   </Button>
                 </div>
               </CardContent>
