@@ -78,7 +78,7 @@ export const useDepartments = create<{
     {
       id: "3",
       title: "Departamento 3",
-      mainImage: "/images/dp-3/PRIORITY_RENTALS-45.webp",
+      mainImage: "/images/dp-3/PRIORITY_RENTALS-54.webp",
       description: "Moderno departamento con diseño contemporáneo y todas las comodidades. Disfrute de sus espaciosos ambientes, terraza privada y vistas panorámicas al lago y las montañas. Perfecto para familias o grupos de amigos que buscan una experiencia única en Bariloche.",
       capacity: 6,
       bedrooms: 2,

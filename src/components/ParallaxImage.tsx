@@ -75,7 +75,7 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
             style={{ opacity: progress }}
           >
             <h2 className="text-6xl lg:text-7xl mb-6 uppercase">{title}</h2>
-            <Button variant="default" className="px-6 py-4 my-10 rounded-full text-xl bg-background text-primary font-light" onClick={onButtonClick}>
+            <Button variant="default" className="border border-[#6B6B6B] text-[#D1D1D1] px-8 py-4 rounded-full max-w-fit bg-transparent text-lg hover:bg-[#CADBD8] hover:text-[#3F3F3F]" onClick={onButtonClick}>
               {buttonText}
             </Button>
           </div>

@@ -49,13 +49,13 @@ const LandingPage = () => {
           </div>
           <div className="items-center hidden lg:flex w-[946px] pt-[72px] justify-end text-lg">
             <div className="flex space-x-12 items-center justify-self-center pr-8 z-10">
-              {["Nosotras", "Los departamentos", "Reviews", "Contacto"].map(
+              {["Nosotros", "Los departamentos", "Reviews", "Contacto"].map(
                 (item) => (
                   <a
                     key={item}
                     href={
-                      item === "Nosotras"
-                        ? "#nosotras"
+                      item === "Nosotros"
+                        ? "#nosotros"
                         : item === "Los departamentos"
                         ? "#los-departamentos"
                         : item === "Reviews"
@@ -126,8 +126,8 @@ const LandingPage = () => {
         secondText="" 
       /> 
 
-      {/* NOSOTRAS */}
-      <section className="pt-10 pb-40 pointer-primary mb-8" id="nosotras">
+      {/* NOSOTROS */}
+      <section className="pt-10 pb-20 pointer-primary mb-8" id="nosotros">
         <div className="mx-auto px-6 lg:px-10">
           <div className="h-px bg-[#565656] opacity-20 flex-grow mb-10"></div>
           <div className="block lg:flex justify-between mb-12">
@@ -152,7 +152,7 @@ Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza
       </section>
 
       {/* LOS DEPARTAMENTOS */}
-      <section className="mx-auto pt-20 pb-40 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag bg-[#EFECE4]" id="los-departamentos">
+      <section className="mx-auto pb-40 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag bg-[#EFECE4] pt-20" id="los-departamentos">
         <div className="mx-auto">
           <div className="flex justify-between items-center mb-5 font-inter">
             <p className="text-light text-lg">
