@@ -66,7 +66,7 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
           }}
         >
           <img
-            src={"/images/parallaxbg.png"}
+            src={"/images/parallaxbg2.jpg"}
             alt="Parallax Background"
             className="object-cover w-full h-full"
           />

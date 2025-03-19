@@ -48,7 +48,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="items-center hidden lg:flex w-[946px] pt-[72px] justify-end text-lg">
-            <div className="flex space-x-12 items-center justify-self-center pr-8">
+            <div className="flex space-x-12 items-center justify-self-center pr-8 z-10">
               {["Nosotras", "Los departamentos", "Reviews", "Contacto"].map(
                 (item) => (
                   <a
@@ -99,25 +99,18 @@ const LandingPage = () => {
                   <Whatsapp fill="#D1D1D1" className="transition-colors duration-300 group-hover:fill-black"/>
                 </span>
               </Button>
-              {/* <Button
-                id="btn-reserva"
-                className="btn border border-[#6B6B6B] text-[#D1D1D1] px-6 py-4 rounded-full bg-transparent text-lg hover:bg-[#D1D1D1] hover:text-[#3F3F3F]"
-              >
-                Reserva
-              </Button> */}
             </div>
           </div>
           <div className="flex items-center justify-self-end lg:hidden pt-[72px] pr-10 cursor-pointer" onClick={toggleMenu}>
             <BurguerMenu isOpen={isMenuOpen} toggleMenu={toggleMenu}/>
           </div>
         </nav>
-        <div className="relative mx-auto text-center mt-14 px-20">
-          <h2 className="text-3xl md:text-3xl lg:text-4xl text-light text-balance mb-16 md:w-4/6 lg:w-5/6 mx-auto">
-            Descubre la comodidad y el encanto de nuestros departamentos en
-            alquiler en San Carlos de Bariloche, una de las ciudades mas bellas
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col min-h-screen min-w-full items-center justify-center">
+          <h2 className="text-3xl md:text-3xl lg:text-4xl text-light text-balance mb-12 text-center px-10 lg:max-w-3/5">
+            Descubre la comodidad y el encanto de nuestros departamentos en San Carlos de Bariloche, una de las ciudades mas bellas
             de la Patagonia argentina.
           </h2>
-          <div className="flex flex-col justify-center items-center gap-3 lg:flex-row">
+          <div className="flex flex-col justify-center items-center gap-4 lg:flex-row">
             <Button className="bg-[#D1D1D1] text-[#3F3F3F] px-8 py-4 rounded-full max-w-fit text-lg hover:bg-[#E3BDB1] hover:text-white">
               Reserva tu habitación
             </Button>
@@ -129,8 +122,8 @@ const LandingPage = () => {
       </section>
 
       <ParallaxSection 
-        firstText="tu refugio en la naturaleza en la patagonia" 
-        secondText="tu refugio en la naturaleza en la patagonia" 
+        firstText="tu refugio en la naturaleza patagonica" 
+        secondText="" 
       /> 
 
       {/* NOSOTRAS */}
@@ -148,10 +141,9 @@ const LandingPage = () => {
             
           <div className="flex w-full lg:justify-end">
             <div className="relative lg:w-4/6">
-              <p className="text-4xl lg:text-4xl text-primary mt-10 lg:mt-5 text-pretty">
-                Descubre la comodidad y el encanto de nuestros departamentos en
-                alquiler en San Carlos de Bariloche, una de las ciudades mas
-                bellas de la Patagonia argentina.
+              <p className="text-3xl lg:text-4xl text-primary mt-10 lg:mt-5 text-pretty">
+                En Luna Huapi te invitamos a disfrutar de una experiencia única en la Patagonia. Somos un exclusivo complejo de solo 4 departamentos diseñados para brindarte confort, privacidad y calidez en cada detalle. <br/> <br/> 
+Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza con el acceso a las mejores actividades y paisajes de la región. Nuestra prioridad es que te sientas como en casa, con un servicio atento y personalizado, para que cada momento de tu estadía sea inolvidable.
               </p>
             </div>
           </div>
