@@ -12,7 +12,7 @@ interface ParallaxSectionProps {
 const ParallaxSection = ({ 
   firstText, 
   secondText, 
-  bgImage = "/images/parallaxbg.png" 
+  bgImage = "/images/parallaxbg.jpg" 
 }: ParallaxSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   
@@ -28,74 +28,96 @@ const ParallaxSection = ({
     restDelta: 0.001
   });
 
-  // Mejorar los rangos de animación para un movimiento más natural
-  const leftX = useTransform(smoothProgress, [0, 1], ["-50%", "50%"]);
-  const rightX = useTransform(smoothProgress, [0, 1], ["50%", "-50%"]);
+  // Efecto de imagen de fondo
+  const imageScale = useTransform(smoothProgress, [0, 1], [1.1, 1]);
+  const imageY = useTransform(smoothProgress, [0, 1], ["0%", "5%"]);
   
-  // Añadir escala para efecto de profundidad
-  const scale = useTransform(smoothProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
-  
-  // Mejorar la opacidad del overlay para una transición más suave
+  // Opacidad del overlay para una transición más suave
   const overlayOpacity = useTransform(smoothProgress, [0.2, 0.4, 0.6], [0.7, 0.3, 0]);
   
-  // Añadir opacidad a los textos para efecto fade-in/fade-out
-  const textOpacity = useTransform(smoothProgress, [0.1, 0.2, 0.8, 0.9], [0, 1, 1, 0]);
+  // Controlar la visibilidad y el efecto de gradiente del texto
+  const textProgress = useTransform(smoothProgress, [0.1, 0.3, 0.7, 0.9], [0, 1, 1, 0]);
+  
+  // Controlar la posición del gradiente
+  const gradientPosition = useTransform(smoothProgress, [0.1, 0.5, 0.9], ["-100%", "0%", "100%"]);
 
   return (
     <div 
       ref={containerRef}
       className="relative h-[855px] overflow-hidden flex items-center justify-center bg-background pointer-primary"
     >
+      {/* Background image */}
       <div className="absolute inset-0">
         <motion.img
           src={bgImage}
           alt="Parallax Background"
           className="w-full h-full object-cover"
           style={{ 
-            scale: useTransform(smoothProgress, [0, 1], [1.1, 1]),
-            y: useTransform(smoothProgress, [0, 1], ["0%", "5%"])
+            scale: imageScale,
+            y: imageY
           }}
         />
       </div>
+      
+      {/* Overlay */}
       <motion.div 
         className="absolute inset-0 bg-background"
         style={{ opacity: overlayOpacity }}
       />
+      
+      {/* Text container */}
       <motion.div 
-        className="absolute inset-0 flex flex-col items-center justify-center gap-8"
-        style={{ scale }}
+        className="absolute inset-0 flex flex-col items-center justify-center"
+        style={{ opacity: textProgress }}
       >
-        <motion.div 
-          style={{ 
-            x: leftX,
-            opacity: textOpacity,
-          }}
-          className="whitespace-nowrap z-10 overflow-hidden"
-        >
-          <motion.span 
-            className="text-[60px] lg:text-7xl text-dark font-light leading-none tracking-wider uppercase block"
+        {/* First text with gradient effect */}
+        <motion.div className="relative overflow-hidden px-20">
+          <motion.h2 
+            className="text-5xl lg:text-6xl font-light leading-none tracking-wider uppercase text-center px-40"
             style={{
-              textShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)"
+              backgroundImage: `linear-gradient(
+                90deg, 
+                transparent 0%, 
+                #ffffff 25%, 
+                #ffffff 75%, 
+                transparent 100%
+              )`,
+              backgroundSize: "200% 100%",
+              backgroundPosition: gradientPosition,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              color: "transparent",
+              textShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)"
             }}
           >
             {firstText}
-          </motion.span>
+          </motion.h2>
         </motion.div>
-        <motion.div 
-          style={{ 
-            x: rightX,
-            opacity: textOpacity,
-          }}
-          className="whitespace-nowrap z-10 overflow-hidden"
-        >
-          <motion.span 
-            className="text-[60px] lg:text-7xl text-dark font-light leading-none tracking-wider uppercase block"
+        
+        {/* Second text with gradient effect */}
+        <motion.div className="relative overflow-hidden">
+          <motion.h2 
+            className="text-[60px] lg:text-7xl font-light leading-none tracking-wider uppercase text-center"
             style={{
-              textShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)"
+              backgroundImage: `linear-gradient(
+                90deg, 
+                transparent 0%, 
+                #ffffff 25%, 
+                #ffffff 75%, 
+                transparent 100%
+              )`,
+              backgroundSize: "200% 100%",
+              backgroundPosition: gradientPosition,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              color: "transparent",
+              textShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)"
             }}
           >
             {secondText}
-          </motion.span>
+          </motion.h2>
         </motion.div>
       </motion.div>
     </div>

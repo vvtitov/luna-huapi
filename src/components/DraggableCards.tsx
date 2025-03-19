@@ -29,6 +29,36 @@ export default function Departments() {
     lastX: 0
   });
 
+  // Function to scroll to a specific card
+  const scrollToCard = useCallback((index: number) => {
+    if (!sliderRef.current) return;
+    
+    const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
+    const newScrollLeft = index * cardWidth;
+    
+    sliderRef.current.scrollTo({
+      left: newScrollLeft,
+      behavior: 'smooth'
+    });
+    
+    setActiveIndex(index);
+  }, []);
+
+  // Handle click on card image
+  const handleCardClick = useCallback((e: React.MouseEvent, index: number) => {
+    // Don't trigger navigation if clicking on the "Ver más" button
+    if ((e.target as HTMLElement).closest('button')) return;
+    
+    // If clicking on a card to the right of current active card, go to next card
+    if (index > activeIndex) {
+      scrollToCard(Math.min(departments.length - 1, activeIndex + 1));
+    } 
+    // If clicking on a card to the left of current active card, go to previous card
+    else if (index < activeIndex) {
+      scrollToCard(Math.max(0, activeIndex - 1));
+    }
+  }, [activeIndex, departments.length, scrollToCard]);
+
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!sliderRef.current) return;
     
@@ -46,7 +76,17 @@ export default function Departments() {
 
   const handleMouseUp = useCallback(() => {
     dragStateRef.current.isDragging = false;
-  }, []);
+    
+    // Snap to nearest card after dragging ends
+    if (sliderRef.current) {
+      const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
+      const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
+      
+      if (newIndex !== activeIndex) {
+        scrollToCard(newIndex);
+      }
+    }
+  }, [activeIndex, scrollToCard]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const { isDragging, startX, scrollLeft } = dragStateRef.current;
@@ -57,7 +97,7 @@ export default function Departments() {
     const walk = (x - startX) * 1.5;
     sliderRef.current.scrollLeft = scrollLeft - walk;
 
-    const cardWidth = 576 + 20;
+    const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
     const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
     setActiveIndex(newIndex);
   }, []);
@@ -143,6 +183,7 @@ export default function Departments() {
               key={department.id}
               className={`
                 w-[300px] lg:w-[576px] h-fit flex-shrink-0 transition-all
+                cursor-pointer
               `}
               style={{ 
                 scrollSnapAlign: 'start',
@@ -150,8 +191,8 @@ export default function Departments() {
                   ? `perspective(1000px)
                      translateZ(${Math.abs(index - activeIndex) * -10}px)`
                   : 'none',
-                
               }}
+              onClick={(e) => handleCardClick(e, index)}
             >
               <CardContent className="lg:mb-20 relative overflow-hidden">
                 <div className="relative overflow-hidden">
@@ -181,7 +222,10 @@ export default function Departments() {
                   <Button
                     variant="link"
                     className="text-xl lg:text-xl text-primary/60 z-50 uppercase underline underline-offset-10 pointer-primary font-extralight"
-                    onClick={() => handleOpenDialog(department)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card click when clicking the button
+                      handleOpenDialog(department);
+                    }}
                     disabled={loadingDepartment === department.id}
                   >
                     {loadingDepartment === department.id ? (

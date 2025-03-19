@@ -25,18 +25,18 @@ export const useDepartments = create<{
       id: "1",
       title: "Departamento 1",
       mainImage: "/images/dp-1/PRIORITY_RENTALS-3.webp",
-      description: "Acogedor departamento con vista panorámica al Lago Nahuel Huapi. Cuenta con una amplia sala de estar, cocina equipada y balcón privado. Ideal para parejas o pequeñas familias que buscan disfrutar de la tranquilidad y belleza natural de Bariloche.",
-      capacity: 4,
-      bedrooms: 2,
+      description: "Este departamento ofrece un ambiente íntimo y acogedor, con una vista impresionante del Lago Nahuel Huapi. La sala de estar es amplia y luminosa, con una cocina equipada y un patio privado con vistas al lago. Es ideal para parejas que buscan una experiencia de alojamiento tranquila y relajante en Bariloche.",
+      capacity: 2,
+      bedrooms: 1,
       bathrooms: 1,
       images: {
         apartment: [
           "/images/dp-1/PRIORITY_RENTALS-1.webp",
           "/images/dp-1/PRIORITY_RENTALS-2.webp",
           "/images/dp-1/PRIORITY_RENTALS-3.webp",
+          "/images/dp-1/PRIORITY_RENTALS-4.webp",
           "/images/dp-1/PRIORITY_RENTALS-5.webp",
           "/images/dp-1/PRIORITY_RENTALS-11.webp",
-          "/images/dp-1/PRIORITY_RENTALS-15.webp",
           "/images/dp-1/PRIORITY_RENTALS-16.webp",
           "/images/dp-1/PRIORITY_RENTALS-17.webp"
         ],
@@ -53,8 +53,8 @@ export const useDepartments = create<{
       mainImage: "/images/dp-2/PRIORITY_RENTALS-18.webp",
       description: "Elegante departamento con acabados de primera calidad y vistas impresionantes. Espacios amplios y luminosos, dormitorios confortables y una moderna cocina totalmente equipada. Ubicado estratégicamente para disfrutar de todas las atracciones de la zona.",
       capacity: 6,
-      bedrooms: 3,
-      bathrooms: 2,
+      bedrooms: 2,
+      bathrooms: 1,
       images: {
         apartment: [
           "/images/dp-2/PRIORITY_RENTALS-18.webp",
@@ -78,11 +78,11 @@ export const useDepartments = create<{
     {
       id: "3",
       title: "Departamento 3",
-      mainImage: "/images/dp-3/PRIORITY_RENTALS-45.webp",
+      mainImage: "/images/dp-3/PRIORITY_RENTALS-54.webp",
       description: "Moderno departamento con diseño contemporáneo y todas las comodidades. Disfrute de sus espaciosos ambientes, terraza privada y vistas panorámicas al lago y las montañas. Perfecto para familias o grupos de amigos que buscan una experiencia única en Bariloche.",
-      capacity: 5,
+      capacity: 6,
       bedrooms: 2,
-      bathrooms: 2,
+      bathrooms: 1,
       images: {
         apartment: [
           "/images/dp-3/PRIORITY_RENTALS-45.webp",
@@ -108,9 +108,9 @@ export const useDepartments = create<{
       title: "Departamento 4",
       mainImage: "/images/dp-4/PRIORITY_RENTALS-63.webp",
       description: "Exclusivo departamento de lujo con acabados premium y vistas espectaculares. Cuenta con amplios espacios, cocina gourmet, y todas las comodidades para una estadía inolvidable. Ubicación privilegiada con fácil acceso a los principales atractivos turísticos.",
-      capacity: 7,
-      bedrooms: 3,
-      bathrooms: 2,
+      capacity: 4,
+      bedrooms: 1,
+      bathrooms: 1,
       images: {
         apartment: [
           "/images/dp-4/PRIORITY_RENTALS-63.webp",
