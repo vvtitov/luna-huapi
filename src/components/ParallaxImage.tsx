@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react"
 import { Button } from "../components/ui/button"
 
 interface ParallaxCircleDividerProps {
-  imageUrl: string
   title: string
   buttonText: string
   onButtonClick?: () => void
@@ -66,7 +65,7 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
           }}
         >
           <img
-            src={"/images/parallaxbg2.jpg"}
+            src={"/images/parallaxbg2.webp"}
             alt="Parallax Background"
             className="object-cover w-full h-full"
           />

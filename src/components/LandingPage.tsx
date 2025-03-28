@@ -132,21 +132,23 @@ const LandingPage = () => {
           <div className="h-px bg-[#565656] opacity-20 flex-grow mb-10"></div>
           <div className="block lg:flex justify-between mb-12">
             <div className="min-w-fit font-inter">
-            <p className="text-light text-lg">
-              01 
-              <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase lg:text-xl text-lg">Quienes somos</span>
-            </p>
-            </div>
-            
-          <div className="flex w-full lg:justify-end">
-            <div className="relative lg:w-4/6">
-              <p className="text-3xl lg:text-4xl text-primary mt-10 lg:mt-5 text-pretty">
-                En Luna Huapi te invitamos a disfrutar de una experiencia única en la Patagonia. Somos un exclusivo complejo de solo 4 departamentos diseñados para brindarte confort, privacidad y calidez en cada detalle. <br/> <br/> 
-Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza con el acceso a las mejores actividades y paisajes de la región. Nuestra prioridad es que te sientas como en casa, con un servicio atento y personalizado, para que cada momento de tu estadía sea inolvidable.
+              <p className="text-light text-lg">
+                01 
+                <span className="text-light px-4">/</span> 
+                <span className="text-primary uppercase lg:text-xl text-lg">Quienes somos</span>
               </p>
             </div>
-          </div>
+            
+            <div className="flex w-full lg:justify-end">
+              <div className="relative lg:w-4/6">
+                <p className="text-3xl lg:text-4xl text-primary mt-10 lg:mt-5 text-pretty">
+                En Luna Huapi te invitamos a disfrutar de una experiencia única en la Patagonia. 
+                Somos un exclusivo complejo de solo 4 departamentos diseñados para brindarte confort, privacidad y calidez en cada detalle. <br/> <br/> 
+                Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza con el acceso a las mejores actividades y paisajes de la región. 
+                Nuestra prioridad es que te sientas como en casa, con un servicio atento y personalizado, para que cada momento de tu estadía sea inolvidable.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -172,7 +174,7 @@ Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza
 
       {/* PARALLAX */}
       <div className="relative w-full pointer-primary [&_*]:pointer-primary bg-[#EFECE4]">
-        <ParallaxCircleDivider imageUrl="/paralaxbg.png" title="Tu lugar de descanso" buttonText="Seguinos en instagram" onButtonClick={() => {}}/>
+        <ParallaxCircleDivider title="Tu lugar de descanso" buttonText="Seguinos en instagram" onButtonClick={() => {}}/>
       </div>
 
       {/* FAQ */}
