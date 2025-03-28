@@ -1,6 +1,6 @@
 "use client"
 
-import { X } from "lucide-react"
+import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import * as React from "react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
@@ -51,6 +51,19 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
       ...prev,
       [src]: true
     }));
+  };
+
+  // Navigation functions for image gallery
+  const navigateToNextImage = () => {
+    const currentIndex = allImages.findIndex(img => img === selectedImage);
+    const nextIndex = (currentIndex + 1) % allImages.length;
+    setSelectedImage(allImages[nextIndex]);
+  };
+
+  const navigateToPreviousImage = () => {
+    const currentIndex = allImages.findIndex(img => img === selectedImage);
+    const prevIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+    setSelectedImage(allImages[prevIndex]);
   };
 
   React.useEffect(() => {
@@ -160,23 +173,38 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
               </svg>
             </div>
           )}
+          
+          {/* Navigation Arrows */}
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center space-x-4">
+            <button 
+              onClick={navigateToPreviousImage}
+              className="p-2 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 transition-colors"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-6 h-6 text-primary" />
+            </button>
+            <button 
+              onClick={navigateToNextImage}
+              className="p-2 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 transition-colors"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-6 h-6 text-primary" />
+            </button>
+          </div>
         </div>
 
         {/* Info Panel */}
         <div className="w-full relative md:w-1/2 border-t md:border-l bg-[#EBE6D7] p-5 md:overflow-scroll md:overflow-x-auto min-w-md">
-          <div className="fixed top-20 right-6 md:top-8 md:right-18 lg:flex lg:justify-end rounded-full bg-background/80 backdrop-blur-sm">
+          <div className="fixed top-20 right-3 md:top-8 md:right-8 lg:flex lg:justify-end rounded-full bg-background/80 backdrop-blur-sm">
             <button 
               onClick={onClose}
-              className="rounded-full p-4 border border-muted font-extralight hover:scale-105 transition-transform cursor-pointer"
-              style={{ touchAction: 'manipulation' }}
             >
               <X className="w-6 h-6" />
             </button>
           </div>
 
-          <div className="px-4 md:px-8 md:pt-16">
+          <div className="px-4 mt-10">
 
-            <div className="h-px bg-[#565656] opacity-20 flex-grow mb-12 md:my-12"></div>
           <div className="flex flex-col items-start mb-12 font-inter">
             <p className="text-light text-lg">
               02 
@@ -188,25 +216,25 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
               </p>
           </div>
             <div className="grid-row sm:grid-cols-3 lg:flex lg:flex-row mx-auto justify-center gap-4 mb-8 font-inter w-full text-center shrink-1 space-y-3 lg:space-y-0">
-              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary lg:w-1/3">
-                <h3 className="font-medium text-lg">CAPACIDAD</h3>
+              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
+                <h3 className="font-medium text-lg text-primary">CAPACIDAD</h3>
                 <p className="text-4xl text-muted-foreground">{department.capacity}</p>
               </Card>
-              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary lg:w-1/3">
-                <h3 className="font-medium text-lg">HABITACIONES</h3>
+              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
+                <h3 className="font-medium text-lg text-primary">HABITACIONES</h3>
                 <p className="text-4xl text-muted-foreground">{department.bedrooms}</p>
               </Card>
-              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary lg:w-1/3">
-                <h3 className="font-medium text-lg">BAÑOS</h3>
+              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
+                <h3 className="font-medium text-lg text-primary">BAÑOS</h3>
                 <p className="text-4xl text-muted-foreground">{department.bathrooms}</p>
               </Card>
             </div>
 
             <div className="space-y-4 mb-8 font-inter">
               {[
-                { title: "CHECK IN", desc: "15:00 HS", data: "FLEXIBLE" },
-                { title: "CHECK OUT", desc: "10:00 HS", data: "FLEXIBLE" },
-                { title: "MASCOTAS", desc: "CONSULTAR", data: "SI" }
+                { title: "CHECK IN", desc: department.checkIn.time, data: department.checkIn.flexibility },
+                { title: "CHECK OUT", desc: department.checkOut.time, data: department.checkOut.flexibility },
+                { title: "PARKING", desc: department.parking.details, data: department.parking.availability }
               ].map((item) => (
                 <div key={item.title} className="grid grid-cols-3 gap-4 py-4">
                   <div className="font-medium">{item.title}</div>
@@ -223,7 +251,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
               <Button className="flex bg-[#4A4A4A] text-white hover:bg-[#3A3A3A] px-6 py-4 rounded-full text-lg">
                 Reserva
               </Button>
-              <Button variant="default" className="bg-transparent flex rounded-full text-primary border border-primary px-6 py-4 text-lg">
+              <Button variant="default" className="border border-primary/70 text-primary px-6 py-4 rounded-full mr-4 bg-transparent text-lg transition duration-300 hover:bg-white hover:text-[#3F3F3F]">
                 Contactanos
               </Button>
             </div>

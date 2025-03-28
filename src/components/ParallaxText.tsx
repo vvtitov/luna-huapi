@@ -12,7 +12,7 @@ interface ParallaxSectionProps {
 const ParallaxSection = ({ 
   firstText, 
   secondText, 
-  bgImage = "/images/parallaxbg.jpg" 
+  bgImage = "/images/parallaxbg.webp" 
 }: ParallaxSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   

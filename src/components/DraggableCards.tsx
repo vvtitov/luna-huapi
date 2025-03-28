@@ -200,7 +200,7 @@ export default function Departments() {
                     src={department.mainImage}
                     alt={department.title}
                     className={`
-                      object-cover w-full h-[300px] lg:h-[448px] transition-transform duration-300 mb-4
+                      object-cover w-full h-[300px] lg:h-[548px] transition-transform duration-300 mb-4
                       ${dragStateRef.current.isDragging ? 'scale-[1.00]' : 'scale-100'}
                     `}
                     draggable={false}

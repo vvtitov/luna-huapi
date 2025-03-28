@@ -9,6 +9,18 @@ export interface Department {
   capacity: number;
   bedrooms: number;
   bathrooms: number;
+  checkIn: {
+    time: string;
+    flexibility: string;
+  };
+  checkOut: {
+    time: string;
+    flexibility: string;
+  };
+  parking: {
+    availability: string;
+    details: string;
+  };
   images: {
     apartment: string[];
     building: string[];
@@ -25,10 +37,22 @@ export const useDepartments = create<{
       id: "1",
       title: "Departamento 1",
       mainImage: "/images/dp-1/PRIORITY_RENTALS-3.webp",
-      description: "Este departamento ofrece un ambiente íntimo y acogedor, con una vista impresionante del Lago Nahuel Huapi. La sala de estar es amplia y luminosa, con una cocina equipada y un patio privado con vistas al lago. Es ideal para parejas que buscan una experiencia de alojamiento tranquila y relajante en Bariloche.",
+      description: "Este departamento ofrece un ambiente íntimo y acogedor. La sala de estar es muy luminosa, con una cocina equipada y un patio privado. Es ideal para una/dos personas que buscan una experiencia de alojamiento tranquila y relajante en Bariloche. Ubicado en el encantador barrio de Belgrano a pocas cuadras del centro.",
       capacity: 2,
       bedrooms: 1,
       bathrooms: 1,
+      checkIn: {
+        time: "15:00 HS",
+        flexibility: "FLEXIBLE"
+      },
+      checkOut: {
+        time: "10:00 HS",
+        flexibility: "FLEXIBLE"
+      },
+      parking: {
+        availability: "CONSULTAR",
+        details: "SI"
+      },
       images: {
         apartment: [
           "/images/dp-1/PRIORITY_RENTALS-1.webp",
@@ -51,10 +75,22 @@ export const useDepartments = create<{
       id: "2",
       title: "Departamento 2",
       mainImage: "/images/dp-2/PRIORITY_RENTALS-18.webp",
-      description: "Elegante departamento con acabados de primera calidad y vistas impresionantes. Espacios amplios y luminosos, dormitorios confortables y una moderna cocina totalmente equipada. Ubicado estratégicamente para disfrutar de todas las atracciones de la zona.",
+      description: "Exclusivo y acogedor departamento con vistas al lago Nahuel Huapi y gran parte de la ciudad. Cuenta con todas las comodidades para una estadía inolvidable. Ubicación privilegiada con fácil acceso a los principales atractivos turísticos, a pocas cuadras del centro.",
       capacity: 6,
       bedrooms: 2,
       bathrooms: 1,
+      checkIn: {
+        time: "15:00 HS",
+        flexibility: "FLEXIBLE"
+      },
+      checkOut: {
+        time: "10:00 HS",
+        flexibility: "FLEXIBLE"
+      },
+      parking: {
+        availability: "DISPONIBLE",
+        details: "SI"
+      },
       images: {
         apartment: [
           "/images/dp-2/PRIORITY_RENTALS-18.webp",
@@ -79,10 +115,22 @@ export const useDepartments = create<{
       id: "3",
       title: "Departamento 3",
       mainImage: "/images/dp-3/PRIORITY_RENTALS-54.webp",
-      description: "Moderno departamento con diseño contemporáneo y todas las comodidades. Disfrute de sus espaciosos ambientes, terraza privada y vistas panorámicas al lago y las montañas. Perfecto para familias o grupos de amigos que buscan una experiencia única en Bariloche.",
+      description: "Elegante departamento con acabados de primera calidad y vistas impresionantes desde todos los ambientes al lago Nahuel Huepi y gran parte de la ciudad. Espacios amplios y luminosos, dormitorios confortables y una moderna cocina totalmente equipada. Ubicado estratégicamente para disfrutar de todas las atracciones de la zona.",
       capacity: 6,
       bedrooms: 2,
       bathrooms: 1,
+      checkIn: {
+        time: "15:00 HS",
+        flexibility: "FLEXIBLE"
+      },
+      checkOut: {
+        time: "10:00 HS",
+        flexibility: "FLEXIBLE"
+      },
+      parking: {
+        availability: "DISPONIBLE",
+        details: "SI"
+      },
       images: {
         apartment: [
           "/images/dp-3/PRIORITY_RENTALS-45.webp",
@@ -107,10 +155,22 @@ export const useDepartments = create<{
       id: "4",
       title: "Departamento 4",
       mainImage: "/images/dp-4/PRIORITY_RENTALS-63.webp",
-      description: "Exclusivo departamento de lujo con acabados premium y vistas espectaculares. Cuenta con amplios espacios, cocina gourmet, y todas las comodidades para una estadía inolvidable. Ubicación privilegiada con fácil acceso a los principales atractivos turísticos.",
+      description: "Elegante departamento con acabados de primera calidad y vistas impresionantes desde todos los ambientes al lago Nahuel Huepi y gran parte de la ciudad. Espacios amplios y luminosos, dormitorios confortables y una moderna cocina totalmente equipada. Ubicado estratégicamente para disfrutar de todas las atracciones de la zona.",
       capacity: 4,
       bedrooms: 1,
       bathrooms: 1,
+      checkIn: {
+        time: "15:00 HS",
+        flexibility: "FLEXIBLE"
+      },
+      checkOut: {
+        time: "10:00 HS",
+        flexibility: "FLEXIBLE"
+      },
+      parking: {
+        availability: "DISPONIBLE",
+        details: "SI"
+      },
       images: {
         apartment: [
           "/images/dp-4/PRIORITY_RENTALS-63.webp",

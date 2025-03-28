@@ -23,7 +23,7 @@ const LandingPage = () => {
     <div className="bg-background min-h-screen min-w-[300px]">
 
       <section className="relative h-screen w-full bg-card-foreground bg-blend-overlay bg-[url('/images/dp-2/PRIORITY_RENTALS-29.webp')] bg-cover bg-center">
-        <nav id="navbar" className="relative top-0 flex justify-between w-full items-center align-middle">
+        <nav id="navbar" className="relative top-0 flex justify-between w-full items-center align-middle z-10">
           <div id="right-side" className="relative flex pl-10">
             <div
               id="logo-container"
@@ -48,7 +48,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="items-center hidden lg:flex w-[946px] pt-[72px] justify-end text-lg">
-            <div className="flex space-x-12 items-center justify-self-center pr-8 z-10">
+            <div className="flex space-x-12 items-center justify-self-center pr-8">
               {["Nosotros", "Los departamentos", "Reviews", "Contacto"].map(
                 (item) => (
                   <a
@@ -91,7 +91,7 @@ const LandingPage = () => {
                 id="btn-contactanos"
                 className="group inline-flex items-center border border-[#6B6B6B] text-[#D1D1D1] px-6 py-4 rounded-full mr-4 bg-transparent text-lg transition duration-300 hover:bg-[#D1D1D1] hover:text-[#3F3F3F]"
                 onClick={() => {
-                  window.location.href = "https://wa.me/5492944444444";
+                  window.location.href = "https://wa.me/5492944327488";
                 }}
               >
                 Contactanos{" "}
@@ -132,21 +132,23 @@ const LandingPage = () => {
           <div className="h-px bg-[#565656] opacity-20 flex-grow mb-10"></div>
           <div className="block lg:flex justify-between mb-12">
             <div className="min-w-fit font-inter">
-            <p className="text-light text-lg">
-              01 
-              <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase lg:text-xl text-lg">Quienes somos</span>
-            </p>
-            </div>
-            
-          <div className="flex w-full lg:justify-end">
-            <div className="relative lg:w-4/6">
-              <p className="text-3xl lg:text-4xl text-primary mt-10 lg:mt-5 text-pretty">
-                En Luna Huapi te invitamos a disfrutar de una experiencia única en la Patagonia. Somos un exclusivo complejo de solo 4 departamentos diseñados para brindarte confort, privacidad y calidez en cada detalle. <br/> <br/> 
-Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza con el acceso a las mejores actividades y paisajes de la región. Nuestra prioridad es que te sientas como en casa, con un servicio atento y personalizado, para que cada momento de tu estadía sea inolvidable.
+              <p className="text-light text-lg">
+                01 
+                <span className="text-light px-4">/</span> 
+                <span className="text-primary uppercase lg:text-xl text-lg">Quienes somos</span>
               </p>
             </div>
-          </div>
+            
+            <div className="flex w-full lg:justify-end">
+              <div className="relative lg:w-4/6">
+                <p className="text-3xl lg:text-4xl text-primary mt-10 lg:mt-5 text-pretty">
+                En Luna Huapi te invitamos a disfrutar de una experiencia única en la Patagonia. 
+                Somos un exclusivo complejo de solo 4 departamentos diseñados para brindarte confort, privacidad y calidez en cada detalle. <br/> <br/> 
+                Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza con el acceso a las mejores actividades y paisajes de la región. 
+                Nuestra prioridad es que te sientas como en casa, con un servicio atento y personalizado, para que cada momento de tu estadía sea inolvidable.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -172,7 +174,7 @@ Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza
 
       {/* PARALLAX */}
       <div className="relative w-full pointer-primary [&_*]:pointer-primary bg-[#EFECE4]">
-        <ParallaxCircleDivider imageUrl="/paralaxbg.png" title="Tu lugar de descanso" buttonText="Seguinos en instagram" onButtonClick={() => {}}/>
+        <ParallaxCircleDivider title="Tu lugar de descanso" buttonText="Seguinos en instagram" onButtonClick={() => {}}/>
       </div>
 
       {/* FAQ */}
@@ -207,8 +209,11 @@ Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza
           <div className="grid md:grid-cols-3 md:grid-rows-2 justify-between my-15 text-dark items-start gap-10 text-primary">
             <div className="uppercase text-lg lg:text-xl flex items-baseline">
               <img src="/assets/circle.svg" alt="Circle" className="self-start pt-1.5 mr-3"/>
-              Los jilgueros 2374, Bariloche <br /> <br />CP 1723, Argentina <br />
-              54 (9) 1157963615
+              <div className="flex flex-col">
+                <div>20 de Junio 766, Bariloche</div>
+                <div className="mb-6">CP 1723, Argentina</div>
+                <div>+54 (9) 294 432-7488</div>
+              </div>
             </div>
             <div className="uppercase text-lg lg:text-xl flex items-center">
             <img src="/assets/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
