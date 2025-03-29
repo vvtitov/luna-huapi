@@ -1,0 +1,40 @@
+{
+  "navbar": {
+    "about": "Nosotros",
+    "apartments": "Los departamentos",
+    "reviews": "Reviews",
+    "contact": "Contacto",
+    "contactUs": "Contactanos"
+  },
+  "hero": {
+    "title": "Descubre la comodidad y el encanto de nuestros departamentos en San Carlos de Bariloche, una de las ciudades mas bellas de la Patagonia argentina.",
+    "bookButton": "Reserva tu habitación",
+    "followButton": "Seguinos en instagram"
+  },
+  "parallax": {
+    "firstText": "tu refugio en la naturaleza patagonica",
+    "restingPlace": "Tu lugar de descanso"
+  },
+  "about": {
+    "section": "Quienes somos",
+    "content": "En Luna Huapi te invitamos a disfrutar de una experiencia única en la Patagonia. Somos un exclusivo complejo de solo 4 departamentos diseñados para brindarte confort, privacidad y calidez en cada detalle. Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza con el acceso a las mejores actividades y paisajes de la región. Nuestra prioridad es que te sientas como en casa, con un servicio atento y personalizado, para que cada momento de tu estadía sea inolvidable."
+  },
+  "apartments": {
+    "section": "Nuestros departamentos"
+  },
+  "testimonials": {
+    "section": "Nuestros huéspedes"
+  },
+  "faq": {
+    "section": "Preguntas frecuentes"
+  },
+  "footer": {
+    "followUs": "Seguinos",
+    "contactUs": "Contactanos",
+    "rights": "© 2025 Luna Huapi. Todos los derechos reservados."
+  },
+  "language": {
+    "es": "ES",
+    "en": "EN"
+  }
+}

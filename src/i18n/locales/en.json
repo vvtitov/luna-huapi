@@ -1,0 +1,40 @@
+{
+  "navbar": {
+    "about": "About Us",
+    "apartments": "Apartments",
+    "reviews": "Reviews",
+    "contact": "Contact",
+    "contactUs": "Contact Us"
+  },
+  "hero": {
+    "title": "Discover the comfort and charm of our apartments in San Carlos de Bariloche, one of the most beautiful cities in the Argentine Patagonia.",
+    "bookButton": "Book your room",
+    "followButton": "Follow us on Instagram"
+  },
+  "parallax": {
+    "firstText": "your refuge in the Patagonian nature",
+    "restingPlace": "Your resting place"
+  },
+  "about": {
+    "section": "About Us",
+    "content": "At Luna Huapi, we invite you to enjoy a unique experience in Patagonia. We are an exclusive complex of only 4 apartments designed to provide you with comfort, privacy, and warmth in every detail. Located in San Carlos de Bariloche, we combine the tranquility of nature with access to the best activities and landscapes in the region. Our priority is for you to feel at home, with attentive and personalized service, so that every moment of your stay is unforgettable."
+  },
+  "apartments": {
+    "section": "Our Apartments"
+  },
+  "testimonials": {
+    "section": "Our Guests"
+  },
+  "faq": {
+    "section": "Frequently Asked Questions"
+  },
+  "footer": {
+    "followUs": "Follow Us",
+    "contactUs": "Contact Us",
+    "rights": "© 2025 Luna Huapi. All rights reserved."
+  },
+  "language": {
+    "es": "ES",
+    "en": "EN"
+  }
+}

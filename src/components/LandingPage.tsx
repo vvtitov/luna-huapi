@@ -10,13 +10,37 @@ import ParallaxSection from "./ParallaxText";
 import { ParallaxCircleDivider } from "./ParallaxImage";
 import BurguerMenu from "./BurguerMenu";
 import Whatsapp from "./ui/whatsapp";
-
+import LanguageSelector from "./LanguageSelector";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { language } = useLanguage();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const getNavItems = () => {
+    if (language === 'en') {
+      return ["About Us", "The Apartments", "Reviews", "Contact"];
+    }
+    return ["Nosotros", "Los departamentos", "Reviews", "Contacto"];
+  };
+
+  const getNavItemHref = (item: string) => {
+    if (language === 'en') {
+      if (item === "About Us") return "#nosotros";
+      if (item === "The Apartments") return "#los-departamentos";
+      if (item === "Reviews") return "#reviews";
+      if (item === "Contact") return "#contacto";
+    } else {
+      if (item === "Nosotros") return "#nosotros";
+      if (item === "Los departamentos") return "#los-departamentos";
+      if (item === "Reviews") return "#reviews";
+      if (item === "Contacto") return "#contacto";
+    }
+    return "#";
   };
 
   return (
@@ -49,21 +73,11 @@ const LandingPage = () => {
           </div>
           <div className="items-center hidden lg:flex w-[946px] pt-[72px] justify-end text-lg">
             <div className="flex space-x-12 items-center justify-self-center pr-8">
-              {["Nosotros", "Los departamentos", "Reviews", "Contacto"].map(
+              {getNavItems().map(
                 (item) => (
                   <a
                     key={item}
-                    href={
-                      item === "Nosotros"
-                        ? "#nosotros"
-                        : item === "Los departamentos"
-                        ? "#los-departamentos"
-                        : item === "Reviews"
-                        ? "#reviews"
-                        : item === "Contacto"
-                        ? "#contacto"
-                        : "#"
-                    }
+                    href={getNavItemHref(item)}
                     className="text-light relative group min-w-fit hover:text-white transition-all duration-300"
                     onClick={(event) => {
                       event.preventDefault();
@@ -84,9 +98,7 @@ const LandingPage = () => {
             </div>
             <div className="flex items-center justify-self-end pr-10">
               <div className="w-px h-[30px] bg-[#D1D1D1]"></div>
-              <div className="text-[#D1D1D1] px-6 py-4 rounded-full flex items-center">
-                ES <img src="/assets/arrow-down.svg" alt="Arrow Down" className="w-5 h-5 ml-1"/>
-              </div>
+              <LanguageSelector className="text-[#D1D1D1] px-6 py-4 rounded-full flex items-center" />
               <Button
                 id="btn-contactanos"
                 className="group inline-flex items-center border border-[#6B6B6B] text-[#D1D1D1] px-6 py-4 rounded-full mr-4 bg-transparent text-lg transition duration-300 hover:bg-[#D1D1D1] hover:text-[#3F3F3F]"
@@ -94,7 +106,7 @@ const LandingPage = () => {
                   window.location.href = "https://wa.me/5492944327488";
                 }}
               >
-                Contactanos{" "}
+                {language === 'en' ? 'Contact Us' : 'Contactanos'}{" "}
                 <span className="ml-1" role="img" aria-label="WhatsApp">
                   <Whatsapp fill="#D1D1D1" className="transition-colors duration-300 group-hover:fill-black"/>
                 </span>
@@ -106,23 +118,22 @@ const LandingPage = () => {
           </div>
         </nav>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col min-h-screen min-w-full items-center justify-center">
-          <h2 className="text-3xl md:text-3xl lg:text-4xl text-light text-balance mb-12 text-center px-10 lg:max-w-3/5">
-            Descubre la comodidad y el encanto de nuestros departamentos en San Carlos de Bariloche, una de las ciudades mas bellas
-            de la Patagonia argentina.
+          <h2 className="text-3xl md:text-3xl lg:text-4xl text-light text-balance mb-12 text-center px-10 lg:max-w-3/5 min-w-[300px]">
+            {language === 'en' ? 'Discover the comfort and charm of our apartments in San Carlos de Bariloche, one of the most beautiful cities in Argentine Patagonia.' : 'Descubre la comodidad y el encanto de nuestros departamentos en San Carlos de Bariloche, una de las ciudades mas bellas de la Patagonia argentina.'}
           </h2>
           <div className="flex flex-col justify-center items-center gap-4 lg:flex-row">
             <Button className="bg-[#D1D1D1] text-[#3F3F3F] px-8 py-4 rounded-full max-w-fit text-lg hover:bg-[#E3BDB1] hover:text-white">
-              Reserva tu habitación
+              {language === 'en' ? 'Book your room' : 'Reserva tu habitación'}
             </Button>
             <Button className="border border-[#6B6B6B] text-[#D1D1D1] px-8 py-4 rounded-full max-w-fit bg-transparent text-lg hover:bg-[#CADBD8] hover:text-[#3F3F3F]">
-              Seguinos en instagram
+              <a href="https://www.instagram.com/lunahuapi/" target="_blank" rel="noopener noreferrer">{language === 'en' ? 'Follow us on instagram' : 'Seguinos en instagram'}</a>
             </Button>
           </div>
         </div>
       </section>
 
       <ParallaxSection 
-        firstText="tu refugio en la naturaleza patagonica" 
+        firstText={language === 'en' ? 'your refuge in Patagonian nature' : 'tu refugio en la naturaleza patagonica'} 
         secondText="" 
       /> 
 
@@ -135,17 +146,14 @@ const LandingPage = () => {
               <p className="text-light text-lg">
                 01 
                 <span className="text-light px-4">/</span> 
-                <span className="text-primary uppercase lg:text-xl text-lg">Quienes somos</span>
+                <span className="text-primary uppercase lg:text-xl text-lg">{language === 'en' ? 'Who we are' : 'Quienes somos'}</span>
               </p>
             </div>
             
             <div className="flex w-full lg:justify-end">
               <div className="relative lg:w-4/6">
-                <p className="text-3xl lg:text-4xl text-primary mt-10 lg:mt-5 text-pretty">
-                En Luna Huapi te invitamos a disfrutar de una experiencia única en la Patagonia. 
-                Somos un exclusivo complejo de solo 4 departamentos diseñados para brindarte confort, privacidad y calidez en cada detalle. <br/> <br/> 
-                Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza con el acceso a las mejores actividades y paisajes de la región. 
-                Nuestra prioridad es que te sientas como en casa, con un servicio atento y personalizado, para que cada momento de tu estadía sea inolvidable.
+                <p className="text-3xl lg:text-4xl text-primary mt-10 lg:mt-5 text-balance pr-4">
+                {language === 'en' ? 'At Luna Huapi, we invite you to enjoy a unique experience in Patagonia. We are an exclusive complex of only 4 apartments designed to provide comfort, privacy and warmth in every detail. Located in San Carlos de Bariloche, we combine the tranquility of nature with access to the best activities and landscapes of the region. Our priority is that you feel at home, with attentive and personalized service, so that every moment of your stay is unforgettable.' : 'En Luna Huapi te invitamos a disfrutar de una experiencia única en la Patagonia. Somos un exclusivo complejo de solo 4 departamentos diseñados para brindarte confort, privacidad y calidez en cada detalle. Ubicados en San Carlos de Bariloche, combinamos la tranquilidad de la naturaleza con el acceso a las mejores actividades y paisajes de la región. Nuestra prioridad es que te sientas como en casa, con un servicio atento y personalizado, para que cada momento de tu estadía sea inolvidable.'}
                 </p>
               </div>
             </div>
@@ -160,7 +168,7 @@ const LandingPage = () => {
             <p className="text-light text-lg">
               02 
               <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase lg:text-xl text-lg">Nuestros departamentos</span>
+              <span className="text-primary uppercase lg:text-xl text-lg">{language === 'en' ? 'Our apartments' : 'Nuestros departamentos'}</span>
             </p>
           </div>
           <DraggableCards />
@@ -173,8 +181,8 @@ const LandingPage = () => {
       </div>
 
       {/* PARALLAX */}
-      <div className="relative w-full pointer-primary [&_*]:pointer-primary bg-[#EFECE4]">
-        <ParallaxCircleDivider title="Tu lugar de descanso" buttonText="Seguinos en instagram" onButtonClick={() => {}}/>
+      <div className="relative w-full pointer-primary [&_*]:pointer-primary bg-[#EFECE4] pt-10">
+        <ParallaxCircleDivider title={language === 'en' ? 'Your place of rest' : 'Tu lugar de descanso'} buttonText={language === 'en' ? 'Follow us on instagram' : 'Seguinos en instagram'} onButtonClick={() => {}}/>
       </div>
 
       {/* FAQ */}
@@ -185,7 +193,7 @@ const LandingPage = () => {
             <p className="text-light text-lg">
               04 
               <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase text-lg">Preguntas frecuentes</span>
+              <span className="text-primary uppercase text-lg">{language === 'en' ? 'Frequently asked questions' : 'Preguntas frecuentes'}</span>
             </p>
           </div>
           <div className="flex w-full justify-end">
@@ -201,12 +209,12 @@ const LandingPage = () => {
         <div className="mx-auto">
           <div className="h-px bg-[#565656] opacity-20 my-8"></div>
           <div className="flex justify-between items-center mb-[15vh]">
-            <h1 className="text-5xl lg:text-7xl font-light">CONTACTO</h1>
+            <h1 className="text-5xl lg:text-7xl font-light">{language === 'en' ? 'CONTACT' : 'CONTACTO'}</h1>
             <button className="relative lg:top-3 top-130 left-2 animate-bounce transition-all duration-2000 border border-primary rounded-full p-4" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <ArrowUp className="text-primary" size={24} />
             </button>
           </div>
-          <div className="grid md:grid-cols-3 md:grid-rows-2 justify-between my-15 text-dark items-start gap-10 text-primary">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 items-baseline">
             <div className="uppercase text-lg lg:text-xl flex items-baseline">
               <img src="/assets/circle.svg" alt="Circle" className="self-start pt-1.5 mr-3"/>
               <div className="flex flex-col">
@@ -218,7 +226,7 @@ const LandingPage = () => {
             <div className="uppercase text-lg lg:text-xl flex items-center">
             <img src="/assets/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
             <a href="https://www.instagram.com/lunahuapi/" target="_blank" rel="noopener noreferrer hover:underline" 
-                className="underline underline-offset-8 text-lg">seguinos en instagram →</a></div>
+                className="underline underline-offset-8 text-lg">{language === 'en' ? 'Follow us on instagram →' : 'seguinos en instagram →'}</a></div>
             <div className="uppercase text-md lg:text-xl flex items-center">
             <img src="/assets/circle.svg" alt="Circle" className="self-center mr-3 min-w-fit shrink-0"/>
             <a href="mailto:info@lunahuapi.com" className="text-lg">info@lunahuapi.com</a> </div>
