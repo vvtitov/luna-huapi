@@ -81,12 +81,15 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
 
   // Initialize thumbnail loading states
   React.useEffect(() => {
-    const initialLoadingState: Record<number, boolean> = {};
-    allImages.forEach((img, idx) => {
-      // Check if we've already loaded this image
-      initialLoadingState[idx] = !loadedImages[img];
-    });
-    setLoadingThumbnails(initialLoadingState);
+    // Only initialize if we don't have loading states already
+    if (Object.keys(loadingThumbnails).length === 0) {
+      const initialLoadingState: Record<number, boolean> = {};
+      allImages.forEach((img, idx) => {
+        // Check if we've already loaded this image
+        initialLoadingState[idx] = !loadedImages[img];
+      });
+      setLoadingThumbnails(initialLoadingState);
+    }
   }, [allImages, loadedImages]);
 
   // Preload the next few images
@@ -139,7 +142,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
   const t = language === 'en' ? translations.en : translations.es;
 
   return (
-    <div className="fixed top-0 right-0 bottom-0 left-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden">
+    <div className="fixed top-0 right-0 bottom-0 left-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden overscroll-none">
       <div className="flex flex-col md:flex-row h-full w-full">
         {/* Thumbnails */}
         <div className="block md:flex flex-col gap-2 p-4 border-r space-x-3 mx-auto">
@@ -148,6 +151,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
               key={idx}
               onClick={() => setSelectedImage(thumb)}
               className="relative w-20 h-20 overflow-hidden rounded-md hover:opacity-80 transition-opacity cursor-pointer"
+              style={{ touchAction: 'manipulation' }}
             >
               <img
                 src={thumb || "/placeholder.svg"}
@@ -186,7 +190,8 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             onLoad={handleMainImageLoad}
             style={{ 
               opacity: isMainImageLoading ? 0.5 : 1,
-              transition: 'opacity 0.3s ease-in-out'
+              transition: 'opacity 0.3s ease-in-out',
+              touchAction: 'manipulation'
             }}
           />
           {isMainImageLoading && (
@@ -222,7 +227,6 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
           <div className="fixed top-20 right-3 md:top-8 md:right-8 lg:flex lg:justify-end rounded-full bg-background/80 backdrop-blur-sm">
             <button 
               onClick={onClose}
-              className="rounded-full p-4 border border-muted font-extralight hover:scale-105 transition-transform cursor-pointer hover:bg-white"
             >
               <X className="w-6 h-6" />
             </button>

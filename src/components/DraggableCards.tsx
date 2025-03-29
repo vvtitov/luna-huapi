@@ -109,44 +109,50 @@ export default function Departments() {
     // Set loading state for this department
     setLoadingDepartment(department.id);
     
-    // Preload department images before opening dialog
+    // Set selected department and open dialog immediately
+    // This prevents the modal from closing unexpectedly on mobile
+    setSelectedDepartment(department);
+    setIsDialogOpen(true);
+    
+    // Preload department images in the background after dialog is open
     const preloadImages = async () => {
-      // Start loading the main image first
-      const mainImg = new Image();
-      mainImg.src = department.mainImage;
-      
-      // Then preload a few apartment images
-      const imagesToPreload = [
-        ...department.images.apartment.slice(0, 3)
-      ];
-      
-      // Create an array of promises for image loading
-      const preloadPromises = imagesToPreload.map(src => {
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => resolve(true);
-          img.onerror = () => resolve(false);
-          img.src = src;
+      try {
+        // Start loading the main image first
+        const mainImg = new Image();
+        mainImg.src = department.mainImage;
+        
+        // Then preload a few apartment images
+        const imagesToPreload = [
+          ...department.images.apartment.slice(0, 3)
+        ];
+        
+        // Create an array of promises for image loading
+        const preloadPromises = imagesToPreload.map(src => {
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            img.src = src;
+          });
         });
-      });
-      
-      // Wait for main image to load
-      await new Promise(resolve => {
-        mainImg.onload = resolve;
-        mainImg.onerror = resolve;
-      });
-      
-      // Set selected department and open dialog
-      setSelectedDepartment(department);
-      setIsDialogOpen(true);
-      setLoadingDepartment(null);
-      
-      // Continue preloading other images in the background
-      Promise.all(preloadPromises).catch(() => {
-        // Silently handle any errors
-      });
+        
+        // Wait for main image to load
+        await new Promise(resolve => {
+          mainImg.onload = resolve;
+          mainImg.onerror = resolve;
+        });
+        
+        // Continue preloading other images in the background
+        Promise.all(preloadPromises).catch(() => {
+          // Silently handle any errors
+        });
+      } finally {
+        // Always clear loading state, even if errors occur
+        setLoadingDepartment(null);
+      }
     };
     
+    // Start preloading in the background
     preloadImages();
   }, []);
 
