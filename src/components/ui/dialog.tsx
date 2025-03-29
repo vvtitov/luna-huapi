@@ -48,6 +48,14 @@ function DialogContent({
   children,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content>) {
+  // Detectar si estamos en iOS
+  const isIOS = React.useMemo(() => {
+    if (typeof navigator !== 'undefined') {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    }
+    return false;
+  }, []);
+
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -57,7 +65,17 @@ function DialogContent({
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed inset-0 z-50 w-full h-full bg-background overflow-y-auto overscroll-none",
           className
         )}
-        style={{ touchAction: 'manipulation' }}
+        style={{ 
+          touchAction: 'manipulation',
+          // Aplicar optimizaciones específicas para iOS
+          ...(isIOS ? {
+            WebkitOverflowScrolling: 'touch',
+            overscrollBehavior: 'none',
+            // Reducir la complejidad de las animaciones en iOS
+            animationDuration: '0.2s',
+            transitionDuration: '0.2s'
+          } : {})
+        }}
         {...props}
       >
         {children}
