@@ -21,10 +21,11 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
   if (!department) return null;
 
   const allImages = React.useMemo(() => {
+    // Limitamos el número de imágenes para mejorar el rendimiento en móviles
     const uniqueImages = [
       ...new Set([
-        ...department.images.apartment,
-        ...department.images.building
+        ...department.images.apartment.slice(0, 10),
+        ...department.images.building.slice(0, 5)
       ])
     ].filter(img => img !== department.mainImage);
     
@@ -78,7 +79,8 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
   React.useEffect(() => {
     if (Object.keys(loadingThumbnails).length === 0) {
       const initialLoadingState: Record<number, boolean> = {};
-      allImages.forEach((img, idx) => {
+      // Limitamos a cargar solo los primeros thumbnails visibles
+      allImages.slice(0, 5).forEach((img, idx) => {
         initialLoadingState[idx] = !loadedImages[img];
       });
       setLoadingThumbnails(initialLoadingState);
@@ -88,25 +90,24 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
   React.useEffect(() => {
     const currentIndex = allImages.findIndex(img => img === selectedImage);
     
-    for (let i = 1; i <= 3; i++) {
-      const nextIndex = (currentIndex + i) % allImages.length;
-      const nextImage = allImages[nextIndex];
-      
-      if (!loadedImages[nextImage]) {
-        const img = new Image();
-        img.src = nextImage;
-        img.onload = () => {
-          setLoadedImages(prev => ({
-            ...prev,
-            [nextImage]: true
-          }));
-        };
-      }
+    // Reducimos la precarga a solo la siguiente imagen
+    const nextIndex = (currentIndex + 1) % allImages.length;
+    const nextImage = allImages[nextIndex];
+    
+    if (!loadedImages[nextImage]) {
+      const img = new Image();
+      img.src = nextImage;
+      img.onload = () => {
+        setLoadedImages(prev => ({
+          ...prev,
+          [nextImage]: true
+        }));
+      };
     }
   }, [selectedImage, allImages, loadedImages]);
 
   return (
-    <div className="fixed top-0 right-0 bottom-0 left-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden overscroll-none">
+    <div className="fixed inset-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden overscroll-none">
       <div className="flex flex-col md:flex-row h-full w-full">
         <div className="block md:flex flex-col gap-2 p-4 border-r space-x-3 mx-auto">
           {allImages.map((thumb, idx) => (
@@ -145,11 +146,12 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
           <img 
             src={selectedImage || department.mainImage} 
             alt={department.title} 
-            className="object-cover w-full h-full"
+            className="object-cover w-full h-full cursor-pointer"
             width={800}
             height={600}
             loading="eager"
             onLoad={handleMainImageLoad}
+            onClick={navigateToNextImage}
             style={{ 
               opacity: isMainImageLoading ? 0.5 : 1,
               transition: 'opacity 0.3s ease-in-out',
@@ -165,7 +167,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             </div>
           )}
           
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center space-x-4">
+          <div className="absolute bottom-4 left-0 right-0 hidden lg:flex justify-center items-center space-x-4">
             <button 
               onClick={navigateToPreviousImage}
               className="p-2 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 transition-colors"

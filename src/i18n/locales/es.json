@@ -41,7 +41,7 @@
   },
   "apartment": {
     "capacity": "CAPACIDAD",
-    "bedrooms": "HABITACIONES",
+    "bedrooms": "CUARTOS",
     "bathrooms": "BAÑOS",
     "checkIn": "CHECK IN",
     "checkOut": "CHECK OUT",

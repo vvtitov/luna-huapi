@@ -168,26 +168,15 @@ export default function Departments() {
         const mainImg = new Image();
         mainImg.src = department.mainImage;
         
-        const imagesToPreload = [
-          ...department.images.apartment.slice(0, 3)
-        ];
-        
-        const preloadPromises = imagesToPreload.map(src => {
-          return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
-            img.src = src;
-          });
-        });
-        
-        await new Promise(resolve => {
+        await new Promise((resolve) => {
           mainImg.onload = resolve;
           mainImg.onerror = resolve;
+          
+          setTimeout(resolve, 3000);
         });
         
-        Promise.all(preloadPromises).catch(() => {
-        });
+      } catch (error) {
+        console.error("Error preloading images:", error);
       } finally {
         setLoadingDepartment(null);
       }
@@ -200,7 +189,7 @@ export default function Departments() {
     setIsDialogOpen(false);
     setTimeout(() => {
       setSelectedDepartment(null);
-    }, 300);
+    }, 500);
   }, []);
 
   return (
@@ -301,7 +290,7 @@ export default function Departments() {
               department={selectedDepartment} 
               onClose={() => {
                 setIsDialogOpen(false);
-                setTimeout(() => setSelectedDepartment(null), 300);
+                setTimeout(() => setSelectedDepartment(null), 500);
               }} 
             />
           )}
