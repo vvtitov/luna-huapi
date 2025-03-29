@@ -6,6 +6,7 @@ import { Button } from "./ui/button"
 import { Card } from "./ui/card"
 import { Separator } from "./ui/separator"
 import { Department } from "./ApartmentsConfig"
+import { useLanguage } from "../i18n/LanguageContext"
 
 interface ApartmentDetailProps {
   department: Department | null;
@@ -13,6 +14,8 @@ interface ApartmentDetailProps {
 }
 
 export default function ApartmentDetail({ department, onClose }: ApartmentDetailProps) {
+  const { language } = useLanguage();
+  
   if (!department) return null;
 
   // Combine apartment and building images, excluding the main image from thumbnails
@@ -111,6 +114,32 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
       }
     }
   }, [selectedImage, allImages, loadedImages]);
+
+  // Translations
+  const translations = {
+    es: {
+      capacity: "CAPACIDAD",
+      bedrooms: "HABITACIONES",
+      bathrooms: "BAÑOS",
+      checkIn: "CHECK IN",
+      checkOut: "CHECK OUT",
+      parking: "PARKING",
+      book: "Reserva",
+      contact: "Contactanos"
+    },
+    en: {
+      capacity: "CAPACITY",
+      bedrooms: "BEDROOMS",
+      bathrooms: "BATHROOMS",
+      checkIn: "CHECK IN",
+      checkOut: "CHECK OUT",
+      parking: "PARKING",
+      book: "Book",
+      contact: "Contact us"
+    }
+  };
+
+  const t = language === 'en' ? translations.en : translations.es;
 
   return (
     <div className="fixed top-0 right-0 bottom-0 left-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden overscroll-none">
@@ -212,29 +241,29 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
               <span className="text-primary uppercase text-lg">{department.title}</span>
             </p>
             <p className="text-muted-foreground mt-8">
-                {department.description}
+                {language === 'en' ? department.descriptionEn || department.description : department.description}
               </p>
           </div>
             <div className="grid-row sm:grid-cols-3 lg:flex lg:flex-row mx-auto justify-center gap-4 mb-8 font-inter w-full text-center shrink-1 space-y-3 lg:space-y-0">
               <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
-                <h3 className="font-medium text-lg text-primary">CAPACIDAD</h3>
+                <h3 className="font-medium text-lg text-primary">{t.capacity}</h3>
                 <p className="text-4xl text-muted-foreground">{department.capacity}</p>
               </Card>
               <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
-                <h3 className="font-medium text-lg text-primary">HABITACIONES</h3>
+                <h3 className="font-medium text-lg text-primary">{t.bedrooms}</h3>
                 <p className="text-4xl text-muted-foreground">{department.bedrooms}</p>
               </Card>
               <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
-                <h3 className="font-medium text-lg text-primary">BAÑOS</h3>
+                <h3 className="font-medium text-lg text-primary">{t.bathrooms}</h3>
                 <p className="text-4xl text-muted-foreground">{department.bathrooms}</p>
               </Card>
             </div>
 
             <div className="space-y-4 mb-8 font-inter">
               {[
-                { title: "CHECK IN", desc: department.checkIn.time, data: department.checkIn.flexibility },
-                { title: "CHECK OUT", desc: department.checkOut.time, data: department.checkOut.flexibility },
-                { title: "PARKING", desc: department.parking.details, data: department.parking.availability }
+                { title: t.checkIn, desc: department.checkIn.time, data: language === 'en' ? "FLEXIBLE" : department.checkIn.flexibility },
+                { title: t.checkOut, desc: department.checkOut.time, data: language === 'en' ? "FLEXIBLE" : department.checkOut.flexibility },
+                { title: t.parking, desc: language === 'en' ? "YES" : department.parking.details, data: language === 'en' ? (department.parking.availability === "DISPONIBLE" ? "AVAILABLE" : "CHECK AVAILABILITY") : department.parking.availability }
               ].map((item) => (
                 <div key={item.title} className="grid grid-cols-3 gap-4 py-4">
                   <div className="font-medium">{item.title}</div>
@@ -248,11 +277,28 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             </div>
 
             <div className="flex gap-4">
-              <Button className="flex bg-[#4A4A4A] text-white hover:bg-[#3A3A3A] px-6 py-4 rounded-full text-lg">
-                Reserva
+              <Button 
+                className="flex bg-[#4A4A4A] text-white hover:bg-[#3A3A3A] px-6 py-4 rounded-full text-lg"
+                onClick={() => {
+                  if (department.airbnbUrl) {
+                    window.open(department.airbnbUrl, "_blank");
+                  }
+                }}
+              >
+                {t.book}
               </Button>
-              <Button variant="default" className="border border-primary/70 text-primary px-6 py-4 rounded-full mr-4 bg-transparent text-lg transition duration-300 hover:bg-white hover:text-[#3F3F3F]">
-                Contactanos
+              <Button 
+                variant="default" 
+                className="border border-primary/70 text-primary px-6 py-4 rounded-full mr-4 bg-transparent text-lg transition duration-300 hover:bg-white hover:text-[#3F3F3F]"
+                onClick={() => {
+                  if (department.whatsappUrl) {
+                    window.open(department.whatsappUrl, "_blank");
+                  } else {
+                    window.open("https://wa.me/5492944327488", "_blank");
+                  }
+                }}
+              >
+                {t.contact}
               </Button>
             </div>
           </div>

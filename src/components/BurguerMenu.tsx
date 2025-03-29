@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface BurguerMenuProps {
   isOpen: boolean;
@@ -6,6 +7,8 @@ interface BurguerMenuProps {
 }
 
 export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
+  const { language, changeLanguage } = useLanguage();
+
   const handleClick = (sectionId: string) => {
     try {
       const section = document.getElementById(sectionId);
@@ -18,6 +21,10 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
     } catch (error) {
       console.error('Error scrolling to section:', error);
     }
+  };
+
+  const toggleLanguage = () => {
+    changeLanguage(language === 'es' ? 'en' : 'es');
   };
 
   return (
@@ -77,11 +84,11 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
           <ul className="text-primary text-center text-2xl mt-20">
             <li className="mb-6">
               <button
-                onClick={() => handleClick("nosotras")}
+                onClick={() => handleClick("nosotros")}
                 className="hover:text-primary transition-colors duration-300 underline underline-offset-4 hover:cursor-pointer"
                 style={{ zIndex: 999 }}
               >
-                Nosotras
+                {language === 'en' ? 'About Us' : 'Nosotros'}
               </button>
             </li>
             <li className="mb-6">
@@ -90,7 +97,7 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
                 className="hover:text-primary transition-colors duration-300 underline underline-offset-4 hover:cursor-pointer"
                 style={{ zIndex: 999 }}
               >
-                Los departamentos
+                {language === 'en' ? 'The Apartments' : 'Los departamentos'}
               </button>
             </li>
             <li className="mb-6">
@@ -108,13 +115,16 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
                 className="hover:text-primary transition-colors duration-300 underline underline-offset-4 hover:cursor-pointer"
                 style={{ zIndex: 999 }}
               >
-                Contacto
+                {language === 'en' ? 'Contact' : 'Contacto'}
               </button>
             </li>
           </ul>
-          <div className="text-primary px-6 py-4 rounded-full flex items-center text-xl mt-5">
-            ES <ArrowUpRight />
-          </div>
+          <button 
+            onClick={toggleLanguage} 
+            className="text-primary px-6 py-4 rounded-full flex items-center text-xl mt-5 hover:text-primary transition-colors duration-300 hover:cursor-pointer"
+          >
+            {language === 'es' ? 'ES' : 'EN'} <ArrowUpRight />
+          </button>
         </nav>
       </section>
       {isOpen && (

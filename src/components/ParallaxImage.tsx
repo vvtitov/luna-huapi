@@ -73,9 +73,11 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
             className="absolute inset-0 flex flex-col items-center justify-center text-light text-center"
             style={{ opacity: progress }}
           >
-            <h2 className="text-6xl lg:text-7xl mb-6 uppercase">{title}</h2>
-            <Button variant="default" className="border border-[#6B6B6B] text-[#D1D1D1] px-8 py-4 rounded-full max-w-fit bg-transparent text-lg hover:bg-[#CADBD8] hover:text-[#3F3F3F]" onClick={onButtonClick}>
-              {buttonText}
+            <h2 className="text-5xl lg:text-6xl mb-6 uppercase p-4">{title}</h2>
+            <Button asChild className="border border-[#6B6B6B] text-[#D1D1D1] px-8 py-4 rounded-full max-w-fit bg-transparent text-lg hover:bg-[#CADBD8] hover:text-[#3F3F3F]">
+              <a href="https://www.instagram.com/lunahuapi/" onClick={onButtonClick}>
+                {buttonText}
+              </a>
             </Button>
           </div>
         </div>

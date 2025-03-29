@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Página principal en español -->
+  <url>
+    <loc>https://lunahuapi.com/</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/"/>
+  </url>
+  
+  <!-- Página principal en inglés -->
+  <url>
+    <loc>https://lunahuapi.com/en/</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/"/>
+  </url>
+  
+  <!-- Páginas de departamentos en español -->
+  <url>
+    <loc>https://lunahuapi.com/departamentos/1</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/departamentos/1"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/apartments/1"/>
+  </url>
+  
+  <url>
+    <loc>https://lunahuapi.com/departamentos/2</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/departamentos/2"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/apartments/2"/>
+  </url>
+  
+  <url>
+    <loc>https://lunahuapi.com/departamentos/3</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/departamentos/3"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/apartments/3"/>
+  </url>
+  
+  <url>
+    <loc>https://lunahuapi.com/departamentos/4</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/departamentos/4"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/apartments/4"/>
+  </url>
+  
+  <!-- Páginas de departamentos en inglés -->
+  <url>
+    <loc>https://lunahuapi.com/en/apartments/1</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/apartments/1"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/departamentos/1"/>
+  </url>
+  
+  <url>
+    <loc>https://lunahuapi.com/en/apartments/2</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/apartments/2"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/departamentos/2"/>
+  </url>
+  
+  <url>
+    <loc>https://lunahuapi.com/en/apartments/3</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/apartments/3"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/departamentos/3"/>
+  </url>
+  
+  <url>
+    <loc>https://lunahuapi.com/en/apartments/4</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/apartments/4"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/departamentos/4"/>
+  </url>
+  
+  <!-- Secciones adicionales -->
+  <url>
+    <loc>https://lunahuapi.com/contacto</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/contacto"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/contact"/>
+  </url>
+  
+  <url>
+    <loc>https://lunahuapi.com/en/contact</loc>
+    <lastmod>2025-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lunahuapi.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://lunahuapi.com/contacto"/>
+  </url>
+</urlset>

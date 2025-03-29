@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://lunahuapi.com/sitemap.xml
+
+# Disallow specific directories if needed
+# Disallow: /admin/
+# Disallow: /private/
