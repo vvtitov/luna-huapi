@@ -5,6 +5,7 @@ import {
 } from "../components/ui/dialog";
 import { Card, CardContent } from "../components/ui/card";
 import ApartmentDetail from "./ApartmentDetails";
+import IOSApartmentModal from "./IOSApartmentModal";
 import { Button } from "./ui/button";
 import { useDepartments, Department } from "./ApartmentsConfig";
 import { useTranslation } from "react-i18next";
@@ -32,14 +33,34 @@ export default function Departments() {
     scrollLeft: 0,
     lastX: 0
   });
-
+  
+  // Detectar si estamos en iOS
+  const isIOS = useRef<boolean>(false);
+  
   useEffect(() => {
+    // Detectar iOS al montar el componente
+    isIOS.current = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    
     const style = document.createElement('style');
     style.textContent = `
       .scrollbar-draggable::-webkit-scrollbar {
         display: none;
         width: 0;
         height: 0;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      .ios-dialog-content {
+        /* Estilos específicos para iOS */
       }
     `;
     document.head.appendChild(style);
@@ -160,46 +181,55 @@ export default function Departments() {
   const handleOpenDialog = useCallback((department: Department) => {
     setLoadingDepartment(department.id);
     
-    // Primero establecemos el departamento seleccionado
-    setSelectedDepartment(department);
-    
-    // Pequeño retraso antes de abrir el diálogo para asegurar que el estado se actualice correctamente
-    setTimeout(() => {
+    // Enfoque específico para iOS
+    if (isIOS.current) {
+      // En iOS, simplemente establecemos el departamento seleccionado y abrimos el diálogo
+      setSelectedDepartment(department);
       setIsDialogOpen(true);
       
-      // Precargamos solo la imagen principal para reducir la carga inicial
-      const preloadMainImage = async () => {
-        try {
-          const mainImg = new Image();
-          mainImg.src = department.mainImage;
-          
-          // Esperamos a que la imagen principal se cargue o hasta un máximo de 2 segundos
-          await Promise.race([
-            new Promise(resolve => {
-              mainImg.onload = resolve;
-              mainImg.onerror = resolve;
-            }),
-            new Promise(resolve => setTimeout(resolve, 2000))
-          ]);
-        } catch (error) {
-          console.error("Error preloading main image:", error);
-        } finally {
-          setLoadingDepartment(null);
-        }
-      };
+      // Desactivamos el indicador de carga después de un breve retraso
+      setTimeout(() => {
+        setLoadingDepartment(null);
+      }, 300);
+    } else {
+      // Para otros dispositivos, usamos el enfoque normal
+      setSelectedDepartment(department);
       
-      preloadMainImage();
-    }, 50);
+      setTimeout(() => {
+        setIsDialogOpen(true);
+        
+        // Precargamos solo la imagen principal
+        const preloadMainImage = async () => {
+          try {
+            const mainImg = new Image();
+            mainImg.src = department.mainImage;
+            
+            await Promise.race([
+              new Promise(resolve => {
+                mainImg.onload = resolve;
+                mainImg.onerror = resolve;
+              }),
+              new Promise(resolve => setTimeout(resolve, 2000))
+            ]);
+          } finally {
+            setLoadingDepartment(null);
+          }
+        };
+        
+        preloadMainImage();
+      }, 50);
+    }
   }, []);
 
   const handleCloseDialog = useCallback(() => {
-    // Primero cerramos el diálogo
     setIsDialogOpen(false);
     
-    // Esperamos a que la animación de cierre termine antes de limpiar el estado
+    // Mayor tiempo de espera para iOS
+    const delay = isIOS.current ? 800 : 500;
+    
     setTimeout(() => {
       setSelectedDepartment(null);
-    }, 500);
+    }, delay);
   }, []);
 
   return (
@@ -293,19 +323,34 @@ export default function Departments() {
         </div>
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent>
-          {selectedDepartment && (
-            <ApartmentDetail 
-              department={selectedDepartment} 
-              onClose={() => {
-                setIsDialogOpen(false);
-                setTimeout(() => setSelectedDepartment(null), 500);
-              }} 
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      {/* Renderizamos el modal específico para iOS o el modal normal según el dispositivo */}
+      {isIOS.current ? (
+        selectedDepartment && (
+          <IOSApartmentModal
+            department={selectedDepartment}
+            onClose={() => {
+              setIsDialogOpen(false);
+              setTimeout(() => setSelectedDepartment(null), 500);
+            }}
+            isOpen={isDialogOpen}
+          />
+        )
+      ) : (
+        <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
+          <DialogContent>
+            {selectedDepartment && (
+              <ApartmentDetail 
+                department={selectedDepartment} 
+                onClose={() => {
+                  setIsDialogOpen(false);
+                  setTimeout(() => setSelectedDepartment(null), 500);
+                }}
+                isIOS={false}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
     </section>
   );
 }

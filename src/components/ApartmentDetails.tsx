@@ -12,25 +12,29 @@ import { useTranslation } from "react-i18next"
 interface ApartmentDetailProps {
   department: Department | null;
   onClose: () => void;
+  isIOS?: boolean;
 }
 
-export default function ApartmentDetail({ department, onClose }: ApartmentDetailProps) {
+export default function ApartmentDetail({ department, onClose, isIOS = false }: ApartmentDetailProps) {
   const { language } = useLanguage();
   const { t } = useTranslation();
   
   if (!department) return null;
 
   const allImages = React.useMemo(() => {
+    // Si es iOS, limitamos significativamente el número de imágenes
+    const maxImages = isIOS ? 5 : 20;
+    
     // Limitamos el número de imágenes para mejorar el rendimiento en móviles
     const uniqueImages = [
       ...new Set([
-        ...department.images.apartment.slice(0, 10),
-        ...department.images.building.slice(0, 5)
+        ...department.images.apartment.slice(0, isIOS ? 3 : 10),
+        ...department.images.building.slice(0, isIOS ? 2 : 5)
       ])
     ].filter(img => img !== department.mainImage);
     
-    return [department.mainImage, ...uniqueImages];
-  }, [department]);
+    return [department.mainImage, ...uniqueImages.slice(0, maxImages - 1)];
+  }, [department, isIOS]);
 
   const [selectedImage, setSelectedImage] = React.useState(department.mainImage);
   const [isMainImageLoading, setIsMainImageLoading] = React.useState(true);
@@ -75,74 +79,75 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
       setIsMainImageLoading(false);
     }
     
-    // Detectar si estamos en iOS para aplicar optimizaciones específicas
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    
+    // Optimizaciones específicas para iOS
     if (isIOS) {
       // Forzar un reflow para mejorar la estabilidad en iOS
       document.body.style.overflow = 'hidden';
-      
-      // Limitar la cantidad de imágenes a precargar en iOS para evitar problemas de memoria
-      const limitedPreload = async () => {
-        const currentIndex = allImages.findIndex(img => img === selectedImage);
-        const nextIndex = (currentIndex + 1) % allImages.length;
-        const nextImage = allImages[nextIndex];
-        
-        if (!loadedImages[nextImage]) {
-          const img = new Image();
-          img.src = nextImage;
-          img.onload = () => {
-            setLoadedImages(prev => ({
-              ...prev,
-              [nextImage]: true
-            }));
-          };
-        }
-      };
-      
-      limitedPreload();
       
       return () => {
         document.body.style.overflow = '';
       };
     }
-  }, [selectedImage, loadedImages, allImages]);
+  }, [selectedImage, loadedImages, isIOS]);
 
   React.useEffect(() => {
     if (Object.keys(loadingThumbnails).length === 0) {
       const initialLoadingState: Record<number, boolean> = {};
       // Limitamos a cargar solo los primeros thumbnails visibles
-      allImages.slice(0, 5).forEach((img, idx) => {
+      // En iOS, cargamos aún menos thumbnails
+      const thumbnailsToLoad = isIOS ? 3 : 5;
+      allImages.slice(0, thumbnailsToLoad).forEach((img, idx) => {
         initialLoadingState[idx] = !loadedImages[img];
       });
       setLoadingThumbnails(initialLoadingState);
     }
-  }, [allImages, loadedImages]);
+  }, [allImages, loadedImages, isIOS]);
 
   React.useEffect(() => {
-    const currentIndex = allImages.findIndex(img => img === selectedImage);
-    
-    // Reducimos la precarga a solo la siguiente imagen
-    const nextIndex = (currentIndex + 1) % allImages.length;
-    const nextImage = allImages[nextIndex];
-    
-    if (!loadedImages[nextImage]) {
-      const img = new Image();
-      img.src = nextImage;
-      img.onload = () => {
-        setLoadedImages(prev => ({
-          ...prev,
-          [nextImage]: true
-        }));
-      };
+    // En iOS, limitamos la precarga a solo la siguiente imagen
+    if (isIOS) {
+      const currentIndex = allImages.findIndex(img => img === selectedImage);
+      const nextIndex = (currentIndex + 1) % allImages.length;
+      const nextImage = allImages[nextIndex];
+      
+      if (!loadedImages[nextImage]) {
+        const img = new Image();
+        img.src = nextImage;
+        img.onload = () => {
+          setLoadedImages(prev => ({
+            ...prev,
+            [nextImage]: true
+          }));
+        };
+      }
+    } else {
+      // Para otros dispositivos, mantenemos el comportamiento original
+      const currentIndex = allImages.findIndex(img => img === selectedImage);
+      
+      // Reducimos la precarga a solo la siguiente imagen
+      const nextIndex = (currentIndex + 1) % allImages.length;
+      const nextImage = allImages[nextIndex];
+      
+      if (!loadedImages[nextImage]) {
+        const img = new Image();
+        img.src = nextImage;
+        img.onload = () => {
+          setLoadedImages(prev => ({
+            ...prev,
+            [nextImage]: true
+          }));
+        };
+      }
     }
-  }, [selectedImage, allImages, loadedImages]);
+  }, [selectedImage, allImages, loadedImages, isIOS]);
 
   return (
     <div className="fixed inset-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden overscroll-none">
       <div className="flex flex-col md:flex-row h-full w-full">
-        <div className="block md:flex flex-col gap-2 p-4 border-r space-x-3 mx-auto">
-          {allImages.map((thumb, idx) => (
+        {/* En iOS, ocultamos las miniaturas en móviles para reducir la carga de renderizado */}
+        <div className={`${isIOS ? 'hidden md:flex' : 'block md:flex'} flex-col gap-2 p-4 border-r space-x-3 mx-auto`}>
+          {/* En iOS, limitamos el número de miniaturas mostradas */}
+          {(isIOS ? allImages.slice(0, 5) : allImages).map((thumb, idx) => (
             <button
               key={idx}
               onClick={() => setSelectedImage(thumb)}
