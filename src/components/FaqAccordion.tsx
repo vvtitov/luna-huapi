@@ -108,7 +108,7 @@ export default function FaqAccordion() {
     <Accordion type="single" collapsible className="w-full">
       {currentFaqs.map((faq, index) => (
         <AccordionItem key={index} value={`item-${index + 1}`}>
-          <AccordionTrigger>{faq.question}</AccordionTrigger>
+          <AccordionTrigger className="text-2xl lg:text-3xl">{faq.question}</AccordionTrigger>
           <AccordionContent>
             {faq.answer}
             {faq.map && (

@@ -13,9 +13,9 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
   const [progress, setProgress] = useState(0)
   const dividerRef = useRef<HTMLDivElement>(null)
 
-  const initialSize = 100 // Tamaño del círculo inicial en px
-  const finalWidth = 2220 // Ancho final en px
-  const finalHeight = 1125 // Alto final en px
+  const initialSize = 100
+  const finalWidth = 2220
+  const finalHeight = 1125
 
   useEffect(() => {
     const updateProgress = () => {
@@ -24,7 +24,6 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
       const rect = dividerRef.current.getBoundingClientRect()
       const viewportHeight = window.innerHeight
 
-      // Ajustamos el cálculo para que el efecto comience cuando el círculo está en el centro
       const startOffset = viewportHeight / 1.3 - initialSize / 2
       const scrollRange = viewportHeight + rect.height - initialSize
       const scrollProgress = (startOffset - rect.top) / scrollRange
@@ -35,7 +34,7 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
 
     window.addEventListener("scroll", updateProgress)
     window.addEventListener("resize", updateProgress)
-    updateProgress() // Llamada inicial
+    updateProgress()
 
     return () => {
       window.removeEventListener("scroll", updateProgress)
