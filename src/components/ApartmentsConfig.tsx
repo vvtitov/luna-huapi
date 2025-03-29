@@ -4,6 +4,7 @@ import { create } from "zustand";
 export interface Department {
   id: string;
   title: string;
+  titleEn?: string;
   mainImage: string;
   description: string;
   descriptionEn?: string;
@@ -39,6 +40,7 @@ export const useDepartments = create<{
     {
       id: "1",
       title: "Departamento 1",
+      titleEn: "Apartment 1",
       mainImage: "/images/dp-1/PRIORITY_RENTALS-3.webp",
       description: "Este departamento ofrece un ambiente íntimo y acogedor. La sala de estar es muy luminosa, con una cocina equipada y un patio privado. Es ideal para una/dos personas que buscan una experiencia de alojamiento tranquila y relajante en Bariloche. Ubicado en el encantador barrio de Belgrano a pocas cuadras del centro.",
       descriptionEn: "This apartment offers an intimate and cozy atmosphere. The living room is very bright, with an equipped kitchen and a private patio. It is ideal for one/two people looking for a quiet and relaxing accommodation experience in Bariloche. Located in the charming Belgrano neighborhood, just a few blocks from downtown.",
@@ -80,6 +82,7 @@ export const useDepartments = create<{
     {
       id: "2",
       title: "Departamento 2",
+      titleEn: "Apartment 2",
       mainImage: "/images/dp-2/PRIORITY_RENTALS-18.webp",
       description: "Exclusivo y acogedor departamento con vistas al lago Nahuel Huapi y gran parte de la ciudad. Cuenta con todas las comodidades para una estadía inolvidable. Ubicación privilegiada con fácil acceso a los principales atractivos turísticos, a pocas cuadras del centro.",
       descriptionEn: "Exclusive and cozy apartment with views of Lake Nahuel Huapi and much of the city. It has all the amenities for an unforgettable stay. Privileged location with easy access to the main tourist attractions, just a few blocks from downtown.",
@@ -123,6 +126,7 @@ export const useDepartments = create<{
     {
       id: "3",
       title: "Departamento 3",
+      titleEn: "Apartment 3",
       mainImage: "/images/dp-3/PRIORITY_RENTALS-54.webp",
       description: "Elegante departamento con acabados de primera calidad y vistas impresionantes desde todos los ambientes al lago Nahuel Huepi y gran parte de la ciudad. Espacios amplios y luminosos, dormitorios confortables y una moderna cocina totalmente equipada. Ubicado estratégicamente para disfrutar de todas las atracciones de la zona.",
       descriptionEn: "Elegant apartment with high-quality finishes and impressive views from all rooms to Lake Nahuel Huapi and much of the city. Spacious and bright spaces, comfortable bedrooms, and a fully equipped modern kitchen. Strategically located to enjoy all the attractions in the area.",
@@ -166,6 +170,7 @@ export const useDepartments = create<{
     {
       id: "4",
       title: "Departamento 4",
+      titleEn: "Apartment 4",
       mainImage: "/images/dp-4/PRIORITY_RENTALS-63.webp",
       description: "Elegante departamento con acabados de primera calidad y vistas impresionantes desde todos los ambientes al lago Nahuel Huepi y gran parte de la ciudad. Espacios amplios y luminosos, dormitorios confortables y una moderna cocina totalmente equipada. Ubicado estratégicamente para disfrutar de todas las atracciones de la zona.",
       descriptionEn: "Elegant apartment with high-quality finishes and impressive views from all rooms to Lake Nahuel Huapi and much of the city. Spacious and bright spaces, comfortable bedrooms, and a fully equipped modern kitchen. Strategically located to enjoy all the attractions in the area.",

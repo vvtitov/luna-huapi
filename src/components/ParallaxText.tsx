@@ -21,24 +21,19 @@ const ParallaxSection = ({
     offset: ["start end", "end start"]
   });
 
-  // Aplicar spring para hacer las animaciones más suaves
   const smoothProgress = useSpring(scrollYProgress, { 
     stiffness: 100, 
     damping: 30,
     restDelta: 0.001
   });
 
-  // Efecto de imagen de fondo
   const imageScale = useTransform(smoothProgress, [0, 1], [1.1, 1]);
   const imageY = useTransform(smoothProgress, [0, 1], ["0%", "5%"]);
   
-  // Opacidad del overlay para una transición más suave
   const overlayOpacity = useTransform(smoothProgress, [0.2, 0.4, 0.6], [0.7, 0.3, 0]);
   
-  // Controlar la visibilidad y el efecto de gradiente del texto
   const textProgress = useTransform(smoothProgress, [0.1, 0.3, 0.7, 0.9], [0, 1, 1, 0]);
   
-  // Controlar la posición del gradiente
   const gradientPosition = useTransform(smoothProgress, [0.1, 0.5, 0.9], ["-100%", "0%", "100%"]);
 
   return (
@@ -46,7 +41,6 @@ const ParallaxSection = ({
       ref={containerRef}
       className="relative h-[855px] overflow-hidden flex items-center justify-center bg-background pointer-primary"
     >
-      {/* Background image */}
       <div className="absolute inset-0">
         <motion.img
           src={bgImage}
@@ -59,18 +53,15 @@ const ParallaxSection = ({
         />
       </div>
       
-      {/* Overlay */}
       <motion.div 
         className="absolute inset-0 bg-background"
         style={{ opacity: overlayOpacity }}
       />
       
-      {/* Text container */}
       <motion.div 
         className="absolute inset-0 flex flex-col items-center justify-center"
         style={{ opacity: textProgress }}
       >
-        {/* First text with gradient effect */}
         <motion.div className="relative overflow-hidden px-20">
           <motion.h2 
             className="text-5xl lg:text-6xl font-light leading-none tracking-wider uppercase text-center px-40"
@@ -95,7 +86,6 @@ const ParallaxSection = ({
           </motion.h2>
         </motion.div>
         
-        {/* Second text with gradient effect */}
         <motion.div className="relative overflow-hidden">
           <motion.h2 
             className="text-[60px] lg:text-7xl font-light leading-none tracking-wider uppercase text-center"

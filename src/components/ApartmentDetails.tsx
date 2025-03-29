@@ -7,6 +7,7 @@ import { Card } from "./ui/card"
 import { Separator } from "./ui/separator"
 import { Department } from "./ApartmentsConfig"
 import { useLanguage } from "../i18n/LanguageContext"
+import { useTranslation } from "react-i18next"
 
 interface ApartmentDetailProps {
   department: Department | null;
@@ -15,12 +16,11 @@ interface ApartmentDetailProps {
 
 export default function ApartmentDetail({ department, onClose }: ApartmentDetailProps) {
   const { language } = useLanguage();
+  const { t } = useTranslation();
   
   if (!department) return null;
 
-  // Combine apartment and building images, excluding the main image from thumbnails
   const allImages = React.useMemo(() => {
-    // Create array without duplicates and excluding the main image from thumbnails
     const uniqueImages = [
       ...new Set([
         ...department.images.apartment,
@@ -28,7 +28,6 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
       ])
     ].filter(img => img !== department.mainImage);
     
-    // Return array with main image first, followed by unique other images
     return [department.mainImage, ...uniqueImages];
   }, [department]);
 
@@ -56,7 +55,6 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
     }));
   };
 
-  // Navigation functions for image gallery
   const navigateToNextImage = () => {
     const currentIndex = allImages.findIndex(img => img === selectedImage);
     const nextIndex = (currentIndex + 1) % allImages.length;
@@ -70,8 +68,6 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
   };
 
   React.useEffect(() => {
-    // Reset loading state when selected image changes
-    // Only if we haven't already loaded this image
     if (!loadedImages[selectedImage]) {
       setIsMainImageLoading(true);
     } else {
@@ -79,25 +75,19 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
     }
   }, [selectedImage, loadedImages]);
 
-  // Initialize thumbnail loading states
   React.useEffect(() => {
-    // Only initialize if we don't have loading states already
     if (Object.keys(loadingThumbnails).length === 0) {
       const initialLoadingState: Record<number, boolean> = {};
       allImages.forEach((img, idx) => {
-        // Check if we've already loaded this image
         initialLoadingState[idx] = !loadedImages[img];
       });
       setLoadingThumbnails(initialLoadingState);
     }
   }, [allImages, loadedImages]);
 
-  // Preload the next few images
   React.useEffect(() => {
-    // Find the current index
     const currentIndex = allImages.findIndex(img => img === selectedImage);
     
-    // Preload the next 3 images
     for (let i = 1; i <= 3; i++) {
       const nextIndex = (currentIndex + i) % allImages.length;
       const nextImage = allImages[nextIndex];
@@ -115,36 +105,9 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
     }
   }, [selectedImage, allImages, loadedImages]);
 
-  // Translations
-  const translations = {
-    es: {
-      capacity: "CAPACIDAD",
-      bedrooms: "HABITACIONES",
-      bathrooms: "BAÑOS",
-      checkIn: "CHECK IN",
-      checkOut: "CHECK OUT",
-      parking: "PARKING",
-      book: "Reserva",
-      contact: "Contactanos"
-    },
-    en: {
-      capacity: "CAPACITY",
-      bedrooms: "BEDROOMS",
-      bathrooms: "BATHROOMS",
-      checkIn: "CHECK IN",
-      checkOut: "CHECK OUT",
-      parking: "PARKING",
-      book: "Book",
-      contact: "Contact us"
-    }
-  };
-
-  const t = language === 'en' ? translations.en : translations.es;
-
   return (
     <div className="fixed top-0 right-0 bottom-0 left-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden overscroll-none">
       <div className="flex flex-col md:flex-row h-full w-full">
-        {/* Thumbnails */}
         <div className="block md:flex flex-col gap-2 p-4 border-r space-x-3 mx-auto">
           {allImages.map((thumb, idx) => (
             <button
@@ -178,7 +141,6 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
           ))}
         </div>
 
-        {/* Main Image */}
         <div className="relative h-[20rem] md:h-full w-full md:w-1/2">
           <img 
             src={selectedImage || department.mainImage} 
@@ -203,7 +165,6 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             </div>
           )}
           
-          {/* Navigation Arrows */}
           <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center space-x-4">
             <button 
               onClick={navigateToPreviousImage}
@@ -222,11 +183,12 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
           </div>
         </div>
 
-        {/* Info Panel */}
         <div className="w-full relative md:w-1/2 border-t md:border-l bg-[#EBE6D7] p-5 md:overflow-scroll md:overflow-x-auto min-w-md">
           <div className="fixed top-20 right-3 md:top-8 md:right-8 lg:flex lg:justify-end rounded-full bg-background/80 backdrop-blur-sm">
             <button 
               onClick={onClose}
+              className="p-3 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 hover:scale-115 transition-colors"
+              aria-label="Close"
             >
               <X className="w-6 h-6" />
             </button>
@@ -238,34 +200,34 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
             <p className="text-light text-lg">
               02 
               <span className="text-light px-4">/</span> 
-              <span className="text-primary uppercase text-lg">{department.title}</span>
+              <span className="text-primary uppercase text-lg">{language === 'en' && department.titleEn ? department.titleEn : department.title}</span>
             </p>
             <p className="text-muted-foreground mt-8">
                 {language === 'en' ? department.descriptionEn || department.description : department.description}
               </p>
           </div>
             <div className="grid-row sm:grid-cols-3 lg:flex lg:flex-row mx-auto justify-center gap-4 mb-8 font-inter w-full text-center shrink-1 space-y-3 lg:space-y-0">
-              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
-                <h3 className="font-medium text-lg text-primary">{t.capacity}</h3>
+              <Card className="px-3 py-6 border rounded-md border-primary/70 lg:w-1/3">
+                <h3 className="font-medium text-lg text-primary">{t('apartment.capacity')}</h3>
                 <p className="text-4xl text-muted-foreground">{department.capacity}</p>
               </Card>
-              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
-                <h3 className="font-medium text-lg text-primary">{t.bedrooms}</h3>
+              <Card className="px-3 py-6 border rounded-md border-primary/70 lg:w-1/3">
+                <h3 className="font-medium text-lg text-primary">{t('apartment.bedrooms')}</h3>
                 <p className="text-4xl text-muted-foreground">{department.bedrooms}</p>
               </Card>
-              <Card className="px-3 py-6 min-w-fit border rounded-md border-primary/70 lg:w-1/3">
-                <h3 className="font-medium text-lg text-primary">{t.bathrooms}</h3>
+              <Card className="px-3 py-6 border rounded-md border-primary/70 lg:w-1/3">
+                <h3 className="font-medium text-lg text-primary">{t('apartment.bathrooms')}</h3>
                 <p className="text-4xl text-muted-foreground">{department.bathrooms}</p>
               </Card>
             </div>
 
             <div className="space-y-4 mb-8 font-inter">
               {[
-                { title: t.checkIn, desc: department.checkIn.time, data: language === 'en' ? "FLEXIBLE" : department.checkIn.flexibility },
-                { title: t.checkOut, desc: department.checkOut.time, data: language === 'en' ? "FLEXIBLE" : department.checkOut.flexibility },
-                { title: t.parking, desc: language === 'en' ? "YES" : department.parking.details, data: language === 'en' ? (department.parking.availability === "DISPONIBLE" ? "AVAILABLE" : "CHECK AVAILABILITY") : department.parking.availability }
+                { title: t('apartment.checkIn'), desc: department.checkIn.time, data: language === 'en' ? "FLEXIBLE" : department.checkIn.flexibility },
+                { title: t('apartment.checkOut'), desc: department.checkOut.time, data: language === 'en' ? "FLEXIBLE" : department.checkOut.flexibility },
+                { title: t('apartment.parking'), desc: language === 'en' ? "YES" : department.parking.details, data: language === 'en' ? (department.parking.availability === "DISPONIBLE" ? "AVAILABLE" : "CHECK AVAILABILITY") : department.parking.availability }
               ].map((item) => (
-                <div key={item.title} className="grid grid-cols-3 gap-4 py-4">
+                <div key={item.title} className="grid grid-cols-3 gap-4 py-4 items-end">
                   <div className="font-medium">{item.title}</div>
                   <div className="text-muted-foreground">{item.desc}</div>
                   <div className="text-right text-muted-foreground">{item.data}</div>
@@ -285,7 +247,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
                   }
                 }}
               >
-                {t.book}
+                {t('apartment.book')}
               </Button>
               <Button 
                 variant="default" 
@@ -298,7 +260,7 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
                   }
                 }}
               >
-                {t.contact}
+                {t('apartment.contact')}
               </Button>
             </div>
           </div>

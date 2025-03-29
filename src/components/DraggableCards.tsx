@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,6 +7,7 @@ import { Card, CardContent } from "../components/ui/card";
 import ApartmentDetail from "./ApartmentDetails";
 import { Button } from "./ui/button";
 import { useDepartments, Department } from "./ApartmentsConfig";
+import { useTranslation } from "react-i18next";
 import { useLanguage } from "../i18n/LanguageContext";
 
 interface DragState {
@@ -18,6 +19,7 @@ interface DragState {
 
 export default function Departments() {
   const { departments } = useDepartments();
+  const { t } = useTranslation();
   const { language } = useLanguage();
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -31,7 +33,22 @@ export default function Departments() {
     lastX: 0
   });
 
-  // Function to scroll to a specific card
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      .scrollbar-draggable::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   const scrollToCard = useCallback((index: number) => {
     if (!sliderRef.current) return;
     
@@ -46,16 +63,12 @@ export default function Departments() {
     setActiveIndex(index);
   }, []);
 
-  // Handle click on card image
   const handleCardClick = useCallback((e: React.MouseEvent, index: number) => {
-    // Don't trigger navigation if clicking on the "Ver más" button
     if ((e.target as HTMLElement).closest('button')) return;
     
-    // If clicking on a card to the right of current active card, go to next card
     if (index > activeIndex) {
       scrollToCard(Math.min(departments.length - 1, activeIndex + 1));
     } 
-    // If clicking on a card to the left of current active card, go to previous card
     else if (index < activeIndex) {
       scrollToCard(Math.max(0, activeIndex - 1));
     }
@@ -72,6 +85,18 @@ export default function Departments() {
     };
   }, []);
 
+  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!sliderRef.current) return;
+    
+    const touch = e.touches[0];
+    dragStateRef.current = {
+      isDragging: true,
+      startX: touch.pageX - sliderRef.current.offsetLeft,
+      scrollLeft: sliderRef.current.scrollLeft,
+      lastX: touch.pageX
+    };
+  }, []);
+
   const handleMouseLeave = useCallback(() => {
     dragStateRef.current.isDragging = false;
   }, []);
@@ -79,7 +104,19 @@ export default function Departments() {
   const handleMouseUp = useCallback(() => {
     dragStateRef.current.isDragging = false;
     
-    // Snap to nearest card after dragging ends
+    if (sliderRef.current) {
+      const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
+      const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
+      
+      if (newIndex !== activeIndex) {
+        scrollToCard(newIndex);
+      }
+    }
+  }, [activeIndex, scrollToCard]);
+
+  const handleTouchEnd = useCallback(() => {
+    dragStateRef.current.isDragging = false;
+    
     if (sliderRef.current) {
       const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
       const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
@@ -104,29 +141,37 @@ export default function Departments() {
     setActiveIndex(newIndex);
   }, []);
 
-  // Optimize dialog opening
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    const { isDragging, startX, scrollLeft } = dragStateRef.current;
+    if (!isDragging || !sliderRef.current) return;
+
+    e.preventDefault();
+    
+    const touch = e.touches[0];
+    const x = touch.pageX - sliderRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    sliderRef.current.scrollLeft = scrollLeft - walk;
+    
+    const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
+    const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
+    setActiveIndex(newIndex);
+  }, []);
+
   const handleOpenDialog = useCallback((department: Department) => {
-    // Set loading state for this department
     setLoadingDepartment(department.id);
     
-    // Set selected department and open dialog immediately
-    // This prevents the modal from closing unexpectedly on mobile
     setSelectedDepartment(department);
     setIsDialogOpen(true);
     
-    // Preload department images in the background after dialog is open
     const preloadImages = async () => {
       try {
-        // Start loading the main image first
         const mainImg = new Image();
         mainImg.src = department.mainImage;
         
-        // Then preload a few apartment images
         const imagesToPreload = [
           ...department.images.apartment.slice(0, 3)
         ];
         
-        // Create an array of promises for image loading
         const preloadPromises = imagesToPreload.map(src => {
           return new Promise((resolve) => {
             const img = new Image();
@@ -136,30 +181,23 @@ export default function Departments() {
           });
         });
         
-        // Wait for main image to load
         await new Promise(resolve => {
           mainImg.onload = resolve;
           mainImg.onerror = resolve;
         });
         
-        // Continue preloading other images in the background
         Promise.all(preloadPromises).catch(() => {
-          // Silently handle any errors
         });
       } finally {
-        // Always clear loading state, even if errors occur
         setLoadingDepartment(null);
       }
     };
     
-    // Start preloading in the background
     preloadImages();
   }, []);
 
-  // Optimize dialog closing
   const handleCloseDialog = useCallback(() => {
     setIsDialogOpen(false);
-    // Clear selected department after animation completes
     setTimeout(() => {
       setSelectedDepartment(null);
     }, 300);
@@ -174,15 +212,22 @@ export default function Departments() {
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseLeave}
           onMouseMove={handleMouseMove}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
           className="flex overflow-x-auto scrollbar-draggable gap-5"
           style={{ 
             scrollBehavior: dragStateRef.current.isDragging ? 'auto' : 'smooth',
             scrollSnapType: dragStateRef.current.isDragging ? 'none' : 'x mandatory',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch',
           }}
         >
           {departments.map((department, index) => (
             <Card
               key={department.id}
+              title={department.title}
               className={`
                 w-[300px] lg:w-[576px] h-fit flex-shrink-0 transition-all
                 cursor-pointer
@@ -200,7 +245,7 @@ export default function Departments() {
                 <div className="relative overflow-hidden">
                   <img
                     src={department.mainImage}
-                    alt={department.title}
+                    alt={language === 'en' && department.titleEn ? department.titleEn : department.title}
                     className={`
                       object-cover w-full h-[300px] lg:h-[548px] transition-transform duration-300 mb-4
                       ${dragStateRef.current.isDragging ? 'scale-[1.00]' : 'scale-100'}
@@ -219,13 +264,13 @@ export default function Departments() {
                 </div>
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center rounded-md mt-4 font-inter pb-2">
                   <span className="text-xl lg:text-xl text-primary uppercase font-extralight mb-3 lg:mb-0">
-                    {department.title}
+                    {language === 'en' && department.titleEn ? department.titleEn : department.title}
                   </span>
                   <Button
                     variant="link"
                     className="text-xl lg:text-xl text-primary/60 z-50 uppercase underline underline-offset-10 pointer-primary font-extralight"
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent card click when clicking the button
+                      e.stopPropagation();
                       handleOpenDialog(department);
                     }}
                     disabled={loadingDepartment === department.id}
@@ -236,10 +281,10 @@ export default function Departments() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        {language === 'en' ? 'Loading...' : 'Cargando...'}
+                        {t('apartment.loading')}
                       </span>
                     ) : (
-                      language === 'en' ? "See more →" : "Ver más →"
+                      t('apartment.seeMore')
                     )}
                   </Button>
                 </div>
@@ -254,7 +299,10 @@ export default function Departments() {
           {selectedDepartment && (
             <ApartmentDetail 
               department={selectedDepartment} 
-              onClose={handleCloseDialog}
+              onClose={() => {
+                setIsDialogOpen(false);
+                setTimeout(() => setSelectedDepartment(null), 300);
+              }} 
             />
           )}
         </DialogContent>
