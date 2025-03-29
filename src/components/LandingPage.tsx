@@ -103,7 +103,7 @@ const LandingPage = () => {
               <LanguageSelector className="text-[#D1D1D1] px-6 py-4 rounded-full flex items-center" />
               <Button
                 id="btn-contactanos"
-                className="group inline-flex items-center border border-[#6B6B6B] text-[#D1D1D1] px-6 py-4 rounded-full mr-4 bg-transparent text-lg transition duration-300 hover:bg-[#D1D1D1] hover:text-[#3F3F3F]"
+                className="group inline-flex items-center border border-[#6B6B6B] text-[#D1D1D1] px-6 py-4 rounded-full mr-4 bg-transparent text-lg transition duration-300 hover:bg-white/90 hover:text-[#3F3F3F]"
                 onClick={() => {
                   window.location.href = "https://wa.me/5492944327488";
                 }}

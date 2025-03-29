@@ -41,7 +41,7 @@ export default function FaqAccordion() {
         answer: (
           <ul className="list-disc pl-5 space-y-1">
             <li>Departamento 1: hasta 2 personas</li>
-            <li>Departamento 3: hasta 4 personas</li>
+            <li>Departamento 2: hasta 4 personas</li>
             <li>Departamento 3 y 4: hasta 6 personas</li>
           </ul>
         )
@@ -86,7 +86,7 @@ export default function FaqAccordion() {
         answer: (
           <ul className="list-disc pl-5 space-y-1">
             <li>Apartment 1: up to 2 people</li>
-            <li>Apartment 3: up to 4 people</li>
+            <li>Apartment 2: up to 4 people</li>
             <li>Apartment 3 and 4: up to 6 people</li>
           </ul>
         )
