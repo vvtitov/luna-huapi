@@ -74,7 +74,39 @@ export default function ApartmentDetail({ department, onClose }: ApartmentDetail
     } else {
       setIsMainImageLoading(false);
     }
-  }, [selectedImage, loadedImages]);
+    
+    // Detectar si estamos en iOS para aplicar optimizaciones específicas
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    
+    if (isIOS) {
+      // Forzar un reflow para mejorar la estabilidad en iOS
+      document.body.style.overflow = 'hidden';
+      
+      // Limitar la cantidad de imágenes a precargar en iOS para evitar problemas de memoria
+      const limitedPreload = async () => {
+        const currentIndex = allImages.findIndex(img => img === selectedImage);
+        const nextIndex = (currentIndex + 1) % allImages.length;
+        const nextImage = allImages[nextIndex];
+        
+        if (!loadedImages[nextImage]) {
+          const img = new Image();
+          img.src = nextImage;
+          img.onload = () => {
+            setLoadedImages(prev => ({
+              ...prev,
+              [nextImage]: true
+            }));
+          };
+        }
+      };
+      
+      limitedPreload();
+      
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [selectedImage, loadedImages, allImages]);
 
   React.useEffect(() => {
     if (Object.keys(loadingThumbnails).length === 0) {

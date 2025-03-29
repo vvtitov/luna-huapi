@@ -160,33 +160,43 @@ export default function Departments() {
   const handleOpenDialog = useCallback((department: Department) => {
     setLoadingDepartment(department.id);
     
+    // Primero establecemos el departamento seleccionado
     setSelectedDepartment(department);
-    setIsDialogOpen(true);
     
-    const preloadImages = async () => {
-      try {
-        const mainImg = new Image();
-        mainImg.src = department.mainImage;
-        
-        await new Promise((resolve) => {
-          mainImg.onload = resolve;
-          mainImg.onerror = resolve;
+    // Pequeño retraso antes de abrir el diálogo para asegurar que el estado se actualice correctamente
+    setTimeout(() => {
+      setIsDialogOpen(true);
+      
+      // Precargamos solo la imagen principal para reducir la carga inicial
+      const preloadMainImage = async () => {
+        try {
+          const mainImg = new Image();
+          mainImg.src = department.mainImage;
           
-          setTimeout(resolve, 3000);
-        });
-        
-      } catch (error) {
-        console.error("Error preloading images:", error);
-      } finally {
-        setLoadingDepartment(null);
-      }
-    };
-    
-    preloadImages();
+          // Esperamos a que la imagen principal se cargue o hasta un máximo de 2 segundos
+          await Promise.race([
+            new Promise(resolve => {
+              mainImg.onload = resolve;
+              mainImg.onerror = resolve;
+            }),
+            new Promise(resolve => setTimeout(resolve, 2000))
+          ]);
+        } catch (error) {
+          console.error("Error preloading main image:", error);
+        } finally {
+          setLoadingDepartment(null);
+        }
+      };
+      
+      preloadMainImage();
+    }, 50);
   }, []);
 
   const handleCloseDialog = useCallback(() => {
+    // Primero cerramos el diálogo
     setIsDialogOpen(false);
+    
+    // Esperamos a que la animación de cierre termine antes de limpiar el estado
     setTimeout(() => {
       setSelectedDepartment(null);
     }, 500);
