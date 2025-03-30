@@ -36,6 +36,7 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
 
   const [selectedImage, setSelectedImage] = useState(department.mainImage);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Evitamos el scroll del body cuando el modal está abierto
   useEffect(() => {
@@ -64,17 +65,25 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
 
   const navigateToNextImage = () => {
     setIsLoading(true);
-    const currentIndex = allImages.findIndex(img => img === selectedImage);
-    const nextIndex = (currentIndex + 1) % allImages.length;
-    setSelectedImage(allImages[nextIndex]);
+    const newIndex = (currentIndex + 1) % allImages.length;
+    setCurrentIndex(newIndex);
+    setSelectedImage(allImages[newIndex]);
   };
 
   const navigateToPreviousImage = () => {
     setIsLoading(true);
-    const currentIndex = allImages.findIndex(img => img === selectedImage);
-    const prevIndex = (currentIndex - 1 + allImages.length) % allImages.length;
-    setSelectedImage(allImages[prevIndex]);
+    const newIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+    setCurrentIndex(newIndex);
+    setSelectedImage(allImages[newIndex]);
   };
+
+  useEffect(() => {
+    // Actualizar el índice cuando cambia la imagen seleccionada
+    const newIndex = allImages.findIndex(img => img === selectedImage);
+    if (newIndex !== -1) {
+      setCurrentIndex(newIndex);
+    }
+  }, [selectedImage, allImages]);
 
   if (!isOpen) return null;
 
@@ -86,6 +95,17 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
         overscrollBehavior: 'none'
       }}
     >
+      {/* Botón de cierre fijo en la parte superior */}
+      <div className="fixed top-4 right-4 z-50">
+        <button 
+          onClick={onClose}
+          className="p-3 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 shadow-md transition-colors"
+          aria-label="Close"
+        >
+          <X className="w-6 h-6 text-primary" />
+        </button>
+      </div>
+
       <div className="flex flex-col h-full w-full">
         <div className="relative h-[20rem] md:h-1/2 w-full">
           <img 
@@ -108,7 +128,8 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
             </div>
           )}
           
-          <div className="absolute bottom-4 left-0 right-0 hidden lg:flex justify-center items-center space-x-4">
+          {/* Botones de navegación para móviles y desktop */}
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center space-x-4">
             <button 
               onClick={navigateToPreviousImage}
               className="p-2 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 transition-colors"
@@ -124,20 +145,19 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
               <ChevronRight className="w-6 h-6 text-primary" />
             </button>
           </div>
+          
+          {/* Indicador de fotos */}
+          <div className="absolute bottom-16 left-0 right-0 flex justify-center items-center">
+            <div className="bg-background/60 backdrop-blur-sm px-3 py-1 rounded-full">
+              <p className="text-primary text-sm">
+                {currentIndex + 1} / {allImages.length} {language === 'en' ? 'photos' : 'fotos'}
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="w-full relative md:w-full border-t md:border-l bg-[#EBE6D7] p-5 overflow-y-auto">
-          <div className="fixed top-20 right-3 md:top-8 md:right-8 lg:flex lg:justify-end rounded-full bg-background/80 backdrop-blur-sm">
-            <button 
-              onClick={onClose}
-              className="p-3 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 hover:scale-115 transition-colors"
-              aria-label="Close"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          <div className="px-4 mt-10">
+          <div className="px-4 mt-4">
             <div className="flex flex-col items-start mb-12 font-inter">
               <p className="text-light text-lg">
                 02 
@@ -208,5 +228,5 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
         </div>
       </div>
     </div>
-  );
+  )
 }
