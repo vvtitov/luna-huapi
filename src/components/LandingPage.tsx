@@ -49,11 +49,11 @@ const LandingPage = () => {
     <div className="bg-background min-h-screen min-w-[300px]">
 
       <section className="relative h-screen w-full bg-card-foreground bg-blend-overlay bg-[url('/images/dp-2/PRIORITY_RENTALS-29.webp')] bg-cover bg-center">
-        <nav id="navbar" className="relative top-0 flex justify-between w-full items-center align-middle z-10">
-          <div id="right-side" className="relative flex pl-10">
+        <nav id="navbar" className="absolute top-0 left-0 right-0 flex justify-between w-full items-center z-10 px-4 sm:px-6 lg:px-10">
+          <div id="right-side" className="relative flex">
             <div
               id="logo-container"
-              className="self-center pt-[72px] "
+              className="self-center pt-8 sm:pt-12 lg:pt-[72px]"
             >
               <img
                 src="/assets/logo.svg"
@@ -73,7 +73,7 @@ const LandingPage = () => {
               </p>
             </div>
           </div>
-          <div className="items-center hidden lg:flex w-[946px] pt-[72px] justify-end text-lg">
+          <div className="items-center hidden lg:flex pt-[72px] justify-end text-lg">
             <div className="flex space-x-12 items-center justify-self-center pr-8">
               {getNavItems().map(
                 (item) => (
@@ -98,7 +98,7 @@ const LandingPage = () => {
                 )
               )}
             </div>
-            <div className="flex items-center justify-self-end pr-10">
+            <div className="flex items-center justify-self-end pr-6">
               <div className="w-px h-[30px] bg-[#D1D1D1]"></div>
               <LanguageSelector className="text-[#D1D1D1] px-6 py-4 rounded-full flex items-center" />
               <Button
@@ -115,12 +115,12 @@ const LandingPage = () => {
               </Button>
             </div>
           </div>
-          <div className="flex items-center justify-self-end lg:hidden pt-[72px] pr-10 cursor-pointer" onClick={toggleMenu}>
+          <div className="flex items-center justify-self-end lg:hidden pt-8 sm:pt-12 lg:pt-[72px] pr-2 cursor-pointer" onClick={toggleMenu}>
             <BurguerMenu isOpen={isMenuOpen} toggleMenu={toggleMenu}/>
           </div>
         </nav>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col min-h-screen min-w-full items-center justify-center">
-          <h2 className="text-3xl md:text-3xl lg:text-4xl text-light text-balance mb-12 text-center px-10 lg:max-w-3/5 min-w-[300px]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-10">
+          <h2 className="text-3xl md:text-3xl lg:text-4xl text-light text-balance mb-8 sm:mb-12 text-center max-w-4xl mx-auto">
             {t('hero.title')}
           </h2>
           <div className="flex flex-col justify-center items-center gap-4 lg:flex-row">

@@ -28,16 +28,16 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ className }) => {
       </button>
       
       {isOpen && (
-        <div className="absolute top-full mt-2 bg-background border border-[#6B6B6B] rounded-md shadow-lg z-50 right-6">
+        <div className="absolute top-full mt-2 bg-transparent border border-[#6B6B6B] rounded-md shadow-lg z-50 right-6.5">
           <button
             onClick={() => handleLanguageChange('es')}
-            className="block w-full text-left px-4 py-2 hover:bg-[#D1D1D1] hover:text-[#3F3F3F] text-primary"
+            className="block w-full text-left px-4 py-2 hover:bg-[#D1D1D1] hover:rounded-md hover:text-[#3F3F3F] text-light"
           >
             ES
           </button>
           <button
             onClick={() => handleLanguageChange('en')}
-            className="block w-full text-left px-4 py-2 hover:bg-[#D1D1D1] hover:text-[#3F3F3F] text-primary"
+            className="block w-full text-left px-4 py-2 hover:bg-[#D1D1D1] hover:rounded-md hover:text-[#3F3F3F] text-light"
           >
             EN
           </button>

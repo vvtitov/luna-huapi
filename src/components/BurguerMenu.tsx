@@ -32,20 +32,20 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
       className={`inset-0 relative flex items-center justify-center transition-all duration-500 ease-in-out cursor-default ${
         isOpen ? "opacity-100 visible" : "opacity-100 text-primary"
       }`}
-      style={{ zIndex: 999 }}
+      style={{ zIndex: 1000 }}
     >
       <button
-        className="flex items-center justify-center w-8 h-8 p-2"
+        className="flex items-center justify-center w-8 h-8 p-2 relative z-[1001]"
         onClick={toggleMenu}
       >
         <span className="sr-only">Toggle menu</span>
         <div
-          className={`absolute w-full h-0.5 bg-primary  transition-all duration-500 ease-in-out ${
+          className={`absolute w-full h-0.5 ${isOpen ? "bg-primary" : "bg-primary"} transition-all duration-500 ease-in-out ${
             isOpen ? "rotate-45 translate-y-0" : "translate-y-[-0.25rem]"
           }`}
         ></div>
         <div
-          className={`absolute w-full h-0.5 bg-primary transition-all duration-500 ease-in-out ${
+          className={`absolute w-full h-0.5 ${isOpen ? "bg-primary" : "bg-primary"} transition-all duration-500 ease-in-out ${
             isOpen ? "-rotate-45 translate-y-0" : "translate-y-[0.25rem]"
           }`}
         ></div>
@@ -55,22 +55,12 @@ export default function BurguerMenu({ isOpen, toggleMenu }: BurguerMenuProps) {
           isOpen ? "visible opacity-100" : "invisible opacity-0"
 
         }`}
-        style={{ zIndex: 998 }}
+        style={{ zIndex: 999 }}
       >
         <div
           className="w-full h-full bg-gradient-to-b from-background via-background to-[#E3BDB1]"
           style={isOpen ? { overflow: "hidden" } : {}}
         >
-         <div
-          className={`absolute top-25 right-10 w-8 h-0.5 bg-primary  transition-all duration-500 ease-in-out ${
-            isOpen ? "rotate-45 translate-y-0" : "translate-y-[-0.25rem]"
-          }`}
-        ></div>
-        <div
-          className={`absolute top-25 right-10 w-8 h-0.5 bg-primary transition-all duration-500 ease-in-out ${
-            isOpen ? "-rotate-45 translate-y-0" : "translate-y-[0.25rem]"
-          }`}
-        ></div>   
         </div>
         <nav className="absolute flex flex-col gap-5 items-center justify-center mx-auto w-full">
             

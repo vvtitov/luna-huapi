@@ -41,6 +41,29 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
   const [loadingThumbnails, setLoadingThumbnails] = React.useState<Record<number, boolean>>({});
   const [loadedImages, setLoadedImages] = React.useState<Record<string, boolean>>({});
 
+  // Reset loading states when department changes
+  React.useEffect(() => {
+    setSelectedImage(department.mainImage);
+    setIsMainImageLoading(true);
+    setLoadedImages({});
+    
+    // Reset all thumbnails to loading state
+    const initialThumbnailState: Record<number, boolean> = {};
+    allImages.forEach((_, idx) => {
+      initialThumbnailState[idx] = true;
+    });
+    setLoadingThumbnails(initialThumbnailState);
+  }, [department, allImages]);
+
+  // Inicializamos todas las imágenes como "cargando"
+  React.useEffect(() => {
+    const initialLoadingState: Record<string, boolean> = {};
+    allImages.forEach(img => {
+      initialLoadingState[img] = false; // Mark all as not loaded initially
+    });
+    setLoadedImages(initialLoadingState);
+  }, [allImages]);
+
   const handleMainImageLoad = () => {
     setIsMainImageLoading(false);
     setLoadedImages(prev => ({
@@ -64,18 +87,22 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
     const currentIndex = allImages.findIndex(img => img === selectedImage);
     const nextIndex = (currentIndex + 1) % allImages.length;
     setSelectedImage(allImages[nextIndex]);
+    setIsMainImageLoading(true); // Reset loading state when changing image
   };
 
   const navigateToPreviousImage = () => {
     const currentIndex = allImages.findIndex(img => img === selectedImage);
     const prevIndex = (currentIndex - 1 + allImages.length) % allImages.length;
     setSelectedImage(allImages[prevIndex]);
+    setIsMainImageLoading(true); // Reset loading state when changing image
   };
 
   React.useEffect(() => {
-    if (!loadedImages[selectedImage]) {
-      setIsMainImageLoading(true);
-    } else {
+    // Always show loading indicator when image changes
+    setIsMainImageLoading(true);
+    
+    // Check if image is already loaded
+    if (loadedImages[selectedImage]) {
       setIsMainImageLoading(false);
     }
     
@@ -89,19 +116,6 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
       };
     }
   }, [selectedImage, loadedImages, isIOS]);
-
-  React.useEffect(() => {
-    if (Object.keys(loadingThumbnails).length === 0) {
-      const initialLoadingState: Record<number, boolean> = {};
-      // Limitamos a cargar solo los primeros thumbnails visibles
-      // En iOS, cargamos aún menos thumbnails
-      const thumbnailsToLoad = isIOS ? 3 : 5;
-      allImages.slice(0, thumbnailsToLoad).forEach((img, idx) => {
-        initialLoadingState[idx] = !loadedImages[img];
-      });
-      setLoadingThumbnails(initialLoadingState);
-    }
-  }, [allImages, loadedImages, isIOS]);
 
   React.useEffect(() => {
     // En iOS, limitamos la precarga a solo la siguiente imagen
