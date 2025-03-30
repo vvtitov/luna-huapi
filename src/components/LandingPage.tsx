@@ -124,7 +124,7 @@ const LandingPage = () => {
             {t('hero.title')}
           </h2>
           <div className="flex flex-col justify-center items-center gap-4 lg:flex-row">
-            <Button className="bg-[#D1D1D1] text-[#3F3F3F] px-8 py-4 rounded-full max-w-fit text-lg hover:bg-[#E3BDB1] hover:text-white"
+            <Button className="w-55 bg-[#D1D1D1] text-[#3F3F3F] px-8 py-4 rounded-full text-lg hover:bg-[#E3BDB1] hover:text-white"
               onClick={() => {
                 const target = document.querySelector("#los-departamentos");
                 if (target) {
@@ -136,7 +136,7 @@ const LandingPage = () => {
             >
               {t('hero.bookButton')}
             </Button>
-            <Button className="border border-[#6B6B6B] text-[#D1D1D1] px-8 py-4 rounded-full max-w-fit bg-transparent text-lg hover:bg-[#CADBD8] hover:text-[#3F3F3F]">
+            <Button className="w-55 border border-[#6B6B6B] text-[#D1D1D1] px-8 py-4 rounded-full bg-transparent text-lg hover:bg-[#CADBD8] hover:text-[#3F3F3F]">
               <a href="https://www.instagram.com/lunahuapi/" target="_blank" rel="noopener noreferrer">{t('hero.followButton')}</a>
             </Button>
           </div>
@@ -213,19 +213,19 @@ const LandingPage = () => {
       <footer className="bg-primary-custom py-12 px-10 pointer-primary [&_*]:pointer-primary font-inter" id="contacto">
         <div className="mx-auto">
           <div className="h-px bg-[#565656] opacity-20 my-8"></div>
-          <div className="flex justify-between items-center mb-[15vh]">
+          <div className="flex flex-row justify-between items-center mb-[10vh]">
             <h1 className="text-5xl lg:text-7xl font-light">{t('footer.title')}</h1>
             <button className="relative top-3 left-2 animate-bounce transition-all duration-2000 border border-primary rounded-full p-4" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <ArrowUp className="text-primary" size={24} />
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 items-baseline">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-5 items-baseline">
             <div className="uppercase text-lg lg:text-xl flex items-baseline">
               <img src="/assets/circle.svg" alt="Circle" className="self-start pt-1.5 mr-3"/>
               <div className="flex flex-col">
                 <div>20 de Junio 766, Bariloche</div>
                 <div className="mb-6">CP 1723, Argentina</div>
-                <div>+54 (9) 294 432-7488</div>
+                <a href="https://wa.me/5492944327488" target="_blank" rel="noopener noreferrer hover:underline" className="underline-offset-8 text-lg">+54 (9) 294 432-7488</a>
               </div>
             </div>
             <div className="uppercase text-lg lg:text-xl flex items-center">

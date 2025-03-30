@@ -62,7 +62,7 @@ export default function Testimonials() {
 
   return (
     <section
-      className="mx-auto min-h-[600px] bg-primary-custom w-full px-10 pointer-primary [&_*]:pointer-primary relative min-w-[400px] pb-20"
+      className="mx-auto min-h-[600px] bg-primary-custom w-full px-10 pointer-primary [&_*]:pointer-primary relative min-w-auto pb-20"
       id="reviews"
     >
       <div className="h-px bg-[#565656] opacity-20 flex-grow"></div>
