@@ -21,22 +21,25 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
   const { language } = useLanguage();
   const { t } = useTranslation();
   
-  // Limitamos drásticamente el número de imágenes para iOS
+  // Aumentamos el número de imágenes pero mantenemos optimizaciones
   const allImages = React.useMemo(() => {
-    // Máximo 3 imágenes para evitar problemas de memoria
+    // Aumentamos a un máximo de 8 imágenes para iOS
     const uniqueImages = [
       ...new Set([
-        ...department.images.apartment.slice(0, 2),
-        ...department.images.building.slice(0, 1)
+        ...department.images.apartment.slice(0, 5),
+        ...department.images.building.slice(0, 3)
       ])
     ].filter(img => img !== department.mainImage);
     
-    return [department.mainImage, ...uniqueImages.slice(0, 2)];
+    return [department.mainImage, ...uniqueImages];
   }, [department]);
 
   const [selectedImage, setSelectedImage] = useState(department.mainImage);
   const [isLoading, setIsLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({
+    [department.mainImage]: false
+  });
 
   // Evitamos el scroll del body cuando el modal está abierto
   useEffect(() => {
@@ -61,29 +64,59 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
 
   const handleImageLoad = () => {
     setIsLoading(false);
+    setLoadedImages(prev => ({
+      ...prev,
+      [selectedImage]: true
+    }));
   };
 
   const navigateToNextImage = () => {
-    setIsLoading(true);
     const newIndex = (currentIndex + 1) % allImages.length;
     setCurrentIndex(newIndex);
-    setSelectedImage(allImages[newIndex]);
+    const nextImage = allImages[newIndex];
+    
+    if (!loadedImages[nextImage]) {
+      setIsLoading(true);
+    }
+    
+    setSelectedImage(nextImage);
   };
 
   const navigateToPreviousImage = () => {
-    setIsLoading(true);
     const newIndex = (currentIndex - 1 + allImages.length) % allImages.length;
     setCurrentIndex(newIndex);
-    setSelectedImage(allImages[newIndex]);
+    const prevImage = allImages[newIndex];
+    
+    if (!loadedImages[prevImage]) {
+      setIsLoading(true);
+    }
+    
+    setSelectedImage(prevImage);
   };
 
+  // Precargamos la siguiente imagen para mejorar la experiencia
   useEffect(() => {
     // Actualizar el índice cuando cambia la imagen seleccionada
     const newIndex = allImages.findIndex(img => img === selectedImage);
     if (newIndex !== -1) {
       setCurrentIndex(newIndex);
     }
-  }, [selectedImage, allImages]);
+    
+    // Precargamos solo la siguiente imagen para evitar sobrecarga
+    const nextIndex = (newIndex + 1) % allImages.length;
+    const nextImage = allImages[nextIndex];
+    
+    if (!loadedImages[nextImage]) {
+      const img = new Image();
+      img.src = nextImage;
+      img.onload = () => {
+        setLoadedImages(prev => ({
+          ...prev,
+          [nextImage]: true
+        }));
+      };
+    }
+  }, [selectedImage, allImages, loadedImages]);
 
   if (!isOpen) return null;
 
@@ -154,6 +187,34 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Miniaturas para navegación rápida (solo visible en pantallas medianas y grandes) */}
+        <div className="hidden md:flex overflow-x-auto py-2 px-4 gap-2 bg-[#EBE6D7]/90 border-t border-b border-primary/20">
+          {allImages.map((thumb, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setCurrentIndex(idx);
+                if (!loadedImages[thumb]) {
+                  setIsLoading(true);
+                }
+                setSelectedImage(thumb);
+              }}
+              className={`relative w-16 h-16 overflow-hidden rounded-md transition-all ${
+                idx === currentIndex ? 'ring-2 ring-primary scale-105' : 'opacity-70 hover:opacity-100'
+              }`}
+            >
+              <img
+                src={thumb}
+                alt={`Thumbnail ${idx + 1}`}
+                className="object-cover w-full h-full"
+                loading="lazy"
+                width={64}
+                height={64}
+              />
+            </button>
+          ))}
         </div>
 
         <div className="w-full relative md:w-full border-t md:border-l bg-[#EBE6D7] p-5 overflow-y-auto">
