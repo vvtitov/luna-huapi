@@ -148,7 +148,7 @@ const LandingPage = () => {
         secondText="" 
       /> 
 
-      <section className="pt-10 pb-20 pointer-primary mb-8" id="nosotros">
+      <section className="pt-5 pb-10 pointer-primary" id="nosotros">
         <div className="mx-auto px-6 lg:px-10">
           <div className="h-px bg-[#565656] opacity-20 flex-grow mb-10"></div>
           <div className="block lg:flex justify-between mb-12">
@@ -171,9 +171,9 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="mx-auto pb-40 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag bg-[#EFECE4] pt-20" id="los-departamentos">
+      <section className="mx-auto pb-10 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag bg-[#EFECE4] pt-10" id="los-departamentos">
         <div className="mx-auto">
-          <div className="flex justify-between items-center mb-5 font-inter">
+          <div className="flex justify-between items-center mb-10 font-inter">
             <p className="text-light text-lg">
               02 
               <span className="text-light px-4">/</span> 
@@ -192,8 +192,8 @@ const LandingPage = () => {
         <ParallaxCircleDivider title={t('parallax.restingPlace')} buttonText={t('hero.followButton')} onButtonClick={() => {}}/>
       </div>
 
-      <section className="mx-auto pb-24 pt-14 px-10 pointer-primary" id="preguntas-frecuentes">
-        <div className="h-px bg-[#565656] opacity-20 flex-grow my-12"></div>
+      <section className="mx-auto pb-12 pt-2 px-10 pointer-primary" id="preguntas-frecuentes">
+        <div className="h-px bg-[#565656] opacity-20 flex-grow mb-12 mt-4"></div>
         <div className="mx-auto">
           <div className="flex justify-between items-center mb-12 font-inter">
             <p className="text-light text-lg">

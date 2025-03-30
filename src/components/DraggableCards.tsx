@@ -51,10 +51,16 @@ export default function Departments() {
     `;
     document.head.appendChild(style);
 
+    // Preload all main images immediately
+    departments.forEach(department => {
+      const img = new Image();
+      img.src = department.mainImage;
+    });
+
     return () => {
       document.head.removeChild(style);
     };
-  }, []);
+  }, [departments]);
 
   useEffect(() => {
     const style = document.createElement('style');
@@ -280,7 +286,7 @@ export default function Departments() {
                       ${dragStateRef.current.isDragging ? 'scale-[1.00]' : 'scale-100'}
                     `}
                     draggable={false}
-                    loading="lazy"
+                    loading="eager"
                     width={576}
                     height={448}
                   />
