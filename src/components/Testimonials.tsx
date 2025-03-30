@@ -75,7 +75,7 @@ export default function Testimonials() {
           </span>
         </p>
         <div className="space-y-8 transition-opacity duration-500 ease-in-out w-full lg:w-4/7 h-full">
-          <h2 className="text-3xl font-light text-primary md:text-2xl lg:text-3xl mt-10 text-balance">
+          <h2 className="text-2xl font-light text-primary md:text-2xl lg:text-3xl mt-10 text-balance">
             {currentTestimonials[currentIndex].text}
           </h2>
           <div className="h-px bg-[#565656] opacity-20 hidden lg:flex flex-grow"></div>
