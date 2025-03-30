@@ -171,7 +171,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="mx-auto pb-10 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag bg-[#EFECE4] pt-10" id="los-departamentos">
+      <section className="mx-auto pb-20 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag bg-[#EFECE4] pt-10" id="los-departamentos">
         <div className="mx-auto">
           <div className="flex justify-between items-center mb-10 font-inter">
             <p className="text-light text-lg">
