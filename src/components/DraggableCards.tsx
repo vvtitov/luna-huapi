@@ -16,6 +16,9 @@ interface DragState {
   startX: number;
   scrollLeft: number;
   lastX: number;
+  velocity: number;
+  timestamp: number;
+  animationId: number | null;
 }
 
 export default function Departments() {
@@ -31,7 +34,10 @@ export default function Departments() {
     isDragging: false,
     startX: 0,
     scrollLeft: 0,
-    lastX: 0
+    lastX: 0,
+    velocity: 0,
+    timestamp: 0,
+    animationId: null
   });
   
   // Detectar si estamos en iOS
@@ -76,22 +82,48 @@ export default function Departments() {
     };
   }, []);
 
+  // Clean up any animations when component unmounts
+  useEffect(() => {
+    return () => {
+      if (dragStateRef.current.animationId) {
+        cancelAnimationFrame(dragStateRef.current.animationId);
+      }
+    };
+  }, []);
+
+  const getCardWidth = useCallback(() => {
+    return window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
+  }, []);
+
   const scrollToCard = useCallback((index: number) => {
     if (!sliderRef.current) return;
     
-    const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
-    const newScrollLeft = index * cardWidth;
+    // Ensure index is within bounds
+    const boundedIndex = Math.max(0, Math.min(departments.length - 1, index));
+    const cardWidth = getCardWidth();
+    const newScrollLeft = boundedIndex * cardWidth;
+    
+    // Cancel any ongoing animation
+    if (dragStateRef.current.animationId) {
+      cancelAnimationFrame(dragStateRef.current.animationId);
+      dragStateRef.current.animationId = null;
+    }
     
     sliderRef.current.scrollTo({
       left: newScrollLeft,
       behavior: 'smooth'
     });
     
-    setActiveIndex(index);
-  }, []);
+    setActiveIndex(boundedIndex);
+  }, [departments.length, getCardWidth]);
 
   const handleCardClick = useCallback((e: React.MouseEvent, index: number) => {
     if ((e.target as HTMLElement).closest('button')) return;
+    
+    // Prevent click handling during or immediately after drag
+    if (dragStateRef.current.isDragging || Math.abs(dragStateRef.current.velocity) > 0.5) {
+      return;
+    }
     
     if (index > activeIndex) {
       scrollToCard(Math.min(departments.length - 1, activeIndex + 1));
@@ -101,88 +133,207 @@ export default function Departments() {
     }
   }, [activeIndex, departments.length, scrollToCard]);
 
+  const applyMomentum = useCallback(() => {
+    if (!sliderRef.current) return;
+    
+    const friction = 0.92; // Lower = more friction
+    const minVelocity = 0.5;
+    
+    const animate = () => {
+      if (!sliderRef.current) return;
+      
+      // Apply friction to gradually reduce velocity
+      dragStateRef.current.velocity *= friction;
+      
+      // Apply velocity to scroll position
+      sliderRef.current.scrollLeft -= dragStateRef.current.velocity;
+      
+      // Update active index based on scroll position
+      const cardWidth = getCardWidth();
+      const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
+      
+      if (newIndex !== activeIndex) {
+        setActiveIndex(newIndex);
+      }
+      
+      // Continue animation if velocity is above threshold
+      if (Math.abs(dragStateRef.current.velocity) > minVelocity) {
+        dragStateRef.current.animationId = requestAnimationFrame(animate);
+      } else {
+        // Snap to nearest card when animation ends
+        const snapIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
+        const targetScrollLeft = snapIndex * cardWidth;
+        
+        if (Math.abs(sliderRef.current.scrollLeft - targetScrollLeft) > 2) {
+          sliderRef.current.scrollTo({
+            left: targetScrollLeft,
+            behavior: 'smooth'
+          });
+        }
+        
+        dragStateRef.current.velocity = 0;
+        dragStateRef.current.animationId = null;
+      }
+    };
+    
+    // Cancel any existing animation
+    if (dragStateRef.current.animationId) {
+      cancelAnimationFrame(dragStateRef.current.animationId);
+    }
+    
+    // Start animation
+    dragStateRef.current.animationId = requestAnimationFrame(animate);
+  }, [activeIndex, getCardWidth]);
+
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!sliderRef.current) return;
+    
+    // Cancel any ongoing animation
+    if (dragStateRef.current.animationId) {
+      cancelAnimationFrame(dragStateRef.current.animationId);
+      dragStateRef.current.animationId = null;
+    }
     
     dragStateRef.current = {
       isDragging: true,
       startX: e.pageX - sliderRef.current.offsetLeft,
       scrollLeft: sliderRef.current.scrollLeft,
-      lastX: e.pageX
+      lastX: e.pageX,
+      velocity: 0,
+      timestamp: Date.now(),
+      animationId: null
     };
+    
+    // Prevent default behavior to avoid text selection during drag
+    e.preventDefault();
   }, []);
 
   const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     if (!sliderRef.current) return;
+    
+    // Cancel any ongoing animation
+    if (dragStateRef.current.animationId) {
+      cancelAnimationFrame(dragStateRef.current.animationId);
+      dragStateRef.current.animationId = null;
+    }
     
     const touch = e.touches[0];
     dragStateRef.current = {
       isDragging: true,
       startX: touch.pageX - sliderRef.current.offsetLeft,
       scrollLeft: sliderRef.current.scrollLeft,
-      lastX: touch.pageX
+      lastX: touch.pageX,
+      velocity: 0,
+      timestamp: Date.now(),
+      animationId: null
     };
   }, []);
 
   const handleMouseLeave = useCallback(() => {
-    dragStateRef.current.isDragging = false;
-  }, []);
+    if (dragStateRef.current.isDragging) {
+      applyMomentum();
+      dragStateRef.current.isDragging = false;
+    }
+  }, [applyMomentum]);
 
   const handleMouseUp = useCallback(() => {
-    dragStateRef.current.isDragging = false;
-    
-    if (sliderRef.current) {
-      const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
-      const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-      
-      if (newIndex !== activeIndex) {
-        scrollToCard(newIndex);
-      }
+    if (dragStateRef.current.isDragging) {
+      applyMomentum();
+      dragStateRef.current.isDragging = false;
     }
-  }, [activeIndex, scrollToCard]);
+  }, [applyMomentum]);
 
   const handleTouchEnd = useCallback(() => {
-    dragStateRef.current.isDragging = false;
-    
-    if (sliderRef.current) {
-      const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
-      const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-      
-      if (newIndex !== activeIndex) {
-        scrollToCard(newIndex);
-      }
+    if (dragStateRef.current.isDragging) {
+      applyMomentum();
+      dragStateRef.current.isDragging = false;
     }
-  }, [activeIndex, scrollToCard]);
+  }, [applyMomentum]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const { isDragging, startX, scrollLeft } = dragStateRef.current;
+    const { isDragging, startX, scrollLeft, lastX, timestamp } = dragStateRef.current;
     if (!isDragging || !sliderRef.current) return;
 
     e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    sliderRef.current.scrollLeft = scrollLeft - walk;
-
-    const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
-    const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-    setActiveIndex(newIndex);
-  }, []);
+    
+    const currentX = e.pageX;
+    const currentTime = Date.now();
+    const elapsed = currentTime - timestamp;
+    const delta = lastX - currentX;
+    
+    // Calculate velocity (pixels per ms)
+    if (elapsed > 0) {
+      // Apply smoothing to velocity calculation
+      const newVelocity = delta / elapsed * 15;
+      dragStateRef.current.velocity = 0.8 * newVelocity + 0.2 * dragStateRef.current.velocity;
+    }
+    
+    // Update timestamp and last position
+    dragStateRef.current.timestamp = currentTime;
+    dragStateRef.current.lastX = currentX;
+    
+    // Calculate drag distance with improved sensitivity
+    const x = currentX - sliderRef.current.offsetLeft;
+    const walk = (x - startX) * 1.2; // Slightly reduced sensitivity for more control
+    
+    // Apply scroll with requestAnimationFrame for smoother performance
+    requestAnimationFrame(() => {
+      if (sliderRef.current && isDragging) {
+        sliderRef.current.scrollLeft = scrollLeft - walk;
+        
+        // Update active index based on scroll position
+        const cardWidth = getCardWidth();
+        const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
+        
+        if (newIndex !== activeIndex) {
+          setActiveIndex(newIndex);
+        }
+      }
+    });
+  }, [activeIndex, getCardWidth]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    const { isDragging, startX, scrollLeft } = dragStateRef.current;
+    const { isDragging, startX, scrollLeft, lastX, timestamp } = dragStateRef.current;
     if (!isDragging || !sliderRef.current) return;
 
     e.preventDefault();
     
     const touch = e.touches[0];
-    const x = touch.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    sliderRef.current.scrollLeft = scrollLeft - walk;
+    const currentX = touch.pageX;
+    const currentTime = Date.now();
+    const elapsed = currentTime - timestamp;
+    const delta = lastX - currentX;
     
-    const cardWidth = window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
-    const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-    setActiveIndex(newIndex);
-  }, []);
+    // Calculate velocity (pixels per ms)
+    if (elapsed > 0) {
+      // Apply smoothing to velocity calculation
+      const newVelocity = delta / elapsed * 15;
+      dragStateRef.current.velocity = 0.8 * newVelocity + 0.2 * dragStateRef.current.velocity;
+    }
+    
+    // Update timestamp and last position
+    dragStateRef.current.timestamp = currentTime;
+    dragStateRef.current.lastX = currentX;
+    
+    // Calculate drag distance with improved sensitivity
+    const x = currentX - sliderRef.current.offsetLeft;
+    const walk = (x - startX) * 1.2; // Slightly reduced sensitivity for more control
+    
+    // Apply scroll with requestAnimationFrame for smoother performance
+    requestAnimationFrame(() => {
+      if (sliderRef.current && isDragging) {
+        sliderRef.current.scrollLeft = scrollLeft - walk;
+        
+        // Update active index based on scroll position
+        const cardWidth = getCardWidth();
+        const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
+        
+        if (newIndex !== activeIndex) {
+          setActiveIndex(newIndex);
+        }
+      }
+    });
+  }, [activeIndex, getCardWidth]);
 
   const handleOpenDialog = useCallback((department: Department) => {
     setLoadingDepartment(department.id);

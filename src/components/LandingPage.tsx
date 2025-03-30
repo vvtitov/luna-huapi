@@ -173,7 +173,7 @@ const LandingPage = () => {
 
       <section className="mx-auto pb-20 px-8 lg:px-10 pointer-drag [&_*]:pointer-drag bg-[#EFECE4] pt-10" id="los-departamentos">
         <div className="mx-auto">
-          <div className="flex justify-between items-center mb-10 font-inter">
+          <div className="flex justify-between items-center mb-12 font-inter">
             <p className="text-light text-lg">
               02 
               <span className="text-light px-4">/</span> 
@@ -193,9 +193,9 @@ const LandingPage = () => {
       </div>
 
       <section className="mx-auto pb-12 pt-2 px-10 pointer-primary" id="preguntas-frecuentes">
-        <div className="h-px bg-[#565656] opacity-20 flex-grow mb-12 mt-4"></div>
+        <div className="h-px bg-[#565656] opacity-20 flex-grow mb-10 mt-4"></div>
         <div className="mx-auto">
-          <div className="flex justify-between items-center mb-12 font-inter">
+          <div className="flex justify-between items-center mb-10 font-inter">
             <p className="text-light text-lg">
               04 
               <span className="text-light px-4">/</span> 
