@@ -86,7 +86,7 @@ export default function Testimonials() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 md:bottom-50 left-10 lg:bottom-80 lg:left-10 items-center flex flex-row gap-4">
+      <div className="absolute bottom-0 md:bottom-20 left-10 lg:bottom-80 lg:left-10 items-center flex flex-row gap-4">
         <button
           className="h-16 w-16 lg:h-12 lg:w-12 rounded-full border border-primary/70 items-center flex justify-center text-primary lg:text-xl text-2xl font-bold hover:bg-primary/10"
           aria-label="Previous testimonial"

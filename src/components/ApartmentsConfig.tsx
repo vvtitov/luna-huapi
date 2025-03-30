@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-// Define the Department interface
 export interface Department {
   id: string;
   title: string;
@@ -31,7 +30,6 @@ export interface Department {
   whatsappUrl?: string;
 }
 
-// Create the store with the departments configuration
 export const useDepartments = create<{
   departments: Department[];
   setDepartments: (departments: Department[]) => void;

@@ -22,32 +22,40 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
   if (!department) return null;
 
   const allImages = React.useMemo(() => {
-    // Si es iOS, limitamos significativamente el número de imágenes
     const maxImages = isIOS ? 5 : 20;
-    
-    // Limitamos el número de imágenes para mejorar el rendimiento en móviles
     const uniqueImages = [
       ...new Set([
         ...department.images.apartment.slice(0, isIOS ? 3 : 10),
         ...department.images.building.slice(0, isIOS ? 2 : 5)
       ])
     ].filter(img => img !== department.mainImage);
-    
     return [department.mainImage, ...uniqueImages.slice(0, maxImages - 1)];
   }, [department, isIOS]);
 
   const [selectedImage, setSelectedImage] = React.useState(department.mainImage);
   const [isMainImageLoading, setIsMainImageLoading] = React.useState(true);
   const [loadingThumbnails, setLoadingThumbnails] = React.useState<Record<number, boolean>>({});
-  const [loadedImages, setLoadedImages] = React.useState<Record<string, boolean>>({});
+  const [loadedImages, setLoadedImages] = React.useState<Record<string, boolean>>({
+    [department.mainImage]: false
+  });
 
-  // Reset loading states when department changes
+  const handleCloseClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onClose();
+    
+    // Asegurar que la página permanezca en la sección de departamentos después de cerrar
+    setTimeout(() => {
+      const departmentsSection = document.getElementById('los-departamentos');
+      if (departmentsSection) {
+        departmentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
   React.useEffect(() => {
     setSelectedImage(department.mainImage);
     setIsMainImageLoading(true);
     setLoadedImages({});
-    
-    // Reset all thumbnails to loading state
     const initialThumbnailState: Record<number, boolean> = {};
     allImages.forEach((_, idx) => {
       initialThumbnailState[idx] = true;
@@ -55,11 +63,10 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
     setLoadingThumbnails(initialThumbnailState);
   }, [department, allImages]);
 
-  // Inicializamos todas las imágenes como "cargando"
   React.useEffect(() => {
     const initialLoadingState: Record<string, boolean> = {};
     allImages.forEach(img => {
-      initialLoadingState[img] = false; // Mark all as not loaded initially
+      initialLoadingState[img] = false;
     });
     setLoadedImages(initialLoadingState);
   }, [allImages]);
@@ -84,33 +91,24 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
   };
 
   const navigateToNextImage = () => {
-    const currentIndex = allImages.findIndex(img => img === selectedImage);
-    const nextIndex = (currentIndex + 1) % allImages.length;
+    const nextIndex = (allImages.findIndex(img => img === selectedImage) + 1) % allImages.length;
     setSelectedImage(allImages[nextIndex]);
-    setIsMainImageLoading(true); // Reset loading state when changing image
+    setIsMainImageLoading(true);
   };
 
   const navigateToPreviousImage = () => {
-    const currentIndex = allImages.findIndex(img => img === selectedImage);
-    const prevIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+    const prevIndex = (allImages.findIndex(img => img === selectedImage) - 1 + allImages.length) % allImages.length;
     setSelectedImage(allImages[prevIndex]);
-    setIsMainImageLoading(true); // Reset loading state when changing image
+    setIsMainImageLoading(true);
   };
 
   React.useEffect(() => {
-    // Always show loading indicator when image changes
     setIsMainImageLoading(true);
-    
-    // Check if image is already loaded
     if (loadedImages[selectedImage]) {
       setIsMainImageLoading(false);
     }
-    
-    // Optimizaciones específicas para iOS
     if (isIOS) {
-      // Forzar un reflow para mejorar la estabilidad en iOS
       document.body.style.overflow = 'hidden';
-      
       return () => {
         document.body.style.overflow = '';
       };
@@ -118,12 +116,9 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
   }, [selectedImage, loadedImages, isIOS]);
 
   React.useEffect(() => {
-    // En iOS, limitamos la precarga a solo la siguiente imagen
     if (isIOS) {
-      const currentIndex = allImages.findIndex(img => img === selectedImage);
-      const nextIndex = (currentIndex + 1) % allImages.length;
+      const nextIndex = (allImages.findIndex(img => img === selectedImage) + 1) % allImages.length;
       const nextImage = allImages[nextIndex];
-      
       if (!loadedImages[nextImage]) {
         const img = new Image();
         img.src = nextImage;
@@ -135,13 +130,8 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
         };
       }
     } else {
-      // Para otros dispositivos, mantenemos el comportamiento original
-      const currentIndex = allImages.findIndex(img => img === selectedImage);
-      
-      // Reducimos la precarga a solo la siguiente imagen
-      const nextIndex = (currentIndex + 1) % allImages.length;
+      const nextIndex = (allImages.findIndex(img => img === selectedImage) + 1) % allImages.length;
       const nextImage = allImages[nextIndex];
-      
       if (!loadedImages[nextImage]) {
         const img = new Image();
         img.src = nextImage;
@@ -158,9 +148,7 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
   return (
     <div className="fixed inset-0 overflow-y-auto md:overflow-scroll bg-[#EBE6D7] scrollbar-hidden overscroll-none">
       <div className="flex flex-col md:flex-row h-full w-full">
-        {/* En iOS, ocultamos las miniaturas en móviles para reducir la carga de renderizado */}
         <div className={`${isIOS ? 'hidden md:flex' : 'block md:flex'} flex-col gap-2 p-4 border-r space-x-3 mx-auto`}>
-          {/* En iOS, limitamos el número de miniaturas mostradas */}
           {(isIOS ? allImages.slice(0, 5) : allImages).map((thumb, idx) => (
             <button
               key={idx}
@@ -239,7 +227,7 @@ export default function ApartmentDetail({ department, onClose, isIOS = false }: 
         <div className="w-full relative md:w-1/2 border-t md:border-l bg-[#EBE6D7] p-5 md:overflow-scroll md:overflow-x-auto min-w-md">
           <div className="fixed top-20 right-3 md:top-8 md:right-8 lg:flex lg:justify-end rounded-full bg-background/80 backdrop-blur-sm">
             <button 
-              onClick={onClose}
+              onClick={handleCloseClick}
               className="p-3 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 hover:scale-115 transition-colors"
               aria-label="Close"
             >

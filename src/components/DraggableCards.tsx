@@ -40,11 +40,9 @@ export default function Departments() {
     animationId: null
   });
   
-  // Detectar si estamos en iOS
   const isIOS = useRef<boolean>(false);
   
   useEffect(() => {
-    // Detectar iOS al montar el componente
     isIOS.current = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     
     const style = document.createElement('style');
@@ -57,7 +55,6 @@ export default function Departments() {
     `;
     document.head.appendChild(style);
 
-    // Preload all main images immediately
     departments.forEach(department => {
       const img = new Image();
       img.src = department.mainImage;
@@ -68,21 +65,6 @@ export default function Departments() {
     };
   }, [departments]);
 
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      .ios-dialog-content {
-        /* Estilos específicos para iOS */
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
-
-  // Clean up any animations when component unmounts
   useEffect(() => {
     return () => {
       if (dragStateRef.current.animationId) {
@@ -98,12 +80,10 @@ export default function Departments() {
   const scrollToCard = useCallback((index: number) => {
     if (!sliderRef.current) return;
     
-    // Ensure index is within bounds
     const boundedIndex = Math.max(0, Math.min(departments.length - 1, index));
     const cardWidth = getCardWidth();
     const newScrollLeft = boundedIndex * cardWidth;
     
-    // Cancel any ongoing animation
     if (dragStateRef.current.animationId) {
       cancelAnimationFrame(dragStateRef.current.animationId);
       dragStateRef.current.animationId = null;
@@ -120,7 +100,6 @@ export default function Departments() {
   const handleCardClick = useCallback((e: React.MouseEvent, index: number) => {
     if ((e.target as HTMLElement).closest('button')) return;
     
-    // Prevent click handling during or immediately after drag
     if (dragStateRef.current.isDragging || Math.abs(dragStateRef.current.velocity) > 0.5) {
       return;
     }
@@ -136,19 +115,16 @@ export default function Departments() {
   const applyMomentum = useCallback(() => {
     if (!sliderRef.current) return;
     
-    const friction = 0.92; // Lower = more friction
+    const friction = 0.92; 
     const minVelocity = 0.5;
     
     const animate = () => {
       if (!sliderRef.current) return;
       
-      // Apply friction to gradually reduce velocity
       dragStateRef.current.velocity *= friction;
       
-      // Apply velocity to scroll position
       sliderRef.current.scrollLeft -= dragStateRef.current.velocity;
       
-      // Update active index based on scroll position
       const cardWidth = getCardWidth();
       const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
       
@@ -156,11 +132,9 @@ export default function Departments() {
         setActiveIndex(newIndex);
       }
       
-      // Continue animation if velocity is above threshold
       if (Math.abs(dragStateRef.current.velocity) > minVelocity) {
         dragStateRef.current.animationId = requestAnimationFrame(animate);
       } else {
-        // Snap to nearest card when animation ends
         const snapIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
         const targetScrollLeft = snapIndex * cardWidth;
         
@@ -176,19 +150,16 @@ export default function Departments() {
       }
     };
     
-    // Cancel any existing animation
     if (dragStateRef.current.animationId) {
       cancelAnimationFrame(dragStateRef.current.animationId);
     }
     
-    // Start animation
     dragStateRef.current.animationId = requestAnimationFrame(animate);
   }, [activeIndex, getCardWidth]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!sliderRef.current) return;
     
-    // Cancel any ongoing animation
     if (dragStateRef.current.animationId) {
       cancelAnimationFrame(dragStateRef.current.animationId);
       dragStateRef.current.animationId = null;
@@ -204,14 +175,12 @@ export default function Departments() {
       animationId: null
     };
     
-    // Prevent default behavior to avoid text selection during drag
     e.preventDefault();
   }, []);
 
   const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     if (!sliderRef.current) return;
     
-    // Cancel any ongoing animation
     if (dragStateRef.current.animationId) {
       cancelAnimationFrame(dragStateRef.current.animationId);
       dragStateRef.current.animationId = null;
@@ -261,27 +230,21 @@ export default function Departments() {
     const elapsed = currentTime - timestamp;
     const delta = lastX - currentX;
     
-    // Calculate velocity (pixels per ms)
     if (elapsed > 0) {
-      // Apply smoothing to velocity calculation
       const newVelocity = delta / elapsed * 15;
       dragStateRef.current.velocity = 0.8 * newVelocity + 0.2 * dragStateRef.current.velocity;
     }
     
-    // Update timestamp and last position
     dragStateRef.current.timestamp = currentTime;
     dragStateRef.current.lastX = currentX;
     
-    // Calculate drag distance with improved sensitivity
     const x = currentX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.2; // Slightly reduced sensitivity for more control
+    const walk = (x - startX) * 1.2;
     
-    // Apply scroll with requestAnimationFrame for smoother performance
     requestAnimationFrame(() => {
       if (sliderRef.current && isDragging) {
         sliderRef.current.scrollLeft = scrollLeft - walk;
         
-        // Update active index based on scroll position
         const cardWidth = getCardWidth();
         const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
         
@@ -304,27 +267,21 @@ export default function Departments() {
     const elapsed = currentTime - timestamp;
     const delta = lastX - currentX;
     
-    // Calculate velocity (pixels per ms)
     if (elapsed > 0) {
-      // Apply smoothing to velocity calculation
       const newVelocity = delta / elapsed * 15;
       dragStateRef.current.velocity = 0.8 * newVelocity + 0.2 * dragStateRef.current.velocity;
     }
     
-    // Update timestamp and last position
     dragStateRef.current.timestamp = currentTime;
     dragStateRef.current.lastX = currentX;
     
-    // Calculate drag distance with improved sensitivity
     const x = currentX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.2; // Slightly reduced sensitivity for more control
+    const walk = (x - startX) * 1.2;
     
-    // Apply scroll with requestAnimationFrame for smoother performance
     requestAnimationFrame(() => {
       if (sliderRef.current && isDragging) {
         sliderRef.current.scrollLeft = scrollLeft - walk;
         
-        // Update active index based on scroll position
         const cardWidth = getCardWidth();
         const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
         
@@ -338,24 +295,19 @@ export default function Departments() {
   const handleOpenDialog = useCallback((department: Department) => {
     setLoadingDepartment(department.id);
     
-    // Enfoque específico para iOS
     if (isIOS.current) {
-      // En iOS, simplemente establecemos el departamento seleccionado y abrimos el diálogo
       setSelectedDepartment(department);
       setIsDialogOpen(true);
       
-      // Desactivamos el indicador de carga después de un breve retraso
       setTimeout(() => {
         setLoadingDepartment(null);
       }, 300);
     } else {
-      // Para otros dispositivos, usamos el enfoque normal
       setSelectedDepartment(department);
       
       setTimeout(() => {
         setIsDialogOpen(true);
         
-        // Precargamos solo la imagen principal
         const preloadMainImage = async () => {
           try {
             const mainImg = new Image();
@@ -381,16 +333,21 @@ export default function Departments() {
   const handleCloseDialog = useCallback(() => {
     setIsDialogOpen(false);
     
-    // Mayor tiempo de espera para iOS
     const delay = isIOS.current ? 800 : 500;
     
     setTimeout(() => {
       setSelectedDepartment(null);
+      
+      // Asegurar que la página permanezca en la sección de departamentos
+      const departmentsSection = document.getElementById('los-departamentos');
+      if (departmentsSection) {
+        departmentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }, delay);
   }, []);
 
   return (
-    <section className="bg-[#EFECE4] overflow-hidden w-full select-none">
+    <section id="los-departamentos" className="bg-[#EFECE4] overflow-hidden w-full select-none">
       <div className="mx-auto">
         <div
           ref={sliderRef}
@@ -414,10 +371,7 @@ export default function Departments() {
             <Card
               key={department.id}
               title={department.title}
-              className={`
-                w-[300px] lg:w-[576px] h-fit flex-shrink-0 transition-all
-                cursor-pointer
-              `}
+              className="w-[300px] lg:w-[576px] h-fit flex-shrink-0 transition-all cursor-pointer"
               style={{ 
                 scrollSnapAlign: 'start',
                 transform: dragStateRef.current.isDragging 
@@ -432,20 +386,14 @@ export default function Departments() {
                   <img
                     src={department.mainImage}
                     alt={language === 'en' && department.titleEn ? department.titleEn : department.title}
-                    className={`
-                      object-cover w-full h-[300px] lg:h-[548px] transition-transform duration-300 mb-4
-                      ${dragStateRef.current.isDragging ? 'scale-[1.00]' : 'scale-100'}
-                    `}
+                    className="object-cover w-full h-[300px] lg:h-[548px] transition-transform duration-300 mb-4"
                     draggable={false}
                     loading="eager"
                     width={576}
                     height={448}
                   />
                   <div 
-                    className={`
-                      absolute inset-0 transition-opacity duration-300
-                      ${dragStateRef.current.isDragging ? 'opacity-100' : 'opacity-0'}
-                    `}
+                    className="absolute inset-0 transition-opacity duration-300"
                   />
                 </div>
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center rounded-md mt-4 font-inter pb-2">
@@ -480,14 +428,21 @@ export default function Departments() {
         </div>
       </div>
 
-      {/* Renderizamos el modal específico para iOS o el modal normal según el dispositivo */}
       {isIOS.current ? (
         selectedDepartment && (
           <IOSApartmentModal
             department={selectedDepartment}
             onClose={() => {
               setIsDialogOpen(false);
-              setTimeout(() => setSelectedDepartment(null), 500);
+              setTimeout(() => {
+                setSelectedDepartment(null);
+                
+                // Asegurar que la página permanezca en la sección de departamentos
+                const departmentsSection = document.getElementById('los-departamentos');
+                if (departmentsSection) {
+                  departmentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }, 500);
             }}
             isOpen={isDialogOpen}
           />
@@ -500,7 +455,15 @@ export default function Departments() {
                 department={selectedDepartment} 
                 onClose={() => {
                   setIsDialogOpen(false);
-                  setTimeout(() => setSelectedDepartment(null), 500);
+                  setTimeout(() => {
+                    setSelectedDepartment(null);
+                    
+                    // Asegurar que la página permanezca en la sección de departamentos
+                    const departmentsSection = document.getElementById('los-departamentos');
+                    if (departmentsSection) {
+                      departmentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 500);
                 }}
                 isIOS={false}
               />

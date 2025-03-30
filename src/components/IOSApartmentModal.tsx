@@ -13,25 +13,20 @@ interface IOSApartmentModalProps {
   isOpen: boolean;
 }
 
-/**
- * Un componente modal simplificado específicamente para iOS
- * que evita problemas de rendimiento y cierre automático
- */
 export default function IOSApartmentModal({ department, onClose, isOpen }: IOSApartmentModalProps) {
   const { language } = useLanguage();
   const { t } = useTranslation();
   
-  // Aumentamos el número de imágenes pero mantenemos optimizaciones
   const allImages = React.useMemo(() => {
-    // Aumentamos a un máximo de 8 imágenes para iOS
+    const maxImages = 20; // Usar la misma cantidad que en escritorio
     const uniqueImages = [
       ...new Set([
-        ...department.images.apartment.slice(0, 5),
-        ...department.images.building.slice(0, 3)
+        ...department.images.apartment.slice(0, 10), // Usar la misma cantidad que en escritorio
+        ...department.images.building.slice(0, 5)    // Usar la misma cantidad que en escritorio
       ])
     ].filter(img => img !== department.mainImage);
     
-    return [department.mainImage, ...uniqueImages];
+    return [department.mainImage, ...uniqueImages.slice(0, maxImages - 1)];
   }, [department]);
 
   const [selectedImage, setSelectedImage] = useState(department.mainImage);
@@ -41,9 +36,26 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
     [department.mainImage]: false
   });
 
-  // Evitamos el scroll del body cuando el modal está abierto
+  // Precarga de imágenes optimizada para iOS
   useEffect(() => {
     if (isOpen) {
+      // Solo precargamos la imagen principal y las primeras 2 imágenes adicionales
+      // para evitar sobrecarga que podría causar el cierre del modal en iOS
+      const imagesToPreload = allImages.slice(0, 3);
+      
+      imagesToPreload.forEach(imgSrc => {
+        if (!loadedImages[imgSrc]) {
+          const img = new Image();
+          img.src = imgSrc;
+          img.onload = () => {
+            setLoadedImages(prev => ({
+              ...prev,
+              [imgSrc]: true
+            }));
+          };
+        }
+      });
+      
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
@@ -57,10 +69,43 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
         document.body.style.position = '';
         document.body.style.width = '';
         document.body.style.top = '';
+        
+        // Restaurar la posición de desplazamiento pero mantener el foco en la sección de departamentos
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        
+        // Asegurar que la página permanezca en la sección de departamentos después de cerrar
+        setTimeout(() => {
+          const departmentsSection = document.getElementById('los-departamentos');
+          if (departmentsSection) {
+            departmentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
       }
     };
-  }, [isOpen]);
+  }, [isOpen, allImages, loadedImages]);
+
+  useEffect(() => {
+    const newIndex = allImages.findIndex(img => img === selectedImage);
+    if (newIndex !== -1) {
+      setCurrentIndex(newIndex);
+    }
+    
+    // Solo precargamos la siguiente imagen cuando el usuario navega
+    // para evitar sobrecarga en iOS
+    const nextIndex = (newIndex + 1) % allImages.length;
+    const nextImage = allImages[nextIndex];
+    
+    if (!loadedImages[nextImage]) {
+      const img = new Image();
+      img.src = nextImage;
+      img.onload = () => {
+        setLoadedImages(prev => ({
+          ...prev,
+          [nextImage]: true
+        }));
+      };
+    }
+  }, [selectedImage, allImages, loadedImages]);
 
   const handleImageLoad = () => {
     setIsLoading(false);
@@ -94,30 +139,6 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
     setSelectedImage(prevImage);
   };
 
-  // Precargamos la siguiente imagen para mejorar la experiencia
-  useEffect(() => {
-    // Actualizar el índice cuando cambia la imagen seleccionada
-    const newIndex = allImages.findIndex(img => img === selectedImage);
-    if (newIndex !== -1) {
-      setCurrentIndex(newIndex);
-    }
-    
-    // Precargamos solo la siguiente imagen para evitar sobrecarga
-    const nextIndex = (newIndex + 1) % allImages.length;
-    const nextImage = allImages[nextIndex];
-    
-    if (!loadedImages[nextImage]) {
-      const img = new Image();
-      img.src = nextImage;
-      img.onload = () => {
-        setLoadedImages(prev => ({
-          ...prev,
-          [nextImage]: true
-        }));
-      };
-    }
-  }, [selectedImage, allImages, loadedImages]);
-
   if (!isOpen) return null;
 
   return (
@@ -128,10 +149,20 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
         overscrollBehavior: 'none'
       }}
     >
-      {/* Botón de cierre fijo en la parte superior */}
       <div className="fixed top-4 right-4 z-50">
         <button 
-          onClick={onClose}
+          onClick={(e) => {
+            e.preventDefault();
+            onClose();
+            
+            // Asegurar que la página permanezca en la sección de departamentos después de cerrar
+            setTimeout(() => {
+              const departmentsSection = document.getElementById('los-departamentos');
+              if (departmentsSection) {
+                departmentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 100);
+          }}
           className="p-3 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 shadow-md transition-colors"
           aria-label="Close"
         >
@@ -161,7 +192,6 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
             </div>
           )}
           
-          {/* Botones de navegación para móviles y desktop */}
           <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center space-x-4">
             <button 
               onClick={navigateToPreviousImage}
@@ -179,7 +209,6 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
             </button>
           </div>
           
-          {/* Indicador de fotos */}
           <div className="absolute bottom-16 left-0 right-0 flex justify-center items-center">
             <div className="bg-background/60 backdrop-blur-sm px-3 py-1 rounded-full">
               <p className="text-primary text-sm">
@@ -189,7 +218,6 @@ export default function IOSApartmentModal({ department, onClose, isOpen }: IOSAp
           </div>
         </div>
 
-        {/* Miniaturas para navegación rápida (solo visible en pantallas medianas y grandes) */}
         <div className="hidden md:flex overflow-x-auto py-2 px-4 gap-2 bg-[#EBE6D7]/90 border-t border-b border-primary/20">
           {allImages.map((thumb, idx) => (
             <button
