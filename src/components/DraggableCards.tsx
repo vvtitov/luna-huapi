@@ -369,16 +369,8 @@ export default function Departments() {
         >
           {departments.map((department, index) => (
             <Card
-              key={department.id}
-              title={department.title}
-              className="w-[300px] lg:w-[576px] h-fit flex-shrink-0 transition-all cursor-pointer"
-              style={{ 
-                scrollSnapAlign: 'start',
-                transform: dragStateRef.current.isDragging 
-                  ? `perspective(1000px)
-                     translateZ(${Math.abs(index - activeIndex) * -10}px)`
-                  : 'none',
-              }}
+              key={index}
+              className={`min-w-[300px] lg:min-w-[576px] bg-transparent border-none shadow-none cursor-grab ${dragStateRef.current.isDragging ? 'cursor-grabbing' : ''} ${index === activeIndex ? 'scale-100' : 'scale-95 opacity-70'} transition-all duration-300`}
               onClick={(e) => handleCardClick(e, index)}
             >
               <CardContent className="lg:mb-20 relative overflow-hidden">

@@ -75,27 +75,27 @@ export default function Testimonials() {
           </span>
         </p>
         <div className="space-y-8 transition-opacity duration-500 ease-in-out w-full lg:w-4/7 h-full">
-          <h2 className="text-2xl font-light text-primary md:text-2xl lg:text-3xl mt-10 text-balance">
+          <h2 className="text-2xl font-light text-primary md:text-2xl lg:text-3xl mt-10 text-balance transition-all duration-500 animate-fadeIn">
             {currentTestimonials[currentIndex].text}
           </h2>
           <div className="h-px bg-[#565656] opacity-20 hidden lg:flex flex-grow"></div>
-          <div className="text-sm uppercase tracking-wider text-muted-foreground mb-20">
-            <p>{currentTestimonials[currentIndex].author}</p>
-            <p>{currentTestimonials[currentIndex].location}</p>
+          <div className="text-sm uppercase tracking-wider text-muted-foreground mb-20 transition-all duration-500 animate-fadeIn">
+            <p className="transition-all duration-300">{currentTestimonials[currentIndex].author}</p>
+            <p className="transition-all duration-300">{currentTestimonials[currentIndex].location}</p>
           </div>
         </div>
       </div>
 
       <div className="absolute bottom-0 md:bottom-20 left-10 lg:bottom-80 lg:left-10 items-center flex flex-row gap-4">
         <button
-          className="h-16 w-16 lg:h-12 lg:w-12 rounded-full border border-primary/70 items-center flex justify-center text-primary lg:text-xl text-2xl font-bold hover:bg-primary/10"
+          className="h-16 w-16 lg:h-12 lg:w-12 rounded-full border border-primary/70 items-center flex justify-center text-primary lg:text-xl text-2xl font-bold hover:bg-primary/10 transition-all duration-300 hover:scale-110"
           aria-label="Previous testimonial"
           onClick={handlePrev}
         >
           ←
         </button>
         <button
-          className="h-16 w-16 lg:h-12 lg:w-12 rounded-full border border-primary/70 items-center flex justify-center text-primary lg:text-xl text-2xl font-bold hover:bg-primary/10"
+          className="h-16 w-16 lg:h-12 lg:w-12 rounded-full border border-primary/70 items-center flex justify-center text-primary lg:text-xl text-2xl font-bold hover:bg-primary/10 transition-all duration-300 hover:scale-110"
           aria-label="Next testimonial"
           onClick={handleNext}
         >

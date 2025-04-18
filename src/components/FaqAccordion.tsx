@@ -105,11 +105,11 @@ export default function FaqAccordion() {
   const currentFaqs = language === 'en' ? faqItems.en : faqItems.es;
 
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion type="single" collapsible className="w-full animate-fadeIn">
       {currentFaqs.map((faq, index) => (
         <AccordionItem key={index} value={`item-${index + 1}`}>
-          <AccordionTrigger className="text-2xl lg:text-3xl">{faq.question}</AccordionTrigger>
-          <AccordionContent>
+          <AccordionTrigger className="text-2xl lg:text-3xl transition-all duration-300 hover:translate-x-1">{faq.question}</AccordionTrigger>
+          <AccordionContent className="transition-all duration-500 animate-fadeIn">
             {faq.answer}
             {faq.map && (
               <div className="mb-4 mt-6">
