@@ -19,6 +19,7 @@ interface DragState {
   velocity: number;
   timestamp: number;
   animationId: number | null;
+  startY?: number;
 }
 
 export default function Departments() {
@@ -194,7 +195,8 @@ export default function Departments() {
       lastX: touch.pageX,
       velocity: 0,
       timestamp: Date.now(),
-      animationId: null
+      animationId: null,
+      startY: touch.clientY // Guardar la posición Y inicial para detectar scroll vertical
     };
   }, []);
 
@@ -214,8 +216,13 @@ export default function Departments() {
 
   const handleTouchEnd = useCallback(() => {
     if (dragStateRef.current.isDragging) {
-      applyMomentum();
+      // Solo aplicar momentum si el desplazamiento fue principalmente horizontal
+      if (Math.abs(dragStateRef.current.velocity) > 0.5) {
+        applyMomentum();
+      }
       dragStateRef.current.isDragging = false;
+      // Limpiar la posición Y inicial
+      dragStateRef.current.startY = undefined;
     }
   }, [applyMomentum]);
 
@@ -258,8 +265,17 @@ export default function Departments() {
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     const { isDragging, startX, scrollLeft, lastX, timestamp } = dragStateRef.current;
     if (!isDragging || !sliderRef.current) return;
-
-    e.preventDefault();
+    
+    // Solo prevenir el comportamiento predeterminado si estamos dentro del componente de tarjetas
+    // y no en un scroll vertical de la página
+    const touchY = e.touches[0].clientY;
+    const initialY = dragStateRef.current.startY || touchY;
+    const deltaY = Math.abs(touchY - initialY);
+    
+    // Si el movimiento es más horizontal que vertical, prevenir el comportamiento predeterminado
+    if (deltaY < 10) {
+      e.preventDefault();
+    }
     
     const touch = e.touches[0];
     const currentX = touch.pageX;
@@ -358,7 +374,7 @@ export default function Departments() {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onTouchMove={handleTouchMove}
-          className="flex overflow-x-auto scrollbar-draggable gap-5"
+          className="flex overflow-x-auto scrollbar-draggable gap-5 touch-pan-x"
           style={{ 
             scrollBehavior: dragStateRef.current.isDragging ? 'auto' : 'smooth',
             scrollSnapType: dragStateRef.current.isDragging ? 'none' : 'x mandatory',
@@ -370,7 +386,7 @@ export default function Departments() {
           {departments.map((department, index) => (
             <Card
               key={index}
-              className={`min-w-[300px] lg:min-w-[576px] bg-transparent border-none shadow-none cursor-grab ${dragStateRef.current.isDragging ? 'cursor-grabbing' : ''} ${index === activeIndex ? 'scale-100' : 'scale-95 opacity-70'} transition-all duration-300`}
+              className={`min-w-[300px] lg:min-w-[576px] bg-transparent border-none shadow-none cursor-grab ${dragStateRef.current.isDragging ? 'cursor-grabbing' : ''} ${index === activeIndex ? 'scale-100' : 'scale-95 opacity-70'} transition-all duration-300 touch-none`}
               onClick={(e) => handleCardClick(e, index)}
             >
               <CardContent className="lg:mb-20 relative overflow-hidden">
