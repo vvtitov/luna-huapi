@@ -206,7 +206,7 @@ export const useDepartments = create<{
           "/images/building/PRIORITY_RENTALS-94.webp"
         ]
       },
-      airbnbUrl: "https://www.airbnb.com/rooms/1374771718389224819?viralityEntryPoint=1&unique_share_id=836F4E85-0EEF-4B12-86DD-C3D1FF991814&slcid=ca46d59a00504dfa975d88a85ed617cb&s=76&feature=share&adults=1&channel=native&slug=LAUJAiTr&source_impression_id=p3_1743272414_P32UXjY-M6MACYBO",
+      airbnbUrl: "https://www.airbnb.com.ar/rooms/1579884448844179015",
       whatsappUrl: "https://wa.me/5492944327488"
     }
   ],

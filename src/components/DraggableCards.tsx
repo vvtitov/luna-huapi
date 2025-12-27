@@ -15,10 +15,6 @@ interface DragState {
   isDragging: boolean;
   startX: number;
   scrollLeft: number;
-  lastX: number;
-  velocity: number;
-  timestamp: number;
-  animationId: number | null;
   startY?: number;
 }
 
@@ -29,16 +25,12 @@ export default function Departments() {
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [loadingDepartment, setLoadingDepartment] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
   const dragStateRef = useRef<DragState>({
     isDragging: false,
     startX: 0,
     scrollLeft: 0,
-    lastX: 0,
-    velocity: 0,
-    timestamp: 0,
-    animationId: null
   });
   
   const isIOS = useRef<boolean>(false);
@@ -66,115 +58,20 @@ export default function Departments() {
     };
   }, [departments]);
 
-  useEffect(() => {
-    return () => {
-      if (dragStateRef.current.animationId) {
-        cancelAnimationFrame(dragStateRef.current.animationId);
-      }
-    };
-  }, []);
-
-  const getCardWidth = useCallback(() => {
-    return window.innerWidth >= 1024 ? 576 + 20 : 300 + 20;
-  }, []);
-
-  const scrollToCard = useCallback((index: number) => {
-    if (!sliderRef.current) return;
-    
-    const boundedIndex = Math.max(0, Math.min(departments.length - 1, index));
-    const cardWidth = getCardWidth();
-    const newScrollLeft = boundedIndex * cardWidth;
-    
-    if (dragStateRef.current.animationId) {
-      cancelAnimationFrame(dragStateRef.current.animationId);
-      dragStateRef.current.animationId = null;
-    }
-    
-    sliderRef.current.scrollTo({
-      left: newScrollLeft,
-      behavior: 'smooth'
-    });
-    
-    setActiveIndex(boundedIndex);
-  }, [departments.length, getCardWidth]);
-
-  const handleCardClick = useCallback((e: React.MouseEvent, index: number) => {
-    if ((e.target as HTMLElement).closest('button')) return;
-    
-    if (dragStateRef.current.isDragging || Math.abs(dragStateRef.current.velocity) > 0.5) {
-      return;
-    }
-    
-    if (index > activeIndex) {
-      scrollToCard(Math.min(departments.length - 1, activeIndex + 1));
-    } 
-    else if (index < activeIndex) {
-      scrollToCard(Math.max(0, activeIndex - 1));
-    }
-  }, [activeIndex, departments.length, scrollToCard]);
-
-  const applyMomentum = useCallback(() => {
-    if (!sliderRef.current) return;
-    
-    const friction = 0.92; 
-    const minVelocity = 0.5;
-    
-    const animate = () => {
-      if (!sliderRef.current) return;
-      
-      dragStateRef.current.velocity *= friction;
-      
-      sliderRef.current.scrollLeft -= dragStateRef.current.velocity;
-      
-      const cardWidth = getCardWidth();
-      const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-      
-      if (newIndex !== activeIndex) {
-        setActiveIndex(newIndex);
-      }
-      
-      if (Math.abs(dragStateRef.current.velocity) > minVelocity) {
-        dragStateRef.current.animationId = requestAnimationFrame(animate);
-      } else {
-        const snapIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-        const targetScrollLeft = snapIndex * cardWidth;
-        
-        if (Math.abs(sliderRef.current.scrollLeft - targetScrollLeft) > 2) {
-          sliderRef.current.scrollTo({
-            left: targetScrollLeft,
-            behavior: 'smooth'
-          });
-        }
-        
-        dragStateRef.current.velocity = 0;
-        dragStateRef.current.animationId = null;
-      }
-    };
-    
-    if (dragStateRef.current.animationId) {
-      cancelAnimationFrame(dragStateRef.current.animationId);
-    }
-    
-    dragStateRef.current.animationId = requestAnimationFrame(animate);
-  }, [activeIndex, getCardWidth]);
-
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!sliderRef.current) return;
     
-    if (dragStateRef.current.animationId) {
-      cancelAnimationFrame(dragStateRef.current.animationId);
-      dragStateRef.current.animationId = null;
+    // No iniciar drag si se hace clic en un botón o enlace
+    if ((e.target as HTMLElement).closest('button, a')) {
+      return;
     }
     
     dragStateRef.current = {
       isDragging: true,
-      startX: e.pageX - sliderRef.current.offsetLeft,
+      startX: e.pageX,
       scrollLeft: sliderRef.current.scrollLeft,
-      lastX: e.pageX,
-      velocity: 0,
-      timestamp: Date.now(),
-      animationId: null
     };
+    setIsDragging(true);
     
     e.preventDefault();
   }, []);
@@ -182,131 +79,64 @@ export default function Departments() {
   const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     if (!sliderRef.current) return;
     
-    if (dragStateRef.current.animationId) {
-      cancelAnimationFrame(dragStateRef.current.animationId);
-      dragStateRef.current.animationId = null;
+    // No iniciar drag si se toca un botón o enlace
+    const target = e.touches[0];
+    const element = document.elementFromPoint(target.clientX, target.clientY);
+    if (element?.closest('button, a')) {
+      return;
     }
     
     const touch = e.touches[0];
     dragStateRef.current = {
       isDragging: true,
-      startX: touch.pageX - sliderRef.current.offsetLeft,
+      startX: touch.pageX,
       scrollLeft: sliderRef.current.scrollLeft,
-      lastX: touch.pageX,
-      velocity: 0,
-      timestamp: Date.now(),
-      animationId: null,
-      startY: touch.clientY // Guardar la posición Y inicial para detectar scroll vertical
+      startY: touch.pageY,
     };
+    setIsDragging(true);
   }, []);
 
-  const handleMouseLeave = useCallback(() => {
-    if (dragStateRef.current.isDragging) {
-      applyMomentum();
-      dragStateRef.current.isDragging = false;
-    }
-  }, [applyMomentum]);
-
-  const handleMouseUp = useCallback(() => {
-    if (dragStateRef.current.isDragging) {
-      applyMomentum();
-      dragStateRef.current.isDragging = false;
-    }
-  }, [applyMomentum]);
-
-  const handleTouchEnd = useCallback(() => {
-    if (dragStateRef.current.isDragging) {
-      // Solo aplicar momentum si el desplazamiento fue principalmente horizontal
-      if (Math.abs(dragStateRef.current.velocity) > 0.5) {
-        applyMomentum();
-      }
-      dragStateRef.current.isDragging = false;
-      // Limpiar la posición Y inicial
-      dragStateRef.current.startY = undefined;
-    }
-  }, [applyMomentum]);
-
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const { isDragging, startX, scrollLeft, lastX, timestamp } = dragStateRef.current;
-    if (!isDragging || !sliderRef.current) return;
+    if (!dragStateRef.current.isDragging || !sliderRef.current) return;
 
     e.preventDefault();
     
-    const currentX = e.pageX;
-    const currentTime = Date.now();
-    const elapsed = currentTime - timestamp;
-    const delta = lastX - currentX;
-    
-    if (elapsed > 0) {
-      const newVelocity = delta / elapsed * 15;
-      dragStateRef.current.velocity = 0.8 * newVelocity + 0.2 * dragStateRef.current.velocity;
-    }
-    
-    dragStateRef.current.timestamp = currentTime;
-    dragStateRef.current.lastX = currentX;
-    
-    const x = currentX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.2;
-    
-    requestAnimationFrame(() => {
-      if (sliderRef.current && isDragging) {
-        sliderRef.current.scrollLeft = scrollLeft - walk;
-        
-        const cardWidth = getCardWidth();
-        const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-        
-        if (newIndex !== activeIndex) {
-          setActiveIndex(newIndex);
-        }
-      }
-    });
-  }, [activeIndex, getCardWidth]);
+    const x = e.pageX;
+    const walk = x - dragStateRef.current.startX;
+    sliderRef.current.scrollLeft = dragStateRef.current.scrollLeft - walk;
+  }, []);
 
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    const { isDragging, startX, scrollLeft, lastX, timestamp } = dragStateRef.current;
-    if (!isDragging || !sliderRef.current) return;
-    
-    // Solo prevenir el comportamiento predeterminado si estamos dentro del componente de tarjetas
-    // y no en un scroll vertical de la página
-    const touchY = e.touches[0].clientY;
-    const initialY = dragStateRef.current.startY || touchY;
-    const deltaY = Math.abs(touchY - initialY);
-    
-    // Si el movimiento es más horizontal que vertical, prevenir el comportamiento predeterminado
-    if (deltaY < 10) {
-      e.preventDefault();
-    }
+    if (!dragStateRef.current.isDragging || !sliderRef.current) return;
     
     const touch = e.touches[0];
-    const currentX = touch.pageX;
-    const currentTime = Date.now();
-    const elapsed = currentTime - timestamp;
-    const delta = lastX - currentX;
+    const deltaX = Math.abs(touch.pageX - dragStateRef.current.startX);
+    const deltaY = Math.abs((touch.pageY || 0) - (dragStateRef.current.startY || 0));
     
-    if (elapsed > 0) {
-      const newVelocity = delta / elapsed * 15;
-      dragStateRef.current.velocity = 0.8 * newVelocity + 0.2 * dragStateRef.current.velocity;
+    // Solo prevenir default si el movimiento es principalmente horizontal
+    if (deltaX > deltaY && deltaX > 5) {
+      e.preventDefault();
+      
+      const walk = touch.pageX - dragStateRef.current.startX;
+      sliderRef.current.scrollLeft = dragStateRef.current.scrollLeft - walk;
     }
-    
-    dragStateRef.current.timestamp = currentTime;
-    dragStateRef.current.lastX = currentX;
-    
-    const x = currentX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.2;
-    
-    requestAnimationFrame(() => {
-      if (sliderRef.current && isDragging) {
-        sliderRef.current.scrollLeft = scrollLeft - walk;
-        
-        const cardWidth = getCardWidth();
-        const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-        
-        if (newIndex !== activeIndex) {
-          setActiveIndex(newIndex);
-        }
-      }
-    });
-  }, [activeIndex, getCardWidth]);
+  }, []);
+
+  const handleMouseUp = useCallback(() => {
+    dragStateRef.current.isDragging = false;
+    setIsDragging(false);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    dragStateRef.current.isDragging = false;
+    setIsDragging(false);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    dragStateRef.current.isDragging = false;
+    dragStateRef.current.startY = undefined;
+    setIsDragging(false);
+  }, []);
 
   const handleOpenDialog = useCallback((department: Department) => {
     setLoadingDepartment(department.id);
@@ -374,10 +204,9 @@ export default function Departments() {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onTouchMove={handleTouchMove}
-          className="flex overflow-x-auto scrollbar-draggable gap-5 touch-pan-x"
+          className={`flex overflow-x-auto scrollbar-draggable gap-5 touch-pan-x pl-6 lg:pl-10 pr-6 lg:pr-10 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
           style={{ 
-            scrollBehavior: dragStateRef.current.isDragging ? 'auto' : 'smooth',
-            scrollSnapType: dragStateRef.current.isDragging ? 'none' : 'x mandatory',
+            scrollBehavior: 'auto',
             msOverflowStyle: 'none',
             scrollbarWidth: 'none',
             WebkitOverflowScrolling: 'touch',
@@ -386,19 +215,18 @@ export default function Departments() {
           {departments.map((department, index) => (
             <Card
               key={index}
-              className={`min-w-[300px] lg:min-w-[576px] bg-transparent border-none shadow-none cursor-grab ${dragStateRef.current.isDragging ? 'cursor-grabbing' : ''} ${index === activeIndex ? 'scale-100' : 'scale-95 opacity-70'} transition-all duration-300 touch-none`}
-              onClick={(e) => handleCardClick(e, index)}
+              className="min-w-[300px] lg:min-w-[576px] bg-transparent border-none shadow-none touch-none flex-shrink-0"
             >
               <CardContent className="lg:mb-20 relative overflow-hidden">
-                <div className="relative overflow-hidden">
+                <div className="relative overflow-hidden w-[300px] h-[300px] lg:w-[576px] lg:h-[576px] mb-4">
                   <img
                     src={department.mainImage}
                     alt={language === 'en' && department.titleEn ? department.titleEn : department.title}
-                    className="object-cover w-full h-[300px] lg:h-[548px] transition-transform duration-300 mb-4"
+                    className="object-cover w-full h-full transition-transform duration-300"
                     draggable={false}
                     loading="eager"
                     width={576}
-                    height={448}
+                    height={576}
                   />
                   <div 
                     className="absolute inset-0 transition-opacity duration-300"
