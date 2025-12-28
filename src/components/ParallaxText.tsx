@@ -22,19 +22,38 @@ const ParallaxSection = ({
   });
 
   const smoothProgress = useSpring(scrollYProgress, { 
-    stiffness: 100, 
-    damping: 30,
-    restDelta: 0.001
+    stiffness: 150, 
+    damping: 25,
+    restDelta: 0.001,
+    mass: 0.5
   });
 
-  const imageScale = useTransform(smoothProgress, [0, 1], [1.1, 1]);
-  const imageY = useTransform(smoothProgress, [0, 1], ["0%", "5%"]);
+  // Animaciones mejoradas de la imagen
+  const imageScale = useTransform(smoothProgress, [0, 0.5, 1], [1.15, 1.05, 1]);
+  const imageY = useTransform(smoothProgress, [0, 0.5, 1], ["-2%", "0%", "3%"]);
+  const imageOpacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0.9]);
   
-  const overlayOpacity = useTransform(smoothProgress, [0.2, 0.4, 0.6], [0.7, 0.3, 0]);
+  // Overlay con mejor transición - se desvanece cuando el texto aparece
+  const overlayOpacity = useTransform(smoothProgress, [0, 0.3, 0.5, 0.7, 1], [0.8, 0.6, 0.3, 0.1, 0]);
   
-  const textProgress = useTransform(smoothProgress, [0.1, 0.3, 0.7, 0.9], [0, 1, 1, 0]);
+  // Texto aparece animadamente cuando llegamos a la mitad (0.4-0.6) - animación más sutil
+  const textOpacity = useTransform(smoothProgress, [0.35, 0.5, 0.65, 0.9], [0, 1, 1, 0]);
+  const textY = useTransform(smoothProgress, [0.35, 0.5, 0.65, 0.9], [10, 0, 0, -10]);
+  const textScale = useTransform(smoothProgress, [0.35, 0.5, 0.65, 0.9], [0.98, 1, 1, 0.98]);
   
-  const gradientPosition = useTransform(smoothProgress, [0.1, 0.5, 0.9], ["-100%", "0%", "100%"]);
+  // Gradiente mejorado - aparece cuando el texto aparece
+  const gradientPosition = useTransform(smoothProgress, [0.4, 0.5, 0.6, 0.8], ["-150%", "0%", "0%", "150%"]);
+  
+  // Animaciones separadas para cada texto - aparecen secuencialmente alrededor de la mitad (más sutiles)
+  const firstTextY = useTransform(smoothProgress, [0.4, 0.5, 0.6, 0.85], [15, 0, 0, -15]);
+  const secondTextY = useTransform(smoothProgress, [0.45, 0.55, 0.65, 0.85], [20, 0, 0, -20]);
+  
+  const firstTextOpacity = useTransform(smoothProgress, [0.4, 0.5, 0.6, 0.85], [0, 1, 1, 0]);
+  const secondTextOpacity = useTransform(smoothProgress, [0.45, 0.55, 0.65, 0.85], [0, 1, 1, 0]);
+  
+  // Escala individual para cada texto - más sutil
+  const firstTextScale = useTransform(smoothProgress, [0.4, 0.5, 0.6, 0.85], [0.96, 1, 1, 0.98]);
+  const secondTextScale = useTransform(smoothProgress, [0.45, 0.55, 0.65, 0.85], [0.96, 1, 1, 0.98]);
 
   return (
     <div 
@@ -48,67 +67,92 @@ const ParallaxSection = ({
           className="w-full h-full object-cover"
           style={{ 
             scale: imageScale,
-            y: imageY
+            y: imageY,
+            opacity: imageOpacity
           }}
         />
       </div>
       
       <motion.div 
-        className="absolute inset-0 bg-background"
+        className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/30 to-transparent"
         style={{ opacity: overlayOpacity }}
       />
       
       <motion.div 
-        className="absolute inset-0 flex flex-col items-center justify-center"
-        style={{ opacity: textProgress }}
+        className="absolute inset-0 flex flex-col items-center justify-center gap-6 lg:gap-8"
+        style={{ 
+          opacity: textOpacity,
+          y: textY,
+          scale: textScale
+        }}
       >
-        <motion.div className="relative overflow-hidden px-20">
+        <motion.div 
+          className="relative overflow-hidden px-4 sm:px-8 lg:px-20"
+          style={{
+            y: firstTextY,
+            opacity: firstTextOpacity,
+            scale: firstTextScale
+          }}
+        >
           <motion.h2 
-            className="text-5xl lg:text-6xl font-light leading-none tracking-wider uppercase text-center px-40"
+            className="text-4xl sm:text-5xl lg:text-6xl font-light leading-tight tracking-wider uppercase text-center px-4 sm:px-20 lg:px-40 text-balance"
             style={{
               backgroundImage: `linear-gradient(
-                90deg, 
+                60deg, 
                 transparent 0%, 
-                #ffffff 25%, 
-                #ffffff 75%, 
+                rgba(255, 255, 255, 0.95) 20%,
+                #ffffff 30%, 
+                #ffffff 70%, 
+                rgba(255, 255, 255, 0.95) 80%,
                 transparent 100%
               )`,
-              backgroundSize: "200% 100%",
+              backgroundSize: "250% 100%",
               backgroundPosition: gradientPosition,
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
               color: "transparent",
-              textShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)"
+              filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4)) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.2))"
             }}
           >
             {firstText}
           </motion.h2>
         </motion.div>
         
-        <motion.div className="relative overflow-hidden">
-          <motion.h2 
-            className="text-[60px] lg:text-7xl font-light leading-none tracking-wider uppercase text-center"
+        {secondText && (
+          <motion.div 
+            className="relative overflow-hidden"
             style={{
-              backgroundImage: `linear-gradient(
-                90deg, 
-                transparent 0%, 
-                #ffffff 25%, 
-                #ffffff 75%, 
-                transparent 100%
-              )`,
-              backgroundSize: "200% 100%",
-              backgroundPosition: gradientPosition,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              color: "transparent",
-              textShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)"
+              y: secondTextY,
+              opacity: secondTextOpacity,
+              scale: secondTextScale
             }}
           >
-            {secondText}
-          </motion.h2>
-        </motion.div>
+            <motion.h2 
+              className="text-[48px] sm:text-[60px] lg:text-7xl font-light leading-tight tracking-wider uppercase text-center px-4 sm:px-8"
+              style={{
+                backgroundImage: `linear-gradient(
+                  90deg, 
+                  transparent 0%, 
+                  rgba(255, 255, 255, 0.95) 15%,
+                  #ffffff 25%, 
+                  #ffffff 75%, 
+                  rgba(255, 255, 255, 0.95) 85%,
+                  transparent 100%
+                )`,
+                backgroundSize: "250% 100%",
+                backgroundPosition: gradientPosition,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                color: "transparent",
+                filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4)) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.2))"
+              }}
+            >
+              {secondText}
+            </motion.h2>
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );

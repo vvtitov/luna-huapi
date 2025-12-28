@@ -11,6 +11,7 @@ interface ParallaxCircleDividerProps {
 
 export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: ParallaxCircleDividerProps) {
   const [progress, setProgress] = useState(0)
+  const [textProgress, setTextProgress] = useState(0)
   const dividerRef = useRef<HTMLDivElement>(null)
 
   const initialSize = 100
@@ -39,6 +40,19 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
         : 1 - Math.pow(-2 * rawProgress + 2, 3) / 2
       
       setProgress(easedProgress)
+      
+      // Progress del texto - solo visible cuando el componente está completamente expandido
+      // El texto aparece solo cuando el progress está entre 0.85 y 1.0 (completamente expandido)
+      let textProgressValue = 0
+      if (easedProgress >= 0.85 && easedProgress <= 1.0) {
+        // Cuando el componente está completamente expandido, el texto aparece gradualmente
+        textProgressValue = (easedProgress - 0.85) / 0.15
+      } else {
+        // Cuando el componente se está achicando o abriendo, el texto no se ve
+        textProgressValue = 0
+      }
+      
+      setTextProgress(textProgressValue)
     }
 
     window.addEventListener("scroll", updateProgress)
@@ -82,8 +96,8 @@ export function ParallaxCircleDivider({ title, buttonText, onButtonClick }: Para
           <div
             className="absolute inset-0 flex flex-col items-center justify-center text-light text-center"
             style={{ 
-              opacity: progress,
-              transition: "opacity 0.5s ease-in-out"
+              opacity: textProgress,
+              transition: "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
             }}
           >
             <h2 className="text-5xl lg:text-6xl mb-6 uppercase p-4">{title}</h2>

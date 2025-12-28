@@ -114,10 +114,11 @@ export default function Departments() {
     const deltaY = Math.abs((touch.pageY || 0) - (dragStateRef.current.startY || 0));
     
     // Solo prevenir default si el movimiento es principalmente horizontal
-    if (deltaX > deltaY && deltaX > 5) {
+    if (deltaX > deltaY && deltaX > 3) {
       e.preventDefault();
       
-      const walk = touch.pageX - dragStateRef.current.startX;
+      // Multiplicador para hacer el drag más rápido y suave en mobile
+      const walk = (touch.pageX - dragStateRef.current.startX) * 1.5;
       sliderRef.current.scrollLeft = dragStateRef.current.scrollLeft - walk;
     }
   }, []);

@@ -13,14 +13,24 @@ import Whatsapp from "./ui/whatsapp";
 import LanguageSelector from "./LanguageSelector";
 import { useLanguage } from "../i18n/LanguageContext";
 import { useTranslation } from "react-i18next";
+import Loader from "./Loader";
 
 const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { language } = useLanguage();
   const { t } = useTranslation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLoadComplete = () => {
+    setIsLoading(false);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const getNavItems = () => {
@@ -47,13 +57,15 @@ const LandingPage = () => {
 
   return (
     <div className="bg-background min-h-screen min-w-[300px]">
+      {isLoading && <Loader onLoadComplete={handleLoadComplete} />}
 
       <section className="relative h-screen w-full bg-card-foreground bg-blend-overlay bg-[url('/images/dp-2/PRIORITY_RENTALS-29.webp')] bg-cover bg-center">
         <nav id="navbar" className="absolute top-0 left-0 right-0 flex justify-between w-full items-center z-10 px-4 sm:px-6 lg:px-10">
           <div id="right-side" className="relative flex">
             <div
               id="logo-container"
-              className="self-center pt-8 sm:pt-12 lg:pt-[72px]"
+              className="self-center pt-8 sm:pt-12 lg:pt-[72px] cursor-pointer"
+              onClick={scrollToTop}
             >
               <img
                 src="/assets/logo.svg"
@@ -120,10 +132,35 @@ const LandingPage = () => {
           </div>
         </nav>
         <div className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-10">
-          <h2 className="text-3xl md:text-3xl lg:text-4xl text-light text-balance mb-8 sm:mb-12 text-center max-w-4xl mx-auto">
-            {t('hero.title')}
-          </h2>
-          <div className="flex flex-col justify-center items-center gap-4 lg:flex-row">
+          {!isLoading && (
+            <h2 
+              className="text-3xl md:text-3xl lg:text-4xl text-light text-balance mb-8 sm:mb-12 text-center max-w-4xl mx-auto"
+            >
+              {(() => {
+                const words = t('hero.title').split(' ');
+                return words.map((word, index) => (
+                  <span
+                    key={index}
+                    className="inline-block"
+                    style={{
+                      animation: `fadeInUp 0.8s ease-out forwards`,
+                      animationDelay: `${300 + index * 100}ms`,
+                      opacity: 0,
+                    }}
+                  >
+                    {word}
+                    {index < words.length - 1 && '\u00A0'}
+                  </span>
+                ));
+              })()}
+            </h2>
+          )}
+          <div 
+            className={`flex flex-col justify-center items-center gap-4 lg:flex-row transition-all duration-1000 ease-out ${
+              isLoading ? 'opacity-0 translate-y-8' : 'opacity-100 translate-y-0'
+            }`}
+            style={{ transitionDelay: isLoading ? '0ms' : '800ms' }}
+          >
             <Button className="w-55 bg-[#D1D1D1] text-[#3F3F3F] px-8 py-4 rounded-full text-lg hover:bg-[#E3BDB1] hover:text-white"
               onClick={() => {
                 const target = document.querySelector("#los-departamentos");
